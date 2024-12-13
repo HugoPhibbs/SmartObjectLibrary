@@ -1,0 +1,19 @@
+{
+  "name": "Miniconda (Python 3)",
+  "build": {
+    "context": "..",
+    "dockerfile": "Dockerfile"
+  },
+
+  "postCreateCommand": "conda env create -f /workspace/environment.yml && conda clean -afy",
+
+  "customizations" : {
+    "jetbrains" : {
+      "backend" : "PyCharm"
+    }
+  },
+
+  "forwardPorts": [8000],
+
+  "remoteUser": "root"
+}
