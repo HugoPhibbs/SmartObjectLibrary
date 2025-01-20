@@ -1,19 +1,30 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/miniconda
 {
-  "name": "Miniconda (Python 3)",
-  "build": {
-    "context": "..",
-    "dockerfile": "Dockerfile"
-  },
+	"name": "Miniconda (Python 3)",
+	"build": { 
+		"context": "..",
+		"dockerfile": "Dockerfile"
+	},
 
-  "postCreateCommand": "conda env create -f /workspace/environment.yml && conda clean -afy",
+	"customizations" : {
+		"jetbrains" : {
+		"backend" : "PyCharm"
+		}
+  	}
 
-  "customizations" : {
-    "jetbrains" : {
-      "backend" : "PyCharm"
-    }
-  },
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	// "features": {},
 
-  "forwardPorts": [8000],
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
 
-  "remoteUser": "root"
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "python --version",
+
+	// Configure tool-specific properties.
+	// "customizations": {},
+
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "root"
 }
