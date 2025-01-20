@@ -1,0 +1,555 @@
+{
+    "id": "1MqlONWM9DPguUA1H$xlLG",
+    "name": "Steel-UB Universal Beam-Steel & Tube-300:180UB16.1-Steel & Tube:363425",
+    "object_type": "Steel-UB Universal Beam-Steel & Tube-300:180UB16.1-Steel & Tube:351875",
+    "material": "Metal-Steel-320MPa",
+    "object_placement": "#559=IfcLocalPlacement(#99,#558)",
+    "property_sets": [
+        {
+            "property_set_name": "Pset_BeamCommon",
+            "properties": [
+                {
+                    "name": "LoadBearing",
+                    "value": true
+                },
+                {
+                    "name": "IsExternal",
+                    "value": false
+                },
+                {
+                    "name": "Slope",
+                    "value": 0.0
+                },
+                {
+                    "name": "Reference",
+                    "value": "Steel-UB Universal Beam-Steel & Tube-300:180UB16.1-Steel & Tube"
+                },
+                {
+                    "name": "Span",
+                    "value": 2500.0
+                }
+            ]
+        },
+        {
+            "property_set_name": "Pset_ManufacturerTypeInformation",
+            "properties": [
+                {
+                    "name": "Manufacturer",
+                    "value": "Steel & Tube"
+                }
+            ]
+        },
+        {
+            "property_set_name": "Constraints",
+            "properties": [
+                {
+                    "name": "Cross-Section Rotation",
+                    "value": 0.0
+                },
+                {
+                    "name": "End Level Offset",
+                    "value": 0.0
+                },
+                {
+                    "name": "Orientation",
+                    "value": "Normal"
+                },
+                {
+                    "name": "Reference Level",
+                    "value": "Level: Level 1"
+                },
+                {
+                    "name": "Reference Level Elevation",
+                    "value": 0.0
+                },
+                {
+                    "name": "Start Level Offset",
+                    "value": 0.0
+                },
+                {
+                    "name": "Work Plane",
+                    "value": "Level : Level 1"
+                }
+            ]
+        },
+        {
+            "property_set_name": "Dimensions",
+            "properties": [
+                {
+                    "name": "Elevation at Top",
+                    "value": 0.0
+                },
+                {
+                    "name": "Stick Symbol Offset Horizontal",
+                    "value": 0.0
+                },
+                {
+                    "name": "Stick Symbol Offset Vertical",
+                    "value": 0.0
+                },
+                {
+                    "name": "Elevation at Bottom",
+                    "value": -173.0
+                },
+                {
+                    "name": "Length",
+                    "value": 2500.0
+                },
+                {
+                    "name": "StickSymbolEndCutBack_ANZRS",
+                    "value": 100.0
+                },
+                {
+                    "name": "StickSymbolStartCutBack_ANZRS",
+                    "value": 100.0
+                },
+                {
+                    "name": "Volume",
+                    "value": 0.00493875
+                }
+            ]
+        },
+        {
+            "property_set_name": "Geometric Position",
+            "properties": [
+                {
+                    "name": "End Extension",
+                    "value": 0.0
+                },
+                {
+                    "name": "Join Status",
+                    "value": "Both joins enabled"
+                },
+                {
+                    "name": "Start Extension",
+                    "value": 0.0
+                },
+                {
+                    "name": "y Justification",
+                    "value": "Origin"
+                },
+                {
+                    "name": "y Offset Value",
+                    "value": 0.0
+                },
+                {
+                    "name": "yz Justification",
+                    "value": "Uniform"
+                },
+                {
+                    "name": "z Justification",
+                    "value": "Top"
+                },
+                {
+                    "name": "z Offset Value",
+                    "value": 0.0
+                }
+            ]
+        },
+        {
+            "property_set_name": "Identity Data",
+            "properties": [
+                {
+                    "name": "Disclaimer",
+                    "value": "Steel & Tube makes no representations or warranties about the information in this document, including (but not limited to) whether the information, and any materials referred to, are fit for purpose. The user is responsible for ensuring that the information, and any materials referred to, are fit for the purpose for which they are intended to be used. Except as required by law, Steel & Tube is not liable for any cost, loss, claim or expense incurred by any person as a result of any person using or relying on the information in this document."
+                }
+            ]
+        },
+        {
+            "property_set_name": "Materials and Finishes",
+            "properties": [
+                {
+                    "name": "Structural Material",
+                    "value": "Metal-Steel-320MPa"
+                }
+            ]
+        },
+        {
+            "property_set_name": "Other",
+            "properties": [
+                {
+                    "name": "Category",
+                    "value": "Structural Framing"
+                },
+                {
+                    "name": "Family",
+                    "value": "Steel-UB Universal Beam-Steel & Tube-300: 180UB16.1-Steel & Tube"
+                },
+                {
+                    "name": "Family and Type",
+                    "value": "Steel-UB Universal Beam-Steel & Tube-300: 180UB16.1-Steel & Tube"
+                },
+                {
+                    "name": "Length Calc",
+                    "value": 2500.0
+                },
+                {
+                    "name": "Type",
+                    "value": "Steel-UB Universal Beam-Steel & Tube-300: 180UB16.1-Steel & Tube"
+                },
+                {
+                    "name": "Type Id",
+                    "value": "Steel-UB Universal Beam-Steel & Tube-300: 180UB16.1-Steel & Tube"
+                }
+            ]
+        },
+        {
+            "property_set_name": "Phasing",
+            "properties": [
+                {
+                    "name": "Phase Created",
+                    "value": "New Construction"
+                }
+            ]
+        },
+        {
+            "property_set_name": "Structural",
+            "properties": [
+                {
+                    "name": "Enable Analytical Model",
+                    "value": true
+                },
+                {
+                    "name": "Structural Usage",
+                    "value": "Other"
+                },
+                {
+                    "name": "Cut Length",
+                    "value": 2500.0
+                },
+                {
+                    "name": "WeightNet_ANZRS",
+                    "value": 40.25
+                }
+            ]
+        },
+        {
+            "property_set_name": "Visibility",
+            "properties": [
+                {
+                    "name": "Error_ANZRS",
+                    "value": false
+                },
+                {
+                    "name": "Override Error Message",
+                    "value": false
+                },
+                {
+                    "name": "Stick Symbol1",
+                    "value": true
+                },
+                {
+                    "name": "Symbol Offset",
+                    "value": false
+                }
+            ]
+        },
+        {
+            "property_set_name": "Dimensions",
+            "properties": [
+                {
+                    "name": "Centroid Horizontal",
+                    "value": 45.0
+                },
+                {
+                    "name": "Centroid Vertical",
+                    "value": 86.5
+                },
+                {
+                    "name": "Clear Web Height",
+                    "value": 155.2
+                },
+                {
+                    "name": "Flange Thickness",
+                    "value": 7.0
+                },
+                {
+                    "name": "Flange Toe of Fillet",
+                    "value": 11.15
+                },
+                {
+                    "name": "Height",
+                    "value": 173.0
+                },
+                {
+                    "name": "Web Fillet",
+                    "value": 8.9
+                },
+                {
+                    "name": "Web Thickness",
+                    "value": 4.5
+                },
+                {
+                    "name": "Web Toe of Fillet",
+                    "value": 33.85
+                },
+                {
+                    "name": "Width",
+                    "value": 90.0
+                }
+            ]
+        },
+        {
+            "property_set_name": "General",
+            "properties": [
+                {
+                    "name": "SpecificationDescription",
+                    "value": ""
+                },
+                {
+                    "name": "SpecificationReference",
+                    "value": ""
+                },
+                {
+                    "name": "CBICode",
+                    "value": "3421"
+                },
+                {
+                    "name": "CBIDescription",
+                    "value": "Light steel framing"
+                },
+                {
+                    "name": "ManufacturerName",
+                    "value": "Steel & Tube"
+                },
+                {
+                    "name": "ManufacturerURL",
+                    "value": "http://steelandtube.co.nz/"
+                },
+                {
+                    "name": "Uniclass2015Code",
+                    "value": "Pr_20_76_51_12"
+                },
+                {
+                    "name": "Uniclass2015Title",
+                    "value": "Carbon steel beams, columns, channels and tees"
+                },
+                {
+                    "name": "Uniclass2015Version",
+                    "value": "2015"
+                }
+            ]
+        },
+        {
+            "property_set_name": "Identity Data",
+            "properties": [
+                {
+                    "name": "Code Name",
+                    "value": ""
+                },
+                {
+                    "name": "Type Comments",
+                    "value": ""
+                },
+                {
+                    "name": "Assembly Code",
+                    "value": "B1020230"
+                },
+                {
+                    "name": "Assembly Description",
+                    "value": "Beams - Steel"
+                },
+                {
+                    "name": "CreatedBy_ANZRS",
+                    "value": "Design Content"
+                },
+                {
+                    "name": "CreatedByURL_ANZRS",
+                    "value": "http://www.designcontent.com.au"
+                },
+                {
+                    "name": "Description",
+                    "value": "Steel & Tube supplies a full range of hot rolled seismic and non seismic universal beams, columns, plate and channels. For more information please refer to the Design with Steel product catalogue on our website."
+                },
+                {
+                    "name": "Design Instruction",
+                    "value": "Design information should be cross referenced with the Steel & Tube Design with Steel Design Guide and NZS 3404: Part1: 2009"
+                },
+                {
+                    "name": "Design Standard",
+                    "value": "NZS 3404: Part 1: 2009 including reference to the NZBC"
+                },
+                {
+                    "name": "Manufactured Standard",
+                    "value": "AS/NZS 3679.1: 2016"
+                },
+                {
+                    "name": "Manufacturer",
+                    "value": "Steel & Tube"
+                },
+                {
+                    "name": "Model",
+                    "value": "180UB16.1"
+                },
+                {
+                    "name": "ModifiedIssue_ANZRS",
+                    "value": 20160329.01
+                },
+                {
+                    "name": "OmniClass Number",
+                    "value": "23.25.30.11.14.14"
+                },
+                {
+                    "name": "OmniClass Title",
+                    "value": "Beams"
+                },
+                {
+                    "name": "Section Name Key",
+                    "value": "UB 180x16.1"
+                },
+                {
+                    "name": "Type Name",
+                    "value": "180UB16.1-Steel & Tube"
+                },
+                {
+                    "name": "URL",
+                    "value": "http://www.steelandtube.co.nz"
+                }
+            ]
+        },
+        {
+            "property_set_name": "Other",
+            "properties": [
+                {
+                    "name": "Category",
+                    "value": "Structural Framing"
+                },
+                {
+                    "name": "Family Name",
+                    "value": "Steel-UB Universal Beam-Steel & Tube-300"
+                }
+            ]
+        },
+        {
+            "property_set_name": "Structural",
+            "properties": [
+                {
+                    "name": "Section Shape",
+                    "value": 6
+                },
+                {
+                    "name": "MassPerUnitLength_ANZRS",
+                    "value": 4.90728
+                },
+                {
+                    "name": "MaximumLength_ANZRS",
+                    "value": 16500.0
+                },
+                {
+                    "name": "SectionAreaGross_ANZRS",
+                    "value": 0.00204
+                },
+                {
+                    "name": "SectionAreaNet_ANZRS",
+                    "value": 0.00204
+                }
+            ]
+        },
+        {
+            "property_set_name": "Structural Analysis",
+            "properties": [
+                {
+                    "name": "Form Factor",
+                    "value": 1.0
+                },
+                {
+                    "name": "Principal Axes Angle",
+                    "value": 90.0
+                },
+                {
+                    "name": "Elastic Modulus strong axis",
+                    "value": 1.9e-05
+                },
+                {
+                    "name": "Elastic Modulus weak axis",
+                    "value": 0.000123
+                },
+                {
+                    "name": "Moment of Inertia strong axis",
+                    "value": 9.88300876425e-05
+                },
+                {
+                    "name": "Moment of Inertia weak axis",
+                    "value": 0.00122813473506
+                },
+                {
+                    "name": "Nominal Weight",
+                    "value": 157.88647896
+                },
+                {
+                    "name": "Perimeter",
+                    "value": 0.2078736
+                },
+                {
+                    "name": "Plastic Modulus strong axis",
+                    "value": 2.94e-05
+                },
+                {
+                    "name": "Plastic Modulus weak axis",
+                    "value": 0.000138
+                },
+                {
+                    "name": "Section Area",
+                    "value": 0.00204
+                },
+                {
+                    "name": "Shear Area strong axis",
+                    "value": 0.00204
+                },
+                {
+                    "name": "Shear Area weak axis",
+                    "value": 0.00204
+                },
+                {
+                    "name": "Tensile Strength",
+                    "value": 440000000.0
+                },
+                {
+                    "name": "Torsional Modulus",
+                    "value": 0.0
+                },
+                {
+                    "name": "Torsional Moment of Inertia",
+                    "value": 3.64964567496e-06
+                },
+                {
+                    "name": "Warping Constant",
+                    "value": 7.33309903162e-06
+                },
+                {
+                    "name": "X-Compactness",
+                    "value": "C"
+                },
+                {
+                    "name": "X-Zex",
+                    "value": 0.000138
+                },
+                {
+                    "name": "Y-Compactness",
+                    "value": "C"
+                },
+                {
+                    "name": "Yield Stress Flange",
+                    "value": 320000000.0
+                },
+                {
+                    "name": "Yield Stress Web",
+                    "value": 320000000.0
+                },
+                {
+                    "name": "Y-Zey",
+                    "value": 2.84e-05
+                }
+            ]
+        },
+        {
+            "property_set_name": "AC_Pset_RenovationAndPhasing",
+            "properties": [
+                {
+                    "name": "Renovation Status",
+                    "value": "New"
+                }
+            ]
+        }
+    ]
+}
