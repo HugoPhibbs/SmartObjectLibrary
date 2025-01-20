@@ -23,6 +23,7 @@
     * Attributes: Manufacturing Date, Warranty Period, Expected Lifespan, End-of-Life Disposal Guidelines.
     * Don't think there are any Psets on end of life information.
     * Don't think there is anything for seismic information either.
+    * Includes 'in-use' information, e.g. maintenance/inspection schedules, etc.
     * Possible Psets:
         * [Pset_Condition](https://ifc43-docs.standards.buildingsmart.org/IFC/RELEASE/IFC4x3/HTML/lexical/Pset_Condition.htm)
         * [Pset_ServiceLife](https://ifc43-docs.standards.buildingsmart.org/IFC/RELEASE/IFC4x3/HTML/lexical/Pset_ServiceLife.htm)
@@ -63,6 +64,9 @@ These objects are linked to the underlying IFC object using *property sets* (whe
 The advantage of wrapping an IFC product is that it is an easy interface to other components of the app - providing
 clean abstractions (e.g. for an API).
 
+Need to have the capability to add meta-data in form of description/units/constraints etc - perhaps IFC has affordances
+for this.
+
 ### Serialisation
 
 SmartProduct should be stored as IFC objects. The idea being that if you can do this, then you can easily export and
@@ -89,3 +93,9 @@ The app will primarily be written in **Python**, using the following frameworks:
 
 We don't (yet) have solid data sources for all of the above information. We can atleast start with readily available IFC
 objects (i.e. from online), and then add attributes to this
+
+## Querying
+
+Can use BIMServer for this, it provides its own QL which we can use - instead of writing everything in pure python.
+
+Steel manufacturers may provide information that we can use. 
