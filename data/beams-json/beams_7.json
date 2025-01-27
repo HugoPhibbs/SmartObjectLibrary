@@ -1,0 +1,132 @@
+{
+    "id": "1MqlONWM9DPguUA1H$xlF1",
+    "name": "Steel-UB Universal Beam-Steel & Tube-300:200UB25.4-Steel & Tube:363824",
+    "object_type": "Steel-UB Universal Beam-Steel & Tube-300:200UB25.4-Steel & Tube:351865",
+    "material": "Metal-Steel-320MPa",
+    "object_placement": "#1505=IfcLocalPlacement(#99,#1504)",
+    "property_sets": {
+        "Pset_BeamCommon": {
+            "LoadBearing": true,
+            "IsExternal": false,
+            "Slope": 0.0,
+            "Reference": "Steel-UB Universal Beam-Steel & Tube-300:200UB25.4-Steel & Tube",
+            "Span": 2500.0
+        },
+        "Pset_ManufacturerTypeInformation": {
+            "Manufacturer": "Steel & Tube"
+        },
+        "Constraints": {
+            "Cross-Section_Rotation": 0.0,
+            "End_Level_Offset": 0.0,
+            "Orientation": "Normal",
+            "Reference_Level": "Level: Level 1",
+            "Reference_Level_Elevation": 0.0,
+            "Start_Level_Offset": 0.0,
+            "Work_Plane": "Level : Level 1"
+        },
+        "Dimensions": {
+            "Centroid_Horizontal": 66.5,
+            "Centroid_Vertical": 101.5,
+            "Clear_Web_Height": 185.2,
+            "Flange_Thickness": 7.8,
+            "Flange_Toe_of_Fillet": 11.8,
+            "Height": 203.0,
+            "Web_Fillet": 8.9,
+            "Web_Thickness": 5.8,
+            "Web_Toe_of_Fillet": 54.7,
+            "Width": 133.0
+        },
+        "Geometric_Position": {
+            "End_Extension": 0.0,
+            "Join_Status": "Both joins enabled",
+            "Start_Extension": 0.0,
+            "y_Justification": "Origin",
+            "y_Offset_Value": 0.0,
+            "yz_Justification": "Uniform",
+            "z_Justification": "Top",
+            "z_Offset_Value": 0.0
+        },
+        "Identity_Data": {
+            "Code_Name": "",
+            "Type_Comments": "",
+            "Assembly_Code": "B1020230",
+            "Assembly_Description": "Beams - Steel",
+            "CreatedBy_ANZRS": "Design Content",
+            "CreatedByURL_ANZRS": "http://www.designcontent.com.au",
+            "Description": "Steel & Tube supplies a full range of hot rolled seismic and non seismic universal beams, columns, plate and channels. For more information please refer to the Design with Steel product catalogue on our website.",
+            "Design_Instruction": "Design information should be cross referenced with the Steel & Tube Design with Steel Design Guide and NZS 3404: Part1: 2009",
+            "Design_Standard": "NZS 3404: Part 1: 2009 including reference to the NZBC",
+            "Manufactured_Standard": "AS/NZS 3679.1: 2016",
+            "Manufacturer": "Steel & Tube",
+            "Model": "200UB25.4",
+            "ModifiedIssue_ANZRS": 20160329.01,
+            "OmniClass_Number": "23.25.30.11.14.14",
+            "OmniClass_Title": "Beams",
+            "Section_Name_Key": "UB 200x25.4",
+            "Type_Name": "200UB25.4-Steel & Tube",
+            "URL": "http://www.steelandtube.co.nz"
+        },
+        "Materials_and_Finishes": {
+            "Structural_Material": "Metal-Steel-320MPa"
+        },
+        "Other": {
+            "Category": "Structural Framing",
+            "Family_Name": "Steel-UB Universal Beam-Steel & Tube-300"
+        },
+        "Phasing": {
+            "Phase_Created": "New Construction"
+        },
+        "Structural": {
+            "Section_Shape": 6,
+            "MassPerUnitLength_ANZRS": 7.74192,
+            "MaximumLength_ANZRS": 18000.0,
+            "SectionAreaGross_ANZRS": 0.00323,
+            "SectionAreaNet_ANZRS": 0.00323
+        },
+        "Visibility": {
+            "Error_ANZRS": false,
+            "Override_Error_Message": false,
+            "Stick_Symbol1": true,
+            "Symbol_Offset": false
+        },
+        "General": {
+            "SpecificationDescription": "",
+            "SpecificationReference": "",
+            "CBICode": "3421",
+            "CBIDescription": "Light steel framing",
+            "ManufacturerName": "Steel & Tube",
+            "ManufacturerURL": "http://steelandtube.co.nz/",
+            "Uniclass2015Code": "Pr_20_76_51_12",
+            "Uniclass2015Title": "Carbon steel beams, columns, channels and tees",
+            "Uniclass2015Version": "2015"
+        },
+        "Structural_Analysis": {
+            "Form_Factor": 1.0,
+            "Principal_Axes_Angle": 90.0,
+            "Elastic_Modulus_strong_axis": 4.61e-05,
+            "Elastic_Modulus_weak_axis": 0.000232,
+            "Moment_of_Inertia_strong_axis": 0.000354537008424,
+            "Moment_of_Inertia_weak_axis": 0.00273433771203,
+            "Nominal_Weight": 249.08798544,
+            "Perimeter": 0.2779776,
+            "Plastic_Modulus_strong_axis": 7.09e-05,
+            "Plastic_Modulus_weak_axis": 0.00026,
+            "Section_Area": 0.00323,
+            "Shear_Area_strong_axis": 0.00323,
+            "Shear_Area_weak_axis": 0.00323,
+            "Tensile_Strength": 440000000.0,
+            "Torsional_Modulus": 0.0,
+            "Torsional_Moment_of_Inertia": 7.26453281968e-06,
+            "Warping_Constant": 3.6416070021e-05,
+            "X-Compactness": "N",
+            "X-Zex": 0.000259,
+            "Y-Compactness": "N",
+            "Yield_Stress_Flange": 320000000.0,
+            "Yield_Stress_Web": 320000000.0,
+            "Y-Zey": 6.88e-05
+        },
+        "AC_Pset_RenovationAndPhasing": {
+            "Renovation_Status": "New"
+        }
+    }
+}

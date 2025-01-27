@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<id>1MqlONWM9DPguUA1H$xlBU</id>
+	<name>Steel-UB Universal Beam-Steel &amp; Tube-300:180UB22.2-Steel &amp; Tube:363567</name>
+	<object_type>Steel-UB Universal Beam-Steel &amp; Tube-300:180UB22.2-Steel &amp; Tube:351871</object_type>
+	<material>Metal-Steel-320MPa</material>
+	<object_placement>#937=IfcLocalPlacement(#99,#936)</object_placement>
+	<property_sets>
+		<Pset_BeamCommon>
+			<LoadBearing>true</LoadBearing>
+			<IsExternal>false</IsExternal>
+			<Slope>0.0</Slope>
+			<Reference>Steel-UB Universal Beam-Steel &amp; Tube-300:180UB22.2-Steel &amp; Tube</Reference>
+			<Span>2500.0</Span>
+		</Pset_BeamCommon>
+		<Pset_ManufacturerTypeInformation>
+			<Manufacturer>Steel &amp; Tube</Manufacturer>
+		</Pset_ManufacturerTypeInformation>
+		<Constraints>
+			<Cross-Section_Rotation>0.0</Cross-Section_Rotation>
+			<End_Level_Offset>0.0</End_Level_Offset>
+			<Orientation>Normal</Orientation>
+			<Reference_Level>Level: Level 1</Reference_Level>
+			<Reference_Level_Elevation>0.0</Reference_Level_Elevation>
+			<Start_Level_Offset>0.0</Start_Level_Offset>
+			<Work_Plane>Level : Level 1</Work_Plane>
+		</Constraints>
+		<Dimensions>
+			<Centroid_Horizontal>45.0</Centroid_Horizontal>
+			<Centroid_Vertical>89.5</Centroid_Vertical>
+			<Clear_Web_Height>161.2</Clear_Web_Height>
+			<Flange_Thickness>10.0</Flange_Thickness>
+			<Flange_Toe_of_Fillet>11.9</Flange_Toe_of_Fillet>
+			<Height>179.0</Height>
+			<Web_Fillet>8.9</Web_Fillet>
+			<Web_Thickness>6.0</Web_Thickness>
+			<Web_Toe_of_Fillet>33.1</Web_Toe_of_Fillet>
+			<Width>90.0</Width>
+		</Dimensions>
+		<Geometric_Position>
+			<End_Extension>0.0</End_Extension>
+			<Join_Status>Both joins enabled</Join_Status>
+			<Start_Extension>0.0</Start_Extension>
+			<y_Justification>Origin</y_Justification>
+			<y_Offset_Value>0.0</y_Offset_Value>
+			<yz_Justification>Uniform</yz_Justification>
+			<z_Justification>Top</z_Justification>
+			<z_Offset_Value>0.0</z_Offset_Value>
+		</Geometric_Position>
+		<Identity_Data>
+			<Code_Name></Code_Name>
+			<Type_Comments></Type_Comments>
+			<Assembly_Code>B1020230</Assembly_Code>
+			<Assembly_Description>Beams - Steel</Assembly_Description>
+			<CreatedBy_ANZRS>Design Content</CreatedBy_ANZRS>
+			<CreatedByURL_ANZRS>http://www.designcontent.com.au</CreatedByURL_ANZRS>
+			<Description>Steel &amp; Tube supplies a full range of hot rolled seismic and non seismic universal beams, columns, plate and channels. For more information please refer to the Design with Steel product catalogue on our website.</Description>
+			<Design_Instruction>Design information should be cross referenced with the Steel &amp; Tube Design with Steel Design Guide and NZS 3404: Part1: 2009</Design_Instruction>
+			<Design_Standard>NZS 3404: Part 1: 2009 including reference to the NZBC</Design_Standard>
+			<Manufactured_Standard>AS/NZS 3679.1: 2016</Manufactured_Standard>
+			<Manufacturer>Steel &amp; Tube</Manufacturer>
+			<Model>180UB22.2</Model>
+			<ModifiedIssue_ANZRS>20160329.01</ModifiedIssue_ANZRS>
+			<OmniClass_Number>23.25.30.11.14.14</OmniClass_Number>
+			<OmniClass_Title>Beams</OmniClass_Title>
+			<Section_Name_Key>UB 180x22.2</Section_Name_Key>
+			<Type_Name>180UB22.2-Steel &amp; Tube</Type_Name>
+			<URL>http://www.steelandtube.co.nz</URL>
+		</Identity_Data>
+		<Materials_and_Finishes>
+			<Structural_Material>Metal-Steel-320MPa</Structural_Material>
+		</Materials_and_Finishes>
+		<Other>
+			<Category>Structural Framing</Category>
+			<Family_Name>Steel-UB Universal Beam-Steel &amp; Tube-300</Family_Name>
+		</Other>
+		<Phasing>
+			<Phase_Created>New Construction</Phase_Created>
+		</Phasing>
+		<Structural>
+			<Section_Shape>6</Section_Shape>
+			<MassPerUnitLength_ANZRS>6.76656</MassPerUnitLength_ANZRS>
+			<MaximumLength_ANZRS>16500.0</MaximumLength_ANZRS>
+			<SectionAreaGross_ANZRS>0.00282</SectionAreaGross_ANZRS>
+			<SectionAreaNet_ANZRS>0.00282</SectionAreaNet_ANZRS>
+		</Structural>
+		<Visibility>
+			<Error_ANZRS>false</Error_ANZRS>
+			<Override_Error_Message>false</Override_Error_Message>
+			<Stick_Symbol1>true</Stick_Symbol1>
+			<Symbol_Offset>false</Symbol_Offset>
+		</Visibility>
+		<General>
+			<SpecificationDescription></SpecificationDescription>
+			<SpecificationReference></SpecificationReference>
+			<CBICode>3421</CBICode>
+			<CBIDescription>Light steel framing</CBIDescription>
+			<ManufacturerName>Steel &amp; Tube</ManufacturerName>
+			<ManufacturerURL>http://steelandtube.co.nz/</ManufacturerURL>
+			<Uniclass2015Code>Pr_20_76_51_12</Uniclass2015Code>
+			<Uniclass2015Title>Carbon steel beams, columns, channels and tees</Uniclass2015Title>
+			<Uniclass2015Version>2015</Uniclass2015Version>
+		</General>
+		<Structural_Analysis>
+			<Form_Factor>1.0</Form_Factor>
+			<Principal_Axes_Angle>90.0</Principal_Axes_Angle>
+			<Elastic_Modulus_strong_axis>2.71e-05</Elastic_Modulus_strong_axis>
+			<Elastic_Modulus_weak_axis>0.000171</Elastic_Modulus_weak_axis>
+			<Moment_of_Inertia_strong_axis>0.0001413513563</Moment_of_Inertia_strong_axis>
+			<Moment_of_Inertia_weak_axis>0.00177268504212</Moment_of_Inertia_weak_axis>
+			<Nominal_Weight>217.70682192</Nominal_Weight>
+			<Perimeter>0.2106168</Perimeter>
+			<Plastic_Modulus_strong_axis>4.23e-05</Plastic_Modulus_strong_axis>
+			<Plastic_Modulus_weak_axis>0.000195</Plastic_Modulus_weak_axis>
+			<Section_Area>0.00282</Section_Area>
+			<Shear_Area_strong_axis>0.00282</Shear_Area_strong_axis>
+			<Shear_Area_weak_axis>0.00282</Shear_Area_weak_axis>
+			<Tensile_Strength>440000000.0</Tensile_Strength>
+			<Torsional_Modulus>0.0</Torsional_Modulus>
+			<Torsional_Moment_of_Inertia>9.45432022465e-06</Torsional_Moment_of_Inertia>
+			<Warping_Constant>1.0862464722e-05</Warping_Constant>
+			<X-Compactness>C</X-Compactness>
+			<X-Zex>0.000195</X-Zex>
+			<Y-Compactness>C</Y-Compactness>
+			<Yield_Stress_Flange>320000000.0</Yield_Stress_Flange>
+			<Yield_Stress_Web>320000000.0</Yield_Stress_Web>
+			<Y-Zey>4.07e-05</Y-Zey>
+		</Structural_Analysis>
+		<AC_Pset_RenovationAndPhasing>
+			<Renovation_Status>New</Renovation_Status>
+		</AC_Pset_RenovationAndPhasing>
+	</property_sets>
+</root>

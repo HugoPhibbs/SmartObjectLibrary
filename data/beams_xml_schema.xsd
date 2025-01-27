@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <!-- Root element -->
+    <xs:element name="root">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="id" type="xs:string"/>
+                <xs:element name="name" type="xs:string"/>
+                <xs:element name="object_type" type="xs:string"/>
+                <xs:element name="material" type="xs:string"/>
+                <xs:element name="object_placement" type="xs:string"/>
+
+                <!-- Property Sets -->
+                <xs:element name="property_sets">
+                    <xs:complexType>
+                        <xs:sequence>
+
+                            <!-- Property Set Examples -->
+                            <xs:element name="Pset_BeamCommon">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="Reference" type="xs:string"/>
+                                        <xs:element name="LoadBearing" type="xs:boolean"/>
+                                        <xs:element name="IsExternal" type="xs:boolean"/>
+                                        <xs:element name="Span" type="xs:decimal"/>
+                                        <xs:element name="Slope" type="xs:decimal"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+
+                            <xs:element name="Pset_ManufacturerTypeInformation">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="Manufacturer" type="xs:string"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+
+                            <xs:element name="Constraints">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="Cross-Section_Rotation" type="xs:decimal"/>
+                                        <xs:element name="End_Level_Offset" type="xs:decimal"/>
+                                        <xs:element name="Orientation" type="xs:string"/>
+                                        <xs:element name="Reference_Level" type="xs:string"/>
+                                        <xs:element name="Reference_Level_Elevation" type="xs:decimal"/>
+                                        <xs:element name="Start_Level_Offset" type="xs:decimal"/>
+                                        <xs:element name="Work_Plane" type="xs:string"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+
+                            <!-- Dimensions Section -->
+                            <xs:element name="Dimensions">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="Centroid_Horizontal" type="xs:decimal"/>
+                                        <xs:element name="Centroid_Vertical" type="xs:decimal"/>
+                                        <xs:element name="Clear_Web_Height" type="xs:decimal"/>
+                                        <xs:element name="Flange_Thickness" type="xs:decimal"/>
+                                        <xs:element name="Flange_Toe_of_Fillet" type="xs:decimal"/>
+                                        <xs:element name="Height" type="xs:decimal"/>
+                                        <xs:element name="Web_Fillet" type="xs:decimal"/>
+                                        <xs:element name="Web_Thickness" type="xs:decimal"/>
+                                        <xs:element name="Web_Toe_of_Fillet" type="xs:decimal"/>
+                                        <xs:element name="Width" type="xs:decimal"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+
+                            <!-- Geometric_Position Section -->
+                            <xs:element name="Geometric_Position">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="End_Extension" type="xs:decimal"/>
+                                        <xs:element name="Join_Status" type="xs:string"/>
+                                        <xs:element name="Start_Extension" type="xs:decimal"/>
+                                        <xs:element name="y_Justification" type="xs:string"/>
+                                        <xs:element name="y_Offset_Value" type="xs:decimal"/>
+                                        <xs:element name="yz_Justification" type="xs:string"/>
+                                        <xs:element name="z_Justification" type="xs:string"/>
+                                        <xs:element name="z_Offset_Value" type="xs:decimal"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+
+                            <!-- Identity_Data Section -->
+                            <xs:element name="Identity_Data">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="Code_Name" type="xs:string"/>
+                                        <xs:element name="Type_Comments" type="xs:string"/>
+                                        <xs:element name="Assembly_Code" type="xs:string"/>
+                                        <xs:element name="Assembly_Description" type="xs:string"/>
+                                        <xs:element name="CreatedBy_ANZRS" type="xs:string"/>
+                                        <xs:element name="CreatedByURL_ANZRS" type="xs:string"/>
+                                        <xs:element name="Description" type="xs:string"/>
+                                        <xs:element name="Design_Instruction" type="xs:string"/>
+                                        <xs:element name="Design_Standard" type="xs:string"/>
+                                        <xs:element name="Manufactured_Standard" type="xs:string"/>
+                                        <xs:element name="Manufacturer" type="xs:string"/>
+                                        <xs:element name="Model" type="xs:string"/>
+                                        <xs:element name="ModifiedIssue_ANZRS" type="xs:string"/>
+                                        <xs:element name="OmniClass_Number" type="xs:string"/>
+                                        <xs:element name="OmniClass_Title" type="xs:string"/>
+                                        <xs:element name="Section_Name_Key" type="xs:string"/>
+                                        <xs:element name="Type_Name" type="xs:string"/>
+                                        <xs:element name="URL" type="xs:string"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+
+                            <!-- More Property Sets can follow the same structure -->
+
+                            <!-- Materials_and_Finishes Section -->
+                            <xs:element name="Materials_and_Finishes">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="Structural_Material" type="xs:string"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+
+                            <!-- Other Section -->
+                            <xs:element name="Other">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="Category" type="xs:string"/>
+                                        <xs:element name="Family_Name" type="xs:string"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+
+                            <!-- Phasing Section -->
+                            <xs:element name="Phasing">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="Phase_Created" type="xs:string"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+
+                            <!-- Structural Section -->
+                            <xs:element name="Structural">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="Section_Shape" type="xs:int"/>
+                                        <xs:element name="MassPerUnitLength_ANZRS" type="xs:decimal"/>
+                                        <xs:element name="MaximumLength_ANZRS" type="xs:decimal"/>
+                                        <xs:element name="SectionAreaGross_ANZRS" type="xs:decimal"/>
+                                        <xs:element name="SectionAreaNet_ANZRS" type="xs:decimal"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+
+                            <!-- Visibility Section -->
+                            <xs:element name="Visibility">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="Error_ANZRS" type="xs:boolean"/>
+                                        <xs:element name="Override_Error_Message" type="xs:boolean"/>
+                                        <xs:element name="Stick_Symbol1" type="xs:boolean"/>
+                                        <xs:element name="Symbol_Offset" type="xs:boolean"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+
+                            <!-- General Section -->
+                            <xs:element name="General">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="SpecificationDescription" type="xs:string"/>
+                                        <xs:element name="SpecificationReference" type="xs:string"/>
+                                        <xs:element name="CBICode" type="xs:string"/>
+                                        <xs:element name="CBIDescription" type="xs:string"/>
+                                        <xs:element name="ManufacturerName" type="xs:string"/>
+                                        <xs:element name="ManufacturerURL" type="xs:string"/>
+                                        <xs:element name="Uniclass2015Code" type="xs:string"/>
+                                        <xs:element name="Uniclass2015Title" type="xs:string"/>
+                                        <xs:element name="Uniclass2015Version" type="xs:string"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+
+                            <!-- Structural_Analysis Section -->
+                            <xs:element name="Structural_Analysis">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="Form_Factor" type="xs:decimal"/>
+                                        <xs:element name="Principal_Axes_Angle" type="xs:decimal"/>
+                                        <xs:element name="Elastic_Modulus_strong_axis" type="xs:decimal"/>
+                                        <xs:element name="Elastic_Modulus_weak_axis" type="xs:decimal"/>
+                                        <xs:element name="Moment_of_Inertia_strong_axis" type="xs:decimal"/>
+                                        <xs:element name="Moment_of_Inertia_weak_axis" type="xs:decimal"/>
+                                        <xs:element name="Nominal_Weight" type="xs:decimal"/>
+                                        <xs:element name="Perimeter" type="xs:decimal"/>
+                                        <xs:element name="Plastic_Modulus_strong_axis" type="xs:decimal"/>
+                                        <xs:element name="Plastic_Modulus_weak_axis" type="xs:decimal"/>
+                                        <xs:element name="Section_Area" type="xs:decimal"/>
+                                        <xs:element name="Shear_Area_strong_axis" type="xs:decimal"/>
+                                        <xs:element name="Shear_Area_weak_axis" type="xs:decimal"/>
+                                        <xs:element name="Tensile_Strength" type="xs:decimal"/>
+                                        <xs:element name="Torsional_Modulus" type="xs:decimal"/>
+                                        <xs:element name="Torsional_Moment_of_Inertia" type="xs:decimal"/>
+                                        <xs:element name="Warping_Constant" type="xs:decimal"/>
+                                        <xs:element name="X-Compactness" type="xs:string"/>
+                                        <xs:element name="X-Zex" type="xs:decimal"/>
+                                        <xs:element name="Y-Compactness" type="xs:string"/>
+                                        <xs:element name="Yield_Stress_Flange" type="xs:decimal"/>
+                                        <xs:element name="Yield_Stress_Web" type="xs:decimal"/>
+                                        <xs:element name="Y-Zey" type="xs:decimal"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+
+                            <!-- AC_Pset_RenovationAndPhasing Section -->
+                            <xs:element name="AC_Pset_RenovationAndPhasing">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="Renovation_Status" type="xs:string"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

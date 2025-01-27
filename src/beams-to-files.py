@@ -1,10 +1,14 @@
 import ifcopenshell
 import json
+import xmltodict
 
 # Load the IFC file
-ifc_file = ifcopenshell.open(r"C:\Users\Hugo\Documents\Work\SmartProductLibrary\data\Steel-UB Universal Beam-Steel & Tube-300.ifc")
+ifc_file = ifcopenshell.open(r"C:\Users\hugop\Documents\Work\SteelProductLibrary\data\Steel-UB Universal Beam-Steel & Tube-300.ifc")
 
 beams = ifc_file.by_type("IfcBeam")
+
+def adjust_name(name):
+    return "_".join(name.split(" "))
 
 def save_beam(ifc_beam, i):
     # Prepare a dictionary to hold the beam data
@@ -14,7 +18,7 @@ def save_beam(ifc_beam, i):
         "object_type": ifc_beam.ObjectType,
         "material": None,  # To store material data
         "object_placement": str(ifc_beam.ObjectPlacement),  # Example: Placement data
-        "property_sets": []
+        "property_sets": {}
     }
 
     # Retrieve material if available
@@ -31,20 +35,23 @@ def save_beam(ifc_beam, i):
         if rel.is_a("IfcRelDefinesByProperties"):
             pset = rel.RelatingPropertyDefinition
             if pset.is_a("IfcPropertySet"):
-                pset_data = {
-                    "property_set_name": pset.Name,
-                    "properties": []
-                }
+                pset_name_adj = adjust_name(pset.Name)
+                beam_data["property_sets"][pset_name_adj] = {}
+
                 for prop in pset.HasProperties:
-                    pset_data["properties"].append({
-                        "name": prop.Name,
-                        "value": prop.NominalValue.wrappedValue if hasattr(prop.NominalValue, 'wrappedValue') else str(prop.NominalValue)
-                    })
-                beam_data["property_sets"].append(pset_data)
+                    name_adjusted = adjust_name(prop.Name)
+                    beam_data["property_sets"][pset_name_adj][name_adjusted] = prop.NominalValue.wrappedValue if hasattr(prop.NominalValue, 'wrappedValue') else str(prop.NominalValue)
 
     # Optionally save to a file
-    with open(f"./data/beams-json/beam_{i}", "w") as json_file:
+    with open(rf"C:\Users\hugop\Documents\Work\SteelProductLibrary\data\beams-json\beams_{i}.json", "w") as json_file:
         json.dump(beam_data, json_file, indent=4)
+    #
+    # beam_data_xml = beam_data.copy()
+    # beam_data_xml["property_sets"] = {"property_set": beam_data_xml["property_sets"]}
+
+    with open(rf"C:\Users\hugop\Documents\Work\SteelProductLibrary\data\beams-xml\beams_{i}.xml", "w") as xml_file:
+        xml_data = xmltodict.unparse({"root": beam_data}, pretty=True)
+        xml_file.write(xml_data)
 
 for i, beam in enumerate(beams):
     save_beam(beam, i)
