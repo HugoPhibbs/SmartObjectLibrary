@@ -47,6 +47,7 @@ def convert_schema(schema):
 
     return schema_json["properties"]
 
+
 def ifcC4NZ_to_opensearch_schema(json_data):
     """
     Creates an opensearch index schema from custom IFC Construction 4.0 NZ data json
@@ -59,6 +60,7 @@ def ifcC4NZ_to_opensearch_schema(json_data):
     schema = builder.to_schema()
 
     return convert_schema(schema)
+
 
 schema = convert_schema(schema)
 
@@ -75,12 +77,27 @@ client.indices.create(index="beams", body={
 id = beam_data["id"]
 response = client.index(index="beams", body=beam_data)
 
-response = client.search(index="beams", body={
-    "query": {
-        "match": {
-            "id": id
-        }
-    }
-})
+response = client.search(
+    index="beams",
+    body={
+        "query": {
+            "match_all": {}
+        }},
+    size=1000
+)
 
-print(response["hits"]["hits"][0]["_source"]) # TODO, figure out why nothing is here
+documents = [hit["_source"] for hit in response["hits"]["hits"]]
+
+for doc in documents:
+    print(doc)
+
+#
+# response = client.search(index="beams", body={
+#     "query": {
+#         "match": {
+#             "id": id
+#         }
+#     }
+# })
+#
+# print(response["hits"]["hits"][0]["_source"]) # TODO, figure out why nothing is here
