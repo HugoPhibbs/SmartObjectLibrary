@@ -3,7 +3,7 @@ import json
 import xmltodict
 
 # Load the IFC file
-ifc_file = ifcopenshell.open(r"C:\Users\hugop\Documents\Work\SteelProductLibrary\data\Steel-UB Universal Beam-Steel & Tube-300.ifc")
+ifc_file = ifcopenshell.open(r"/Steel-UB Universal Beam-Steel & Tube-300.ifc")
 
 beams = ifc_file.by_type("IfcBeam")
 
