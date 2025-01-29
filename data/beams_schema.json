@@ -1,0 +1,374 @@
+{
+  "name": {
+    "type": "text"
+  },
+  "object_type": {
+    "type": "text"
+  },
+  "material": {
+    "type": "text"
+  },
+  "object_placement": {
+    "type": "text"
+  },
+  "property_sets": {
+    "type": "object",
+    "properties": {
+      "Pset_BeamCommon": {
+        "type": "object",
+        "properties": {
+          "Reference": {
+            "type": "text"
+          },
+          "LoadBearing": {
+            "type": "boolean"
+          },
+          "IsExternal": {
+            "type": "boolean"
+          },
+          "Span": {
+            "type": "float"
+          },
+          "Slope": {
+            "type": "float"
+          }
+        }
+      },
+      "Pset_ManufacturerTypeInformation": {
+        "type": "object",
+        "properties": {
+          "Manufacturer": {
+            "type": "text"
+          }
+        }
+      },
+      "Constraints": {
+        "type": "object",
+        "properties": {
+          "Cross-Section_Rotation": {
+            "type": "float"
+          },
+          "End_Level_Offset": {
+            "type": "float"
+          },
+          "Orientation": {
+            "type": "text"
+          },
+          "Reference_Level": {
+            "type": "text"
+          },
+          "Reference_Level_Elevation": {
+            "type": "float"
+          },
+          "Start_Level_Offset": {
+            "type": "float"
+          },
+          "Work_Plane": {
+            "type": "text"
+          }
+        }
+      },
+      "Dimensions": {
+        "type": "object",
+        "properties": {
+          "Centroid_Horizontal": {
+            "type": "float"
+          },
+          "Centroid_Vertical": {
+            "type": "float"
+          },
+          "Clear_Web_Height": {
+            "type": "float"
+          },
+          "Flange_Thickness": {
+            "type": "float"
+          },
+          "Flange_Toe_of_Fillet": {
+            "type": "float"
+          },
+          "Height": {
+            "type": "float"
+          },
+          "Web_Fillet": {
+            "type": "float"
+          },
+          "Web_Thickness": {
+            "type": "float"
+          },
+          "Web_Toe_of_Fillet": {
+            "type": "float"
+          },
+          "Width": {
+            "type": "float"
+          }
+        }
+      },
+      "Geometric_Position": {
+        "type": "object",
+        "properties": {
+          "End_Extension": {
+            "type": "float"
+          },
+          "Join_Status": {
+            "type": "text"
+          },
+          "Start_Extension": {
+            "type": "float"
+          },
+          "y_Justification": {
+            "type": "text"
+          },
+          "y_Offset_Value": {
+            "type": "float"
+          },
+          "yz_Justification": {
+            "type": "text"
+          },
+          "z_Justification": {
+            "type": "text"
+          },
+          "z_Offset_Value": {
+            "type": "float"
+          }
+        }
+      },
+      "Identity_Data": {
+        "type": "object",
+        "properties": {
+          "Assembly_Code": {
+            "type": "text"
+          },
+          "Assembly_Description": {
+            "type": "text"
+          },
+          "Code_Name": {
+            "type": "text"
+          },
+          "CreatedBy_ANZRS": {
+            "type": "text"
+          },
+          "CreatedByURL_ANZRS": {
+            "type": "text"
+          },
+          "Description": {
+            "type": "text"
+          },
+          "Design_Instruction": {
+            "type": "text"
+          },
+          "Design_Standard": {
+            "type": "text"
+          },
+          "Manufactured_Standard": {
+            "type": "text"
+          },
+          "Manufacturer": {
+            "type": "text"
+          },
+          "Model": {
+            "type": "text"
+          },
+          "ModifiedIssue_ANZRS": {
+            "type": "float"
+          },
+          "OmniClass_Number": {
+            "type": "text"
+          },
+          "OmniClass_Title": {
+            "type": "text"
+          },
+          "Section_Name_Key": {
+            "type": "text"
+          },
+          "Type_Comments": {
+            "type": "text"
+          },
+          "Type_Name": {
+            "type": "text"
+          },
+          "URL": {
+            "type": "text"
+          }
+        }
+      },
+      "Materials_and_Finishes": {
+        "type": "object",
+        "properties": {
+          "Structural_Material": {
+            "type": "text"
+          }
+        }
+      },
+      "Other": {
+        "type": "object",
+        "properties": {
+          "Category": {
+            "type": "text"
+          },
+          "Family_Name": {
+            "type": "text"
+          }
+        }
+      },
+      "Phasing": {
+        "type": "object",
+        "properties": {
+          "Phase_Created": {
+            "type": "text"
+          }
+        }
+      },
+      "Structural": {
+        "type": "object",
+        "properties": {
+          "MassPerUnitLength_ANZRS": {
+            "type": "float"
+          },
+          "MaximumLength_ANZRS": {
+            "type": "float"
+          },
+          "SectionAreaGross_ANZRS": {
+            "type": "float"
+          },
+          "SectionAreaNet_ANZRS": {
+            "type": "float"
+          },
+          "Section_Shape": {
+            "type": "integer"
+          }
+        }
+      },
+      "Visibility": {
+        "type": "object",
+        "properties": {
+          "Error_ANZRS": {
+            "type": "boolean"
+          },
+          "Override_Error_Message": {
+            "type": "boolean"
+          },
+          "Stick_Symbol1": {
+            "type": "boolean"
+          },
+          "Symbol_Offset": {
+            "type": "boolean"
+          }
+        }
+      },
+      "General": {
+        "type": "object",
+        "properties": {
+          "CBICode": {
+            "type": "text"
+          },
+          "CBIDescription": {
+            "type": "text"
+          },
+          "ManufacturerName": {
+            "type": "text"
+          },
+          "ManufacturerURL": {
+            "type": "text"
+          },
+          "SpecificationDescription": {
+            "type": "text"
+          },
+          "SpecificationReference": {
+            "type": "text"
+          },
+          "Uniclass2015Code": {
+            "type": "text"
+          },
+          "Uniclass2015Title": {
+            "type": "text"
+          },
+          "Uniclass2015Version": {
+            "type": "text"
+          }
+        }
+      },
+      "Structural_Analysis": {
+        "type": "object",
+        "properties": {
+          "Elastic_Modulus_strong_axis": {
+            "type": "float"
+          },
+          "Elastic_Modulus_weak_axis": {
+            "type": "float"
+          },
+          "Form_Factor": {
+            "type": "float"
+          },
+          "Moment_of_Inertia_strong_axis": {
+            "type": "float"
+          },
+          "Moment_of_Inertia_weak_axis": {
+            "type": "float"
+          },
+          "Nominal_Weight": {
+            "type": "float"
+          },
+          "Perimeter": {
+            "type": "float"
+          },
+          "Plastic_Modulus_strong_axis": {
+            "type": "float"
+          },
+          "Plastic_Modulus_weak_axis": {
+            "type": "float"
+          },
+          "Principal_Axes_Angle": {
+            "type": "float"
+          },
+          "Section_Area": {
+            "type": "float"
+          },
+          "Shear_Area_strong_axis": {
+            "type": "float"
+          },
+          "Shear_Area_weak_axis": {
+            "type": "float"
+          },
+          "Tensile_Strength": {
+            "type": "float"
+          },
+          "Torsional_Modulus": {
+            "type": "float"
+          },
+          "Torsional_Moment_of_Inertia": {
+            "type": "float"
+          },
+          "Warping_Constant": {
+            "type": "float"
+          },
+          "X-Compactness": {
+            "type": "text"
+          },
+          "X-Zex": {
+            "type": "float"
+          },
+          "Y-Compactness": {
+            "type": "text"
+          },
+          "Yield_Stress_Flange": {
+            "type": "float"
+          },
+          "Yield_Stress_Web": {
+            "type": "float"
+          },
+          "Y-Zey": {
+            "type": "float"
+          }
+        }
+      },
+      "AC_Pset_RenovationAndPhasing": {
+        "type": "object",
+        "properties": {
+          "Renovation_Status": {
+            "type": "text"
+          }
+        }
+      }
+    }
+  }
+}
