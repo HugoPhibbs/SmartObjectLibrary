@@ -1,13 +1,16 @@
 from typing import List
 
-from src.opensearch_setup import client
+from src.utils.opensearch_client import client
+
 
 def get_by_id(object_id, format="ifc") -> dict:
-    pass
+    response = client.get(index="objects", id=object_id)
+    return response["_source"]
 
 
-def get_by_filter(filter) -> List[dict]:
-    pass
+def get_by_filter(query_filter) -> List[dict]:
+    response = client.search(index="objects", body={"query": query_filter})
+    return response["hits"]["hits"]
 
 
 def get_by_nlp(nlp_query) -> List[dict]:
