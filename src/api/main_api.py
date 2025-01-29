@@ -11,7 +11,7 @@ def create_object():
     return "Object created"
 
 
-@app.route('/object/<id>', methods=['GET'])
+@app.route('/object/<object_id>', methods=['GET'])
 def get_object(object_id: int):
     response_format = request.args.get("format", default="json", type=str)
     found_object = engine.get_by_id(object_id)
@@ -21,13 +21,13 @@ def get_object(object_id: int):
         pass  # TODO return IFC file
 
 
-@app.route("/object/<id>", methods=['DELETE'])
+@app.route("/object/<object_id>", methods=['DELETE'])
 def delete_object(object_id: int):
     engine.delete_by_id(object_id)
     return "Object deleted"
 
 
-@app.route("/object/<id>", methods=['PUT'])
+@app.route("/object/<object_id>", methods=['PUT'])
 def update_object(object_id: int):
     new_object_data = request.get_json()
     engine.update_by_id(object_id, new_object_data)
