@@ -4,7 +4,7 @@ import re
 
 import genson
 
-from src.opensearch_setup import client
+from src.utils.opensearch_client import client
 
 BEAMS_DIR = r"C:\Users\hugop\Documents\Work\SteelProductLibrary\data\beams-json"
 SCHEMA_PATH = r"C:\Users\hugop\Documents\Work\SteelProductLibrary\data\beams_schema.json"
@@ -45,9 +45,12 @@ def ifcC4NZ_to_opensearch_schema(json_data):
 
 def add_file(file_path):
     with open(file_path, "r") as json_file:
-        beam_data = json.load(json_file)
+        object_data = json.load(json_file)
 
-    response = client.index(index="beams", body=beam_data)
+    object_id = object_data["id"]
+    del object_data["id"]
+
+    response = client.index(index="objects", body=object_data, id=object_id)
 
     return response
 
@@ -60,16 +63,16 @@ def add_all_files():
 
 
 def create_index(schema, delete_if_exists=True):
-    index_exists = client.indices.exists(index="beams")
+    index_exists = client.indices.exists(index="objects")
 
     if delete_if_exists and index_exists:
-        if client.indices.exists(index="beams"):
-            client.indices.delete(index="beams")
+        if client.indices.exists(index="objects"):
+            client.indices.delete(index="objects")
 
     elif index_exists:
         return
 
-    client.indices.create(index="beams", body={
+    client.indices.create(index="objects", body={
         "mappings": {
             "properties": schema
         }
@@ -78,16 +81,17 @@ def create_index(schema, delete_if_exists=True):
 
 def write_schema():
     with open(r"C:\Users\hugop\Documents\Work\SteelProductLibrary\data\beams-json\beams_0.json", "r") as json_file:
-        beam_data = json.load(json_file)
+        object_data = json.load(json_file)
+
+    del object_data["id"]
 
     builder = genson.SchemaBuilder()
-    builder.add_object(beam_data)
+    builder.add_object(object_data)
     schema = builder.to_schema()
+    schema = convert_schema(schema)
 
     with open(SCHEMA_PATH, "w") as schema_file:
         json.dump(schema, schema_file)
-
-    schema = convert_schema(schema)
 
     return schema
 
@@ -100,3 +104,9 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+    id = "1MqlONWM9DPguUA1H$xlNc"
+
+    response = client.get(index="objects", id=id)
+
+    print(response["_source"])
