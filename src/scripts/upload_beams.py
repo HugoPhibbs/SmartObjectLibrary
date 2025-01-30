@@ -4,7 +4,7 @@ import re
 
 import genson
 
-from src.utils.opensearch_client import client
+from scripts.opensearch_client import client
 
 BEAMS_DIR = r"C:\Users\hugop\Documents\Work\SteelProductLibrary\data\beams-json"
 SCHEMA_PATH = r"C:\Users\hugop\Documents\Work\SteelProductLibrary\data\beams_schema.json"
@@ -80,7 +80,7 @@ def create_index(schema, delete_if_exists=True):
 
 
 def write_schema():
-    with open(r"C:\Users\hugop\Documents\Work\SteelProductLibrary\data\beams-json\beams_0.json", "r") as json_file:
+    with open(r"/beams-json/beams_0.json", "r") as json_file:
         object_data = json.load(json_file)
 
     del object_data["id"]

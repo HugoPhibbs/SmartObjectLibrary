@@ -1,5 +1,5 @@
 import threading
-from src.utils.opensearch_start import stop_opensearch, start_opensearch
+from scripts.opensearch_start import stop_opensearch, start_opensearch
 from src.api.main_api import app
 
 
