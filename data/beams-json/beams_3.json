@@ -4,129 +4,555 @@
     "object_type": "Steel-UB Universal Beam-Steel & Tube-300:180UB18.1-Steel & Tube:351873",
     "material": "Metal-Steel-320MPa",
     "object_placement": "#748=IfcLocalPlacement(#99,#747)",
+    "ifc_type": "IfcBeam",
+    "ifc_file_path": "C:\\Users\\hugop\\Documents\\Work\\SteelProductLibrary\\data\\Steel-UB Universal Beam-Steel & Tube-300.ifc",
+    "units": {
+        "LENGTHUNIT": {
+            "Name": "METRE",
+            "Prefix": "MILLI"
+        },
+        "AREAUNIT": {
+            "Name": "SQUARE_METRE",
+            "Prefix": "NO-PREFIX"
+        },
+        "VOLUMEUNIT": {
+            "Name": "CUBIC_METRE",
+            "Prefix": "NO-PREFIX"
+        },
+        "PLANEANGLEUNIT": {
+            "Name": "DEGREE"
+        },
+        "MASSUNIT": {
+            "Name": "GRAM",
+            "Prefix": "KILO"
+        },
+        "TIMEUNIT": {
+            "Name": "SECOND",
+            "Prefix": "NO-PREFIX"
+        },
+        "FREQUENCYUNIT": {
+            "Name": "HERTZ",
+            "Prefix": "NO-PREFIX"
+        },
+        "THERMODYNAMICTEMPERATUREUNIT": {
+            "Name": "DEGREE_CELSIUS",
+            "Prefix": "NO-PREFIX"
+        },
+        "THERMALTRANSMITTANCEUNIT": {},
+        "VOLUMETRICFLOWRATEUNIT": {},
+        "ELECTRICCURRENTUNIT": {
+            "Name": "AMPERE",
+            "Prefix": "NO-PREFIX"
+        },
+        "ELECTRICVOLTAGEUNIT": {
+            "Name": "VOLT",
+            "Prefix": "NO-PREFIX"
+        },
+        "POWERUNIT": {
+            "Name": "WATT",
+            "Prefix": "NO-PREFIX"
+        },
+        "FORCEUNIT": {
+            "Name": "NEWTON",
+            "Prefix": "KILO"
+        },
+        "ILLUMINANCEUNIT": {
+            "Name": "LUX",
+            "Prefix": "NO-PREFIX"
+        },
+        "LUMINOUSFLUXUNIT": {
+            "Name": "LUMEN",
+            "Prefix": "NO-PREFIX"
+        },
+        "LUMINOUSINTENSITYUNIT": {
+            "Name": "CANDELA",
+            "Prefix": "NO-PREFIX"
+        },
+        "PRESSUREUNIT": {
+            "Name": "PASCAL",
+            "Prefix": "NO-PREFIX"
+        }
+    },
     "property_sets": {
         "Pset_BeamCommon": {
-            "LoadBearing": true,
-            "IsExternal": false,
-            "Slope": 0.0,
-            "Reference": "Steel-UB Universal Beam-Steel & Tube-300:180UB18.1-Steel & Tube",
-            "Span": 2500.0
+            "LoadBearing": {
+                "value": true,
+                "unit": "NO-UNIT"
+            },
+            "IsExternal": {
+                "value": false,
+                "unit": "NO-UNIT"
+            },
+            "Slope": {
+                "value": 0.0,
+                "unit": "PLANEANGLEUNIT"
+            },
+            "Reference": {
+                "value": "Steel-UB Universal Beam-Steel & Tube-300:180UB18.1-Steel & Tube",
+                "unit": "NO-UNIT"
+            },
+            "Span": {
+                "value": 2500.0,
+                "unit": "LENGTHUNIT"
+            }
         },
         "Pset_ManufacturerTypeInformation": {
-            "Manufacturer": "Steel & Tube"
+            "Manufacturer": {
+                "value": "Steel & Tube",
+                "unit": "NO-UNIT"
+            }
         },
         "Constraints": {
-            "Cross-Section_Rotation": 0.0,
-            "End_Level_Offset": 0.0,
-            "Orientation": "Normal",
-            "Reference_Level": "Level: Level 1",
-            "Reference_Level_Elevation": 0.0,
-            "Start_Level_Offset": 0.0,
-            "Work_Plane": "Level : Level 1"
+            "Cross-Section Rotation": {
+                "value": 0.0,
+                "unit": "PLANEANGLEUNIT"
+            },
+            "End Level Offset": {
+                "value": 0.0,
+                "unit": "LENGTHUNIT"
+            },
+            "Orientation": {
+                "value": "Normal",
+                "unit": "NO-UNIT"
+            },
+            "Reference Level": {
+                "value": "Level: Level 1",
+                "unit": "NO-UNIT"
+            },
+            "Reference Level Elevation": {
+                "value": 0.0,
+                "unit": "LENGTHUNIT"
+            },
+            "Start Level Offset": {
+                "value": 0.0,
+                "unit": "LENGTHUNIT"
+            },
+            "Work Plane": {
+                "value": "Level : Level 1",
+                "unit": "NO-UNIT"
+            }
         },
         "Dimensions": {
-            "Centroid_Horizontal": 45.0,
-            "Centroid_Vertical": 87.5,
-            "Clear_Web_Height": 157.2,
-            "Flange_Thickness": 8.0,
-            "Flange_Toe_of_Fillet": 11.4,
-            "Height": 175.0,
-            "Web_Fillet": 8.9,
-            "Web_Thickness": 5.0,
-            "Web_Toe_of_Fillet": 33.6,
-            "Width": 90.0
+            "Elevation at Top": {
+                "value": 0.0,
+                "unit": "LENGTHUNIT"
+            },
+            "Stick Symbol Offset Horizontal": {
+                "value": 0.0,
+                "unit": "LENGTHUNIT"
+            },
+            "Stick Symbol Offset Vertical": {
+                "value": 0.0,
+                "unit": "LENGTHUNIT"
+            },
+            "Elevation at Bottom": {
+                "value": -175.0,
+                "unit": "LENGTHUNIT"
+            },
+            "Length": {
+                "value": 2500.0,
+                "unit": "LENGTHUNIT"
+            },
+            "StickSymbolEndCutBack_ANZRS": {
+                "value": 100.0,
+                "unit": "LENGTHUNIT"
+            },
+            "StickSymbolStartCutBack_ANZRS": {
+                "value": 100.0,
+                "unit": "LENGTHUNIT"
+            },
+            "Volume": {
+                "value": 0.0055875,
+                "unit": "VOLUMEUNIT"
+            },
+            "Centroid Horizontal": {
+                "value": 45.0,
+                "unit": "LENGTHUNIT"
+            },
+            "Centroid Vertical": {
+                "value": 87.5,
+                "unit": "LENGTHUNIT"
+            },
+            "Clear Web Height": {
+                "value": 157.2,
+                "unit": "LENGTHUNIT"
+            },
+            "Flange Thickness": {
+                "value": 8.0,
+                "unit": "LENGTHUNIT"
+            },
+            "Flange Toe of Fillet": {
+                "value": 11.4,
+                "unit": "LENGTHUNIT"
+            },
+            "Height": {
+                "value": 175.0,
+                "unit": "LENGTHUNIT"
+            },
+            "Web Fillet": {
+                "value": 8.9,
+                "unit": "LENGTHUNIT"
+            },
+            "Web Thickness": {
+                "value": 5.0,
+                "unit": "LENGTHUNIT"
+            },
+            "Web Toe of Fillet": {
+                "value": 33.6,
+                "unit": "LENGTHUNIT"
+            },
+            "Width": {
+                "value": 90.0,
+                "unit": "LENGTHUNIT"
+            }
         },
-        "Geometric_Position": {
-            "End_Extension": 0.0,
-            "Join_Status": "Both joins enabled",
-            "Start_Extension": 0.0,
-            "y_Justification": "Origin",
-            "y_Offset_Value": 0.0,
-            "yz_Justification": "Uniform",
-            "z_Justification": "Top",
-            "z_Offset_Value": 0.0
+        "Geometric Position": {
+            "End Extension": {
+                "value": 0.0,
+                "unit": "LENGTHUNIT"
+            },
+            "Join Status": {
+                "value": "Both joins enabled",
+                "unit": "NO-UNIT"
+            },
+            "Start Extension": {
+                "value": 0.0,
+                "unit": "LENGTHUNIT"
+            },
+            "y Justification": {
+                "value": "Origin",
+                "unit": "NO-UNIT"
+            },
+            "y Offset Value": {
+                "value": 0.0,
+                "unit": "LENGTHUNIT"
+            },
+            "yz Justification": {
+                "value": "Uniform",
+                "unit": "NO-UNIT"
+            },
+            "z Justification": {
+                "value": "Top",
+                "unit": "NO-UNIT"
+            },
+            "z Offset Value": {
+                "value": 0.0,
+                "unit": "LENGTHUNIT"
+            }
         },
-        "Identity_Data": {
-            "Code_Name": "",
-            "Type_Comments": "",
-            "Assembly_Code": "B1020230",
-            "Assembly_Description": "Beams - Steel",
-            "CreatedBy_ANZRS": "Design Content",
-            "CreatedByURL_ANZRS": "http://www.designcontent.com.au",
-            "Description": "Steel & Tube supplies a full range of hot rolled seismic and non seismic universal beams, columns, plate and channels. For more information please refer to the Design with Steel product catalogue on our website.",
-            "Design_Instruction": "Design information should be cross referenced with the Steel & Tube Design with Steel Design Guide and NZS 3404: Part1: 2009",
-            "Design_Standard": "NZS 3404: Part 1: 2009 including reference to the NZBC",
-            "Manufactured_Standard": "AS/NZS 3679.1: 2016",
-            "Manufacturer": "Steel & Tube",
-            "Model": "180UB18.1",
-            "ModifiedIssue_ANZRS": 20160329.01,
-            "OmniClass_Number": "23.25.30.11.14.14",
-            "OmniClass_Title": "Beams",
-            "Section_Name_Key": "UB 180x18.1",
-            "Type_Name": "180UB18.1-Steel & Tube",
-            "URL": "http://www.steelandtube.co.nz"
+        "Identity Data": {
+            "Disclaimer": {
+                "value": "Steel & Tube makes no representations or warranties about the information in this document, including (but not limited to) whether the information, and any materials referred to, are fit for purpose. The user is responsible for ensuring that the information, and any materials referred to, are fit for the purpose for which they are intended to be used. Except as required by law, Steel & Tube is not liable for any cost, loss, claim or expense incurred by any person as a result of any person using or relying on the information in this document.",
+                "unit": "NO-UNIT"
+            },
+            "Code Name": {
+                "value": "",
+                "unit": "NO-UNIT"
+            },
+            "Type Comments": {
+                "value": "",
+                "unit": "NO-UNIT"
+            },
+            "Assembly Code": {
+                "value": "B1020230",
+                "unit": "NO-UNIT"
+            },
+            "Assembly Description": {
+                "value": "Beams - Steel",
+                "unit": "NO-UNIT"
+            },
+            "CreatedBy_ANZRS": {
+                "value": "Design Content",
+                "unit": "NO-UNIT"
+            },
+            "CreatedByURL_ANZRS": {
+                "value": "http://www.designcontent.com.au",
+                "unit": "NO-UNIT"
+            },
+            "Description": {
+                "value": "Steel & Tube supplies a full range of hot rolled seismic and non seismic universal beams, columns, plate and channels. For more information please refer to the Design with Steel product catalogue on our website.",
+                "unit": "NO-UNIT"
+            },
+            "Design Instruction": {
+                "value": "Design information should be cross referenced with the Steel & Tube Design with Steel Design Guide and NZS 3404: Part1: 2009",
+                "unit": "NO-UNIT"
+            },
+            "Design Standard": {
+                "value": "NZS 3404: Part 1: 2009 including reference to the NZBC",
+                "unit": "NO-UNIT"
+            },
+            "Manufactured Standard": {
+                "value": "AS/NZS 3679.1: 2016",
+                "unit": "NO-UNIT"
+            },
+            "Manufacturer": {
+                "value": "Steel & Tube",
+                "unit": "NO-UNIT"
+            },
+            "Model": {
+                "value": "180UB18.1",
+                "unit": "NO-UNIT"
+            },
+            "ModifiedIssue_ANZRS": {
+                "value": 20160329.01,
+                "unit": "NO-UNIT"
+            },
+            "OmniClass Number": {
+                "value": "23.25.30.11.14.14",
+                "unit": "NO-UNIT"
+            },
+            "OmniClass Title": {
+                "value": "Beams",
+                "unit": "NO-UNIT"
+            },
+            "Section Name Key": {
+                "value": "UB 180x18.1",
+                "unit": "NO-UNIT"
+            },
+            "Type Name": {
+                "value": "180UB18.1-Steel & Tube",
+                "unit": "NO-UNIT"
+            },
+            "URL": {
+                "value": "http://www.steelandtube.co.nz",
+                "unit": "NO-UNIT"
+            }
         },
-        "Materials_and_Finishes": {
-            "Structural_Material": "Metal-Steel-320MPa"
+        "Materials and Finishes": {
+            "Structural Material": {
+                "value": "Metal-Steel-320MPa",
+                "unit": "NO-UNIT"
+            }
         },
         "Other": {
-            "Category": "Structural Framing",
-            "Family_Name": "Steel-UB Universal Beam-Steel & Tube-300"
+            "Category": {
+                "value": "Structural Framing",
+                "unit": "NO-UNIT"
+            },
+            "Family": {
+                "value": "Steel-UB Universal Beam-Steel & Tube-300: 180UB18.1-Steel & Tube",
+                "unit": "NO-UNIT"
+            },
+            "Family and Type": {
+                "value": "Steel-UB Universal Beam-Steel & Tube-300: 180UB18.1-Steel & Tube",
+                "unit": "NO-UNIT"
+            },
+            "Length Calc": {
+                "value": 2500.0,
+                "unit": "LENGTHUNIT"
+            },
+            "Type": {
+                "value": "Steel-UB Universal Beam-Steel & Tube-300: 180UB18.1-Steel & Tube",
+                "unit": "NO-UNIT"
+            },
+            "Type Id": {
+                "value": "Steel-UB Universal Beam-Steel & Tube-300: 180UB18.1-Steel & Tube",
+                "unit": "NO-UNIT"
+            },
+            "Family Name": {
+                "value": "Steel-UB Universal Beam-Steel & Tube-300",
+                "unit": "NO-UNIT"
+            }
         },
         "Phasing": {
-            "Phase_Created": "New Construction"
+            "Phase Created": {
+                "value": "New Construction",
+                "unit": "NO-UNIT"
+            }
         },
         "Structural": {
-            "Section_Shape": 6,
-            "MassPerUnitLength_ANZRS": 5.51688,
-            "MaximumLength_ANZRS": 16500.0,
-            "SectionAreaGross_ANZRS": 0.0023,
-            "SectionAreaNet_ANZRS": 0.0023
+            "Enable Analytical Model": {
+                "value": true,
+                "unit": "NO-UNIT"
+            },
+            "Structural Usage": {
+                "value": "Other",
+                "unit": "NO-UNIT"
+            },
+            "Cut Length": {
+                "value": 2500.0,
+                "unit": "LENGTHUNIT"
+            },
+            "WeightNet_ANZRS": {
+                "value": 45.25,
+                "unit": "NO-UNIT"
+            },
+            "Section Shape": {
+                "value": 6,
+                "unit": "NO-UNIT"
+            },
+            "MassPerUnitLength_ANZRS": {
+                "value": 5.51688,
+                "unit": "NO-UNIT"
+            },
+            "MaximumLength_ANZRS": {
+                "value": 16500.0,
+                "unit": "LENGTHUNIT"
+            },
+            "SectionAreaGross_ANZRS": {
+                "value": 0.0023,
+                "unit": "AREAUNIT"
+            },
+            "SectionAreaNet_ANZRS": {
+                "value": 0.0023,
+                "unit": "AREAUNIT"
+            }
         },
         "Visibility": {
-            "Error_ANZRS": false,
-            "Override_Error_Message": false,
-            "Stick_Symbol1": true,
-            "Symbol_Offset": false
+            "Error_ANZRS": {
+                "value": false,
+                "unit": "NO-UNIT"
+            },
+            "Override Error Message": {
+                "value": false,
+                "unit": "NO-UNIT"
+            },
+            "Stick Symbol1": {
+                "value": true,
+                "unit": "NO-UNIT"
+            },
+            "Symbol Offset": {
+                "value": false,
+                "unit": "NO-UNIT"
+            }
         },
         "General": {
-            "SpecificationDescription": "",
-            "SpecificationReference": "",
-            "CBICode": "3421",
-            "CBIDescription": "Light steel framing",
-            "ManufacturerName": "Steel & Tube",
-            "ManufacturerURL": "http://steelandtube.co.nz/",
-            "Uniclass2015Code": "Pr_20_76_51_12",
-            "Uniclass2015Title": "Carbon steel beams, columns, channels and tees",
-            "Uniclass2015Version": "2015"
+            "SpecificationDescription": {
+                "value": "",
+                "unit": "NO-UNIT"
+            },
+            "SpecificationReference": {
+                "value": "",
+                "unit": "NO-UNIT"
+            },
+            "CBICode": {
+                "value": "3421",
+                "unit": "NO-UNIT"
+            },
+            "CBIDescription": {
+                "value": "Light steel framing",
+                "unit": "NO-UNIT"
+            },
+            "ManufacturerName": {
+                "value": "Steel & Tube",
+                "unit": "NO-UNIT"
+            },
+            "ManufacturerURL": {
+                "value": "http://steelandtube.co.nz/",
+                "unit": "NO-UNIT"
+            },
+            "Uniclass2015Code": {
+                "value": "Pr_20_76_51_12",
+                "unit": "NO-UNIT"
+            },
+            "Uniclass2015Title": {
+                "value": "Carbon steel beams, columns, channels and tees",
+                "unit": "NO-UNIT"
+            },
+            "Uniclass2015Version": {
+                "value": "2015",
+                "unit": "NO-UNIT"
+            }
         },
-        "Structural_Analysis": {
-            "Form_Factor": 1.0,
-            "Principal_Axes_Angle": 90.0,
-            "Elastic_Modulus_strong_axis": 2.17e-05,
-            "Elastic_Modulus_weak_axis": 0.000139,
-            "Moment_of_Inertia_strong_axis": 0.000112965223272,
-            "Moment_of_Inertia_weak_axis": 0.00140192738625,
-            "Nominal_Weight": 177.49970616,
-            "Perimeter": 0.208788,
-            "Plastic_Modulus_strong_axis": 3.37e-05,
-            "Plastic_Modulus_weak_axis": 0.000157,
-            "Section_Area": 0.0023,
-            "Shear_Area_strong_axis": 0.0023,
-            "Shear_Area_weak_axis": 0.0023,
-            "Tensile_Strength": 440000000.0,
-            "Torsional_Modulus": 0.0,
-            "Torsional_Moment_of_Inertia": 5.19060718216e-06,
-            "Warping_Constant": 8.48045466242e-06,
-            "X-Compactness": "C",
-            "X-Zex": 0.000157,
-            "Y-Compactness": "C",
-            "Yield_Stress_Flange": 320000000.0,
-            "Yield_Stress_Web": 320000000.0,
-            "Y-Zey": 3.25e-05
+        "Structural Analysis": {
+            "Form Factor": {
+                "value": 1.0,
+                "unit": "NO-UNIT"
+            },
+            "Principal Axes Angle": {
+                "value": 90.0,
+                "unit": "PLANEANGLEUNIT"
+            },
+            "Elastic Modulus strong axis": {
+                "value": 2.17e-05,
+                "unit": "VOLUMEUNIT"
+            },
+            "Elastic Modulus weak axis": {
+                "value": 0.000139,
+                "unit": "VOLUMEUNIT"
+            },
+            "Moment of Inertia strong axis": {
+                "value": 0.000112965223272,
+                "unit": "NO-UNIT"
+            },
+            "Moment of Inertia weak axis": {
+                "value": 0.00140192738625,
+                "unit": "NO-UNIT"
+            },
+            "Nominal Weight": {
+                "value": 177.49970616,
+                "unit": "NO-UNIT"
+            },
+            "Perimeter": {
+                "value": 0.208788,
+                "unit": "AREAUNIT"
+            },
+            "Plastic Modulus strong axis": {
+                "value": 3.37e-05,
+                "unit": "VOLUMEUNIT"
+            },
+            "Plastic Modulus weak axis": {
+                "value": 0.000157,
+                "unit": "VOLUMEUNIT"
+            },
+            "Section Area": {
+                "value": 0.0023,
+                "unit": "AREAUNIT"
+            },
+            "Shear Area strong axis": {
+                "value": 0.0023,
+                "unit": "AREAUNIT"
+            },
+            "Shear Area weak axis": {
+                "value": 0.0023,
+                "unit": "AREAUNIT"
+            },
+            "Tensile Strength": {
+                "value": 440000000.0,
+                "unit": "PRESSUREUNIT"
+            },
+            "Torsional Modulus": {
+                "value": 0.0,
+                "unit": "VOLUMEUNIT"
+            },
+            "Torsional Moment of Inertia": {
+                "value": 5.19060718216e-06,
+                "unit": "NO-UNIT"
+            },
+            "Warping Constant": {
+                "value": 8.48045466242e-06,
+                "unit": "NO-UNIT"
+            },
+            "X-Compactness": {
+                "value": "C",
+                "unit": "NO-UNIT"
+            },
+            "X-Zex": {
+                "value": 0.000157,
+                "unit": "VOLUMEUNIT"
+            },
+            "Y-Compactness": {
+                "value": "C",
+                "unit": "NO-UNIT"
+            },
+            "Yield Stress Flange": {
+                "value": 320000000.0,
+                "unit": "PRESSUREUNIT"
+            },
+            "Yield Stress Web": {
+                "value": 320000000.0,
+                "unit": "PRESSUREUNIT"
+            },
+            "Y-Zey": {
+                "value": 3.25e-05,
+                "unit": "VOLUMEUNIT"
+            }
         },
         "AC_Pset_RenovationAndPhasing": {
-            "Renovation_Status": "New"
+            "Renovation Status": {
+                "value": "New",
+                "unit": "NO-UNIT"
+            }
         }
     }
 }
