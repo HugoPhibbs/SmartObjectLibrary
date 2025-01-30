@@ -16,5 +16,3 @@ if __name__ == "__main__":
     stop_opensearch()
     start_opensearch()
 
-    upload_beams.main()
-
