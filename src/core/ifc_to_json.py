@@ -1,10 +1,7 @@
-from typing import List
-
-import ifcopenshell
 import json
-import xmltodict
-import ifcopenshell.file
 from enum import Enum
+from typing import List
+import ifcopenshell.file
 
 
 class IfcMeasureToUnit:
@@ -57,7 +54,8 @@ def unit_for_property(prop):
 
     return "NO-UNIT"
 
-def save_beam(ifc_file, ifc_object, ifc_file_path, i):
+
+def ifc_object_to_dict(ifc_file, ifc_object, ifc_file_path):
     # Prepare a dictionary to hold the beam data
     object_data = {
         "id": ifc_object.GlobalId,
@@ -91,34 +89,35 @@ def save_beam(ifc_file, ifc_object, ifc_file_path, i):
                         "unit": unit_for_property(prop)
                     }
 
-    # Optionally save to a file
-    with open(rf"C:\Users\hugop\Documents\Work\SteelProductLibrary\data\beams-json\beams_{i}.json", "w") as json_file:
-        json.dump(object_data, json_file, indent=4)
-    #
-    # beam_data_xml = beam_data.copy()
-    # beam_data_xml["property_sets"] = {"property_set": beam_data_xml["property_sets"]}
+    return object_data
 
-    with open(rf"C:\Users\hugop\Documents\Work\SteelProductLibrary\data\beams-xml\beams_{i}.xml", "w") as xml_file:
-        xml_data = xmltodict.unparse({"root": object_data}, pretty=True)
-        xml_file.write(xml_data)
 
+def ifc_file_to_object_dict(ifc_file, ifc_file_name):
+    """
+    Extracts the object contained in an ifc file
+
+    Assumes that there is just 1 object in the file
+
+    :param ifc_file:
+    :return:
+    """
+
+    project = ifc_file.by_type("IfcProject")[0]
+
+    for site in project.IsDecomposedBy:
+        for building in site.RelatedObjects:
+            for storey in building.IsDecomposedBy:
+                obj = storey.RelatedObjects[0]  # Take the first object we find
+                return ifc_object_to_dict(ifc_file, obj, ifc_file_name)
+
+    return None
 
 if __name__ == "__main__":
+    ifc_file = ifcopenshell.open(r"C:\Users\hugop\Documents\Work\SteelProductLibrary\data\ifc\single-beam.ifc")
+    object_data = ifc_file_to_object_dict(ifc_file, "test.ifc")
 
-    ifc_file_path = r"C:\Users\hugop\Documents\Work\SteelProductLibrary\data\Steel-UB Universal Beam-Steel & Tube-300.ifc"
+    with open(r"C:\Users\hugop\Documents\Work\SteelProductLibrary\data\beams-json\test_single.json", "w") as json_file:
+        json.dump(object_data, json_file, indent=4)
 
-    # Load the IFC file
-    ifc_file = ifcopenshell.open(
-        r"C:\Users\hugop\Documents\Work\SteelProductLibrary\data\Steel-UB Universal Beam-Steel & Tube-300.ifc")
-
-    beams = ifc_file.by_type("IfcBeam")
-
-    # # Convert to JSON
-    # ifc_json = ifcopenshell.file.to_json(ifc_file)
-    #
-    # # Save the JSON to a file
-    # with open("output.json", "w") as json_file:
-    #     json_file.write(ifc_json)
-
-    for i, beam in enumerate(beams):
-        save_beam(ifc_file, beam, ifc_file_path, i)
+    print(object_data)
+    print("Done")
