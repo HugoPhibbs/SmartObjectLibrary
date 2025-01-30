@@ -1,6 +1,6 @@
 from typing import List
 
-from src.utils.opensearch_client import client
+from scripts.opensearch_client import client
 
 
 def get_by_id(object_id, format="ifc") -> dict:
