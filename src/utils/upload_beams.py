@@ -104,9 +104,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-    id = "1MqlONWM9DPguUA1H$xlNc"
-
-    response = client.get(index="objects", id=id)
-
-    print(response["_source"])
