@@ -1,0 +1,132 @@
+{
+    "id": "0Qjqr6925Ai9RAc7P_Lbcd",
+    "name": "",
+    "object_type": null,
+    "material": null,
+    "object_placement": "#33=IfcLocalPlacement(#3020,#32)",
+    "ifc_type": "IfcBeam",
+    "ifc_file_path": "test.ifc",
+    "units": {
+        "LENGTHUNIT": {
+            "Name": "METRE",
+            "Prefix": "MILLI"
+        },
+        "AREAUNIT": {
+            "Name": "SQUARE_METRE",
+            "Prefix": "NO-PREFIX"
+        },
+        "VOLUMEUNIT": {
+            "Name": "CUBIC_METRE",
+            "Prefix": "NO-PREFIX"
+        },
+        "PLANEANGLEUNIT": {
+            "Name": "DEGREE"
+        },
+        "MASSUNIT": {
+            "Name": "GRAM",
+            "Prefix": "KILO"
+        },
+        "TIMEUNIT": {
+            "Name": "SECOND",
+            "Prefix": "NO-PREFIX"
+        },
+        "FREQUENCYUNIT": {
+            "Name": "HERTZ",
+            "Prefix": "NO-PREFIX"
+        },
+        "THERMODYNAMICTEMPERATUREUNIT": {
+            "Name": "DEGREE_CELSIUS",
+            "Prefix": "NO-PREFIX"
+        },
+        "THERMALTRANSMITTANCEUNIT": {},
+        "VOLUMETRICFLOWRATEUNIT": {},
+        "ELECTRICCURRENTUNIT": {
+            "Name": "AMPERE",
+            "Prefix": "NO-PREFIX"
+        },
+        "ELECTRICVOLTAGEUNIT": {
+            "Name": "VOLT",
+            "Prefix": "NO-PREFIX"
+        },
+        "POWERUNIT": {
+            "Name": "WATT",
+            "Prefix": "NO-PREFIX"
+        },
+        "FORCEUNIT": {
+            "Name": "NEWTON",
+            "Prefix": "KILO"
+        },
+        "ILLUMINANCEUNIT": {
+            "Name": "LUX",
+            "Prefix": "NO-PREFIX"
+        },
+        "LUMINOUSFLUXUNIT": {
+            "Name": "LUMEN",
+            "Prefix": "NO-PREFIX"
+        },
+        "LUMINOUSINTENSITYUNIT": {
+            "Name": "CANDELA",
+            "Prefix": "NO-PREFIX"
+        },
+        "PRESSUREUNIT": {
+            "Name": "PASCAL",
+            "Prefix": "NO-PREFIX"
+        }
+    },
+    "property_sets": {
+        "Pset_BuildingCommon": {
+            "NumberOfStoreys": {
+                "value": 1,
+                "unit": "NO-UNIT"
+            }
+        },
+        "Identity Data": {
+            "Author": {
+                "value": "",
+                "unit": "NO-UNIT"
+            },
+            "Building Name": {
+                "value": "",
+                "unit": "NO-UNIT"
+            },
+            "Organization Description": {
+                "value": "",
+                "unit": "NO-UNIT"
+            },
+            "Organization Name": {
+                "value": "",
+                "unit": "NO-UNIT"
+            }
+        },
+        "Other": {
+            "Category": {
+                "value": "Project Information",
+                "unit": "NO-UNIT"
+            },
+            "Client Name": {
+                "value": "Owner",
+                "unit": "NO-UNIT"
+            },
+            "Project Address": {
+                "value": "Enter address here",
+                "unit": "NO-UNIT"
+            },
+            "Project Issue Date": {
+                "value": "Issue Date",
+                "unit": "NO-UNIT"
+            },
+            "Project Name": {
+                "value": "Project Name",
+                "unit": "NO-UNIT"
+            },
+            "Project Number": {
+                "value": "Project Number",
+                "unit": "NO-UNIT"
+            },
+            "Project Status": {
+                "value": "Project Status",
+                "unit": "NO-UNIT"
+            }
+        }
+    }
+}
