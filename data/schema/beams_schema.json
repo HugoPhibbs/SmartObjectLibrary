@@ -1,1 +1,1522 @@
-{"name": {"type": "text"}, "object_type": {"type": "text"}, "material": {"type": "text"}, "object_placement": {"type": "text"}, "ifc_type": {"type": "text"}, "ifc_file_path": {"type": "text"}, "units": {"type": "object", "properties": {"LENGTHUNIT": {"type": "object", "properties": {"Name": {"type": "text"}, "Prefix": {"type": "text"}}}, "AREAUNIT": {"type": "object", "properties": {"Name": {"type": "text"}, "Prefix": {"type": "text"}}}, "VOLUMEUNIT": {"type": "object", "properties": {"Name": {"type": "text"}, "Prefix": {"type": "text"}}}, "PLANEANGLEUNIT": {"type": "object", "properties": {"Name": {"type": "text"}}}, "MASSUNIT": {"type": "object", "properties": {"Name": {"type": "text"}, "Prefix": {"type": "text"}}}, "TIMEUNIT": {"type": "object", "properties": {"Name": {"type": "text"}, "Prefix": {"type": "text"}}}, "FREQUENCYUNIT": {"type": "object", "properties": {"Name": {"type": "text"}, "Prefix": {"type": "text"}}}, "THERMODYNAMICTEMPERATUREUNIT": {"type": "object", "properties": {"Name": {"type": "text"}, "Prefix": {"type": "text"}}}, "THERMALTRANSMITTANCEUNIT": {"type": "object"}, "VOLUMETRICFLOWRATEUNIT": {"type": "object"}, "ELECTRICCURRENTUNIT": {"type": "object", "properties": {"Name": {"type": "text"}, "Prefix": {"type": "text"}}}, "ELECTRICVOLTAGEUNIT": {"type": "object", "properties": {"Name": {"type": "text"}, "Prefix": {"type": "text"}}}, "POWERUNIT": {"type": "object", "properties": {"Name": {"type": "text"}, "Prefix": {"type": "text"}}}, "FORCEUNIT": {"type": "object", "properties": {"Name": {"type": "text"}, "Prefix": {"type": "text"}}}, "ILLUMINANCEUNIT": {"type": "object", "properties": {"Name": {"type": "text"}, "Prefix": {"type": "text"}}}, "LUMINOUSFLUXUNIT": {"type": "object", "properties": {"Name": {"type": "text"}, "Prefix": {"type": "text"}}}, "LUMINOUSINTENSITYUNIT": {"type": "object", "properties": {"Name": {"type": "text"}, "Prefix": {"type": "text"}}}, "PRESSUREUNIT": {"type": "object", "properties": {"Name": {"type": "text"}, "Prefix": {"type": "text"}}}}}, "property_sets": {"type": "object", "properties": {"Pset_BeamCommon": {"type": "object", "properties": {"Reference": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}, "LoadBearing": {"type": "object", "properties": {"value": {"type": "boolean"}, "unit": {"type": "text"}}}, "IsExternal": {"type": "object", "properties": {"value": {"type": "boolean"}, "unit": {"type": "text"}}}, "Span": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "Slope": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}}}, "Pset_ManufacturerTypeInformation": {"type": "object", "properties": {"Manufacturer": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}}}, "Constraints": {"type": "object", "properties": {"Cross-Section Rotation": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "End Level Offset": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "Orientation": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}, "Reference Level": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}, "Reference Level Elevation": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "Start Level Offset": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "Work Plane": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}}}, "Dimensions": {"type": "object", "properties": {"Elevation at Bottom": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "Elevation at Top": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "Length": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "StickSymbolEndCutBack_ANZRS": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "Stick Symbol Offset Horizontal": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "Stick Symbol Offset Vertical": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "StickSymbolStartCutBack_ANZRS": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "Volume": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "Centroid Horizontal": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "Centroid Vertical": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "Clear Web Height": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "Flange Thickness": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "Flange Toe of Fillet": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "Height": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "Web Fillet": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "Web Thickness": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "Web Toe of Fillet": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "Width": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}}}, "Geometric Position": {"type": "object", "properties": {"End Extension": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "Join Status": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}, "Start Extension": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "y Justification": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}, "y Offset Value": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "yz Justification": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}, "z Justification": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}, "z Offset Value": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}}}, "Identity Data": {"type": "object", "properties": {"Disclaimer": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}, "Assembly Code": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}, "Assembly Description": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}, "Code Name": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}, "CreatedBy_ANZRS": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}, "CreatedByURL_ANZRS": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}, "Description": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}, "Design Instruction": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}, "Design Standard": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}, "Manufactured Standard": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}, "Manufacturer": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}, "Model": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}, "ModifiedIssue_ANZRS": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "OmniClass Number": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}, "OmniClass Title": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}, "Section Name Key": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}, "Type Comments": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}, "Type Name": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}, "URL": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}}}, "Materials and Finishes": {"type": "object", "properties": {"Structural Material": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}}}, "Other": {"type": "object", "properties": {"Category": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}, "Family": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}, "Family and Type": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}, "Length Calc": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "Type": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}, "Type Id": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}, "Family Name": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}}}, "Phasing": {"type": "object", "properties": {"Phase Created": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}}}, "Structural": {"type": "object", "properties": {"Cut Length": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "Enable Analytical Model": {"type": "object", "properties": {"value": {"type": "boolean"}, "unit": {"type": "text"}}}, "Structural Usage": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}, "WeightNet_ANZRS": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "MassPerUnitLength_ANZRS": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "MaximumLength_ANZRS": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "SectionAreaGross_ANZRS": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "SectionAreaNet_ANZRS": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "Section Shape": {"type": "object", "properties": {"value": {"type": "integer"}, "unit": {"type": "text"}}}}}, "Visibility": {"type": "object", "properties": {"Error_ANZRS": {"type": "object", "properties": {"value": {"type": "boolean"}, "unit": {"type": "text"}}}, "Override Error Message": {"type": "object", "properties": {"value": {"type": "boolean"}, "unit": {"type": "text"}}}, "Stick Symbol1": {"type": "object", "properties": {"value": {"type": "boolean"}, "unit": {"type": "text"}}}, "Symbol Offset": {"type": "object", "properties": {"value": {"type": "boolean"}, "unit": {"type": "text"}}}}}, "General": {"type": "object", "properties": {"CBICode": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}, "CBIDescription": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}, "ManufacturerName": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}, "ManufacturerURL": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}, "SpecificationDescription": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}, "SpecificationReference": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}, "Uniclass2015Code": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}, "Uniclass2015Title": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}, "Uniclass2015Version": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}}}, "Structural Analysis": {"type": "object", "properties": {"Elastic Modulus strong axis": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "Elastic Modulus weak axis": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "Form Factor": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "Moment of Inertia strong axis": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "Moment of Inertia weak axis": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "Nominal Weight": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "Perimeter": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "Plastic Modulus strong axis": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "Plastic Modulus weak axis": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "Principal Axes Angle": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "Section Area": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "Shear Area strong axis": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "Shear Area weak axis": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "Tensile Strength": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "Torsional Modulus": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "Torsional Moment of Inertia": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "Warping Constant": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "X-Compactness": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}, "X-Zex": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "Y-Compactness": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}, "Yield Stress Flange": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "Yield Stress Web": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}, "Y-Zey": {"type": "object", "properties": {"value": {"type": "float"}, "unit": {"type": "text"}}}}}, "AC_Pset_RenovationAndPhasing": {"type": "object", "properties": {"Renovation Status": {"type": "object", "properties": {"value": {"type": "text"}, "unit": {"type": "text"}}}}}}}}
+{
+  "name": {
+    "type": "text"
+  },
+  "object_type": {
+    "type": "text"
+  },
+  "material": {
+    "type": "text"
+  },
+  "object_placement": {
+    "type": "text"
+  },
+  "ifc_type": {
+    "type": "text"
+  },
+  "ifc_file_path": {
+    "type": "text"
+  },
+  "units": {
+    "type": "object",
+    "properties": {
+      "LENGTHUNIT": {
+        "type": "object",
+        "properties": {
+          "Name": {
+            "type": "text"
+          },
+          "Prefix": {
+            "type": "text"
+          }
+        }
+      },
+      "AREAUNIT": {
+        "type": "object",
+        "properties": {
+          "Name": {
+            "type": "text"
+          },
+          "Prefix": {
+            "type": "text"
+          }
+        }
+      },
+      "VOLUMEUNIT": {
+        "type": "object",
+        "properties": {
+          "Name": {
+            "type": "text"
+          },
+          "Prefix": {
+            "type": "text"
+          }
+        }
+      },
+      "PLANEANGLEUNIT": {
+        "type": "object",
+        "properties": {
+          "Name": {
+            "type": "text"
+          }
+        }
+      },
+      "MASSUNIT": {
+        "type": "object",
+        "properties": {
+          "Name": {
+            "type": "text"
+          },
+          "Prefix": {
+            "type": "text"
+          }
+        }
+      },
+      "TIMEUNIT": {
+        "type": "object",
+        "properties": {
+          "Name": {
+            "type": "text"
+          },
+          "Prefix": {
+            "type": "text"
+          }
+        }
+      },
+      "FREQUENCYUNIT": {
+        "type": "object",
+        "properties": {
+          "Name": {
+            "type": "text"
+          },
+          "Prefix": {
+            "type": "text"
+          }
+        }
+      },
+      "THERMODYNAMICTEMPERATUREUNIT": {
+        "type": "object",
+        "properties": {
+          "Name": {
+            "type": "text"
+          },
+          "Prefix": {
+            "type": "text"
+          }
+        }
+      },
+      "THERMALTRANSMITTANCEUNIT": {
+        "type": "object"
+      },
+      "VOLUMETRICFLOWRATEUNIT": {
+        "type": "object"
+      },
+      "ELECTRICCURRENTUNIT": {
+        "type": "object",
+        "properties": {
+          "Name": {
+            "type": "text"
+          },
+          "Prefix": {
+            "type": "text"
+          }
+        }
+      },
+      "ELECTRICVOLTAGEUNIT": {
+        "type": "object",
+        "properties": {
+          "Name": {
+            "type": "text"
+          },
+          "Prefix": {
+            "type": "text"
+          }
+        }
+      },
+      "POWERUNIT": {
+        "type": "object",
+        "properties": {
+          "Name": {
+            "type": "text"
+          },
+          "Prefix": {
+            "type": "text"
+          }
+        }
+      },
+      "FORCEUNIT": {
+        "type": "object",
+        "properties": {
+          "Name": {
+            "type": "text"
+          },
+          "Prefix": {
+            "type": "text"
+          }
+        }
+      },
+      "ILLUMINANCEUNIT": {
+        "type": "object",
+        "properties": {
+          "Name": {
+            "type": "text"
+          },
+          "Prefix": {
+            "type": "text"
+          }
+        }
+      },
+      "LUMINOUSFLUXUNIT": {
+        "type": "object",
+        "properties": {
+          "Name": {
+            "type": "text"
+          },
+          "Prefix": {
+            "type": "text"
+          }
+        }
+      },
+      "LUMINOUSINTENSITYUNIT": {
+        "type": "object",
+        "properties": {
+          "Name": {
+            "type": "text"
+          },
+          "Prefix": {
+            "type": "text"
+          }
+        }
+      },
+      "PRESSUREUNIT": {
+        "type": "object",
+        "properties": {
+          "Name": {
+            "type": "text"
+          },
+          "Prefix": {
+            "type": "text"
+          }
+        }
+      }
+    }
+  },
+  "property_sets": {
+    "type": "object",
+    "properties": {
+      "Pset_BeamCommon": {
+        "type": "object",
+        "properties": {
+          "LoadBearing": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "boolean"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "IsExternal": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "boolean"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Slope": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Reference": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Span": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          }
+        }
+      },
+      "Pset_ManufacturerTypeInformation": {
+        "type": "object",
+        "properties": {
+          "Manufacturer": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          }
+        }
+      },
+      "Constraints": {
+        "type": "object",
+        "properties": {
+          "Cross-Section Rotation": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "End Level Offset": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Orientation": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Reference Level": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Reference Level Elevation": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Start Level Offset": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Work Plane": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          }
+        }
+      },
+      "Dimensions": {
+        "type": "object",
+        "properties": {
+          "Elevation at Top": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Stick Symbol Offset Horizontal": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Stick Symbol Offset Vertical": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Elevation at Bottom": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Length": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "StickSymbolEndCutBack_ANZRS": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "StickSymbolStartCutBack_ANZRS": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Volume": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Centroid Horizontal": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Centroid Vertical": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Clear Web Height": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Flange Thickness": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Flange Toe of Fillet": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Height": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Web Fillet": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Web Thickness": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Web Toe of Fillet": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Width": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          }
+        }
+      },
+      "Geometric Position": {
+        "type": "object",
+        "properties": {
+          "End Extension": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Join Status": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Start Extension": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "y Justification": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "y Offset Value": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "yz Justification": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "z Justification": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "z Offset Value": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          }
+        }
+      },
+      "Identity Data": {
+        "type": "object",
+        "properties": {
+          "Disclaimer": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Code Name": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Type Comments": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Assembly Code": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Assembly Description": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "CreatedBy_ANZRS": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "CreatedByURL_ANZRS": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Description": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Design Instruction": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Design Standard": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Manufactured Standard": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Manufacturer": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Model": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "ModifiedIssue_ANZRS": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "OmniClass Number": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "OmniClass Title": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Section Name Key": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Type Name": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "URL": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          }
+        }
+      },
+      "Materials and Finishes": {
+        "type": "object",
+        "properties": {
+          "Structural Material": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          }
+        }
+      },
+      "Other": {
+        "type": "object",
+        "properties": {
+          "Category": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Family": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Family and Type": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Length Calc": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Type": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Type Id": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Family Name": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          }
+        }
+      },
+      "Phasing": {
+        "type": "object",
+        "properties": {
+          "Phase Created": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          }
+        }
+      },
+      "Structural": {
+        "type": "object",
+        "properties": {
+          "Enable Analytical Model": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "boolean"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Structural Usage": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Cut Length": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "WeightNet_ANZRS": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Section Shape": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "integer"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "MassPerUnitLength_ANZRS": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "MaximumLength_ANZRS": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "SectionAreaGross_ANZRS": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "SectionAreaNet_ANZRS": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          }
+        }
+      },
+      "Visibility": {
+        "type": "object",
+        "properties": {
+          "Error_ANZRS": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "boolean"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Override Error Message": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "boolean"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Stick Symbol1": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "boolean"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Symbol Offset": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "boolean"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          }
+        }
+      },
+      "General": {
+        "type": "object",
+        "properties": {
+          "SpecificationDescription": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "SpecificationReference": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "CBICode": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "CBIDescription": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "ManufacturerName": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "ManufacturerURL": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Uniclass2015Code": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Uniclass2015Title": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Uniclass2015Version": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          }
+        }
+      },
+      "Structural Analysis": {
+        "type": "object",
+        "properties": {
+          "Principal Axes Angle": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Elastic Modulus strong axis": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Elastic Modulus weak axis": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Form Factor": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Moment of Inertia strong axis": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Moment of Inertia weak axis": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Nominal Weight": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Perimeter": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Plastic Modulus strong axis": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Plastic Modulus weak axis": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Section Area": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Shear Area strong axis": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Shear Area weak axis": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Tensile Strength": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Torsional Modulus": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Torsional Moment of Inertia": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Warping Constant": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "X-Compactness": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "X-Zex": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Y-Compactness": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Yield Stress Flange": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Yield Stress Web": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          },
+          "Y-Zey": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "float"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          }
+        }
+      },
+      "AC_Pset_RenovationAndPhasing": {
+        "type": "object",
+        "properties": {
+          "Renovation Status": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "text"
+              },
+              "unit": {
+                "type": "text"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
