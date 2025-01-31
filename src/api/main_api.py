@@ -1,30 +1,69 @@
 import io
 import os
 
+import ifcopenshell
 from flask import Flask, request, jsonify, send_file
 import src.core.query_engine as engine
 import zipfile
+import tempfile
 
 app = Flask(__name__)
 
 
+def create_temp_ifc_file(request_file):
+    content = request_file.read().decode("utf-8")
+    with tempfile.NamedTemporaryFile(delete=False, mode="w") as temp_file:
+        temp_file.write(content)
+        temp_file_path = temp_file.name
+        return ifcopenshell.open(temp_file_path)
+
+
 @app.route('/object', methods=['POST'])
 def create_object():
-    new_object_data = request.get_json()
-    engine.create_object(new_object_data)
-    return "Object created"
+    file = request.files['file']
+
+    if file:
+        ifc_file = create_temp_ifc_file(file)
+        engine.create_object(ifc_file)
+
+        return "Object created"
+
+    return "No file provided"
+
+
+@app.route("/object/<object_id>", methods=['PUT'])
+def update_object(object_id: int):
+    file = request.files['file']
+
+    if file:
+        ifc_file = create_temp_ifc_file(file)
+        engine.update_by_id(object_id, ifc_file)
+        return "Object updated"
+    return "Object updated"
+
+
+@app.route("/object")
+def get_all_objects():
+    response_format = request.args.get("format", default="json", type=str)
+    query_response = engine.get_all_objects(response_format)
+
+    if response_format == "json":
+        return jsonify(query_response)
+    elif response_format == "zip":
+        return send_objects_as_zip(query_response)
+    else:
+        pass
 
 
 @app.route('/object/<object_id>', methods=['GET'])
 def get_object(object_id: int):
     response_format = request.args.get("format", default="json", type=str)
-    found_object = engine.get_by_id(object_id)
+    query_response = engine.get_by_id(object_id, response_format)
 
-    print(found_object)
     if response_format == "json":
-        return jsonify(found_object)
+        return jsonify(query_response)
     elif response_format == "ifc":
-        return send_file(found_object["ifc_file_path"], as_attachment=True)
+        return send_file(query_response, as_attachment=True)
     else:
         pass  # TODO handle this
 
@@ -33,13 +72,6 @@ def get_object(object_id: int):
 def delete_object(object_id: int):
     engine.delete_by_id(object_id)
     return "Object deleted"
-
-
-@app.route("/object/<object_id>", methods=['PUT'])
-def update_object(object_id: int):
-    new_object_data = request.get_json()
-    engine.update_by_id(object_id, new_object_data)
-    return "Object updated"
 
 
 def send_objects_as_zip(objects):
