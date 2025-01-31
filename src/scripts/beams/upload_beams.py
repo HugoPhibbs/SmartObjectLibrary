@@ -4,10 +4,10 @@ import re
 
 import genson
 
-from scripts.opensearch_client import client
+from core.opensearch_client import client
 
-BEAMS_DIR = r"C:\Users\hugop\Documents\Work\SteelProductLibrary\data\beams-json"
-SCHEMA_PATH = r"C:\Users\hugop\Documents\Work\SteelProductLibrary\data\beams_schema.json"
+BEAMS_DIR = r"C:\Users\hugop\Documents\Work\SteelProductLibrary\data\objects\json"
+SCHEMA_PATH = r"C:\Users\hugop\Documents\Work\SteelProductLibrary\data\schema\beams_schema.json"
 
 
 def convert_schema(schema):
@@ -43,22 +43,25 @@ def ifcC4NZ_to_opensearch_schema(json_data):
     return convert_schema(schema)
 
 
+def add_object(object_data, id):
+    response = client.index(index="objects", body=object_data, id=id)
+    return response
+
+
 def add_file(file_path):
+    object_id = os.path.basename(file_path).split(".")[0]
+
     with open(file_path, "r") as json_file:
         object_data = json.load(json_file)
 
-    object_id = object_data["id"]
-    del object_data["id"]
-
-    response = client.index(index="objects", body=object_data, id=object_id)
-
-    return response
+    return add_object(object_data, object_id)
 
 
 def add_all_files():
     for file in os.listdir(BEAMS_DIR):
         file_path = os.path.join(BEAMS_DIR, file)
         if os.path.isfile(file_path) and file.endswith(".json"):
+
             add_file(file_path)
 
 
@@ -80,10 +83,10 @@ def create_index(schema, delete_if_exists=True):
 
 
 def write_schema():
-    with open(r"/beams-json/beams_0.json", "r") as json_file:
-        object_data = json.load(json_file)
+    id = r"1MqlONWM9DPguUA1H$xl0k"
 
-    del object_data["id"]
+    with open(rf"C:\Users\hugop\Documents\Work\SteelProductLibrary\data\objects\json\{id}.json", "r") as json_file:
+        object_data = json.load(json_file)
 
     builder = genson.SchemaBuilder()
     builder.add_object(object_data)
