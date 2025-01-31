@@ -1,6 +1,6 @@
 import json
 from enum import Enum
-from typing import List
+from typing import List, Tuple
 import ifcopenshell.file
 
 
@@ -55,10 +55,9 @@ def unit_for_property(prop):
     return "NO-UNIT"
 
 
-def ifc_object_to_dict(ifc_file, ifc_object, ifc_file_path):
-    # Prepare a dictionary to hold the beam data
+def ifc_object_to_dict(ifc_file, ifc_object, ifc_file_path) -> Tuple[dict, str]:
+    # Prepare a dictionary to hold the object data
     object_data = {
-        "id": ifc_object.GlobalId,
         "name": ifc_object.Name,
         "object_type": ifc_object.ObjectType,
         "material": None,  # To store material data
@@ -89,32 +88,29 @@ def ifc_object_to_dict(ifc_file, ifc_object, ifc_file_path):
                         "unit": unit_for_property(prop)
                     }
 
-    return object_data
+    return object_data, ifc_object.GlobalId
 
 
-def ifc_file_to_object_dict(ifc_file, ifc_file_name):
+def ifc_file_to_object_dict(ifc_file, object_type="IfcBeam"):
     """
-    Extracts the object contained in an ifc file
+    Extracts the (first) object contained in an ifc file
 
     Assumes that there is just 1 object in the file
 
     :param ifc_file:
     :return:
     """
+    object = ifc_file.by_type(object_type)[0]
 
-    project = ifc_file.by_type("IfcProject")[0]
+    if object:
+        file_name = f"{object.GlobalId}.ifc"
+        return *ifc_object_to_dict(ifc_file, object, file_name), file_name
 
-    for site in project.IsDecomposedBy:
-        for building in site.RelatedObjects:
-            for storey in building.IsDecomposedBy:
-                obj = storey.RelatedObjects[0]  # Take the first object we find
-                return ifc_object_to_dict(ifc_file, obj, ifc_file_name)
-
-    return None
+    return None, None, None
 
 if __name__ == "__main__":
-    ifc_file = ifcopenshell.open(r"C:\Users\hugop\Documents\Work\SteelProductLibrary\data\ifc\single-beam.ifc")
-    object_data = ifc_file_to_object_dict(ifc_file, "test.ifc")
+    ifc_file, file_name = ifcopenshell.open(r"C:\Users\hugop\Documents\Work\SteelProductLibrary\data\ifc\single-beams\single-beam-0.ifc")
+    object_data = ifc_file_to_object_dict(ifc_file)
 
     with open(r"C:\Users\hugop\Documents\Work\SteelProductLibrary\data\beams-json\test_single.json", "w") as json_file:
         json.dump(object_data, json_file, indent=4)
