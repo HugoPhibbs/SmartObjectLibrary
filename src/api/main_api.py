@@ -1,16 +1,27 @@
 import io
 import os
+from typing import List
 
 import ifcopenshell
 from flask import Flask, request, jsonify, send_file
+from werkzeug.datastructures.file_storage import FileStorage
+
 import src.core.query_engine as engine
 import zipfile
 import tempfile
 
+from core.LibraryObject import LibraryObject
+
 app = Flask(__name__)
 
 
-def create_temp_ifc_file(request_file):
+def create_temp_ifc_file(request_file: FileStorage) -> ifcopenshell.file:
+    """
+    Creates a temporary IFC file from an HTTP request so it can be handled
+
+    :param request_file: file from the request
+    :return: ifc file
+    """
     content = request_file.read().decode("utf-8")
     with tempfile.NamedTemporaryFile(delete=False, mode="w") as temp_file:
         temp_file.write(content)
@@ -32,7 +43,7 @@ def create_object():
 
 
 @app.route("/object/<object_id>", methods=['PUT'])
-def update_object(object_id: int):
+def update_object(object_id: str):
     file = request.files['file']
 
     if file:
@@ -56,7 +67,7 @@ def get_all_objects():
 
 
 @app.route('/object/<object_id>', methods=['GET'])
-def get_object(object_id: int):
+def get_object(object_id: str):
     response_format = request.args.get("format", default="json", type=str)
     query_response = engine.get_by_id(object_id, response_format)
 
@@ -69,12 +80,12 @@ def get_object(object_id: int):
 
 
 @app.route("/object/<object_id>", methods=['DELETE'])
-def delete_object(object_id: int):
+def delete_object(object_id: str):
     engine.delete_by_id(object_id)
     return "Object deleted"
 
 
-def send_objects_as_zip(objects):
+def send_objects_as_zip(objects: List[LibraryObject]):
     zip_buffer = io.BytesIO()
 
     with zipfile.ZipFile(zip_buffer, 'w') as zip_file:

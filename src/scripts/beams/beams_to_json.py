@@ -1,7 +1,7 @@
 import os
 import json
 import ifcopenshell.file
-from src.core.ifc_to_json import ifc_file_to_object_dict
+from src.core.LibraryObject import LibraryObject
 
 OBJECTS_DIR = r"C:\Users\hugop\Documents\Work\SteelProductLibrary\data\objects"
 
@@ -17,7 +17,7 @@ if __name__ == "__main__":
     for i, file in enumerate(os.listdir(single_beams_ifc_dir)):
         file_path = os.path.join(single_beams_ifc_dir, file)
         ifc_file = ifcopenshell.open(file_path)
-        object_dict, id, _ = ifc_file_to_object_dict(ifc_file)
+        object, _ = LibraryObject.from_ifc_file(ifc_file)
 
-        with open(os.path.join(json_dir, f"{id}.json"), "w") as json_file:
-            json.dump(object_dict, json_file, indent=4)
+        with open(os.path.join(json_dir, f"{object.id}.json"), "w") as json_file:
+            json.dump(object, json_file, indent=4)
