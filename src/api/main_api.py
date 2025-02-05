@@ -1,6 +1,6 @@
 import io
 import os
-from typing import List
+from typing import List, Dict, Any
 
 import ifcopenshell
 from flask import Flask, request, jsonify, send_file
@@ -10,9 +10,13 @@ import src.core.query_engine as engine
 import zipfile
 import tempfile
 
+from flask_cors import CORS
+
 from core.LibraryObject import LibraryObject
+from core.QueryBuilder import OpenSearchQueryBuilder
 
 app = Flask(__name__)
+CORS(app)
 
 
 def create_temp_ifc_file(request_file: FileStorage) -> ifcopenshell.file:
@@ -90,7 +94,7 @@ def send_objects_as_zip(objects: List[LibraryObject]):
 
     with zipfile.ZipFile(zip_buffer, 'w') as zip_file:
         for object in objects:
-            file_path = object["ifc_file_path"]
+            file_path = object.ifc_file_path
             if os.path.exists(file_path):
                 zip_file.write(file_path, arcname=os.path.basename(file_path))
 
@@ -100,10 +104,30 @@ def send_objects_as_zip(objects: List[LibraryObject]):
     return send_file(zip_buffer, as_attachment=True, download_name="files.zip", mimetype="application/zip")
 
 
+def parse_query_params(query_params_dict: dict) -> dict:
+    result = {}
+
+    for key, values in query_params_dict.items():
+        keys = key.split('.')
+        temp = result
+
+        for part in keys[:-1]:
+            # Traverse or create the nested dictionaries
+            temp = temp.setdefault(part, {})
+
+        # Set the final key's value
+        temp[keys[-1]] = values[0]
+
+    return result
+
 @app.route("/object/filter", methods=['GET'])
 def get_object_by_filter():
     response_format = request.args.get("format", default="json", type=str)
-    object_filter = request.get_json().get("filter")
+    query_params_dict = request.args.to_dict()
+    query_params_dict = parse_query_params(query_params_dict)
+
+    object_filter = OpenSearchQueryBuilder().from_query_params_dict(query_params_dict).build()
+
     found_objects = engine.get_by_filter(object_filter)
     if response_format == "json":
         return jsonify(found_objects)
