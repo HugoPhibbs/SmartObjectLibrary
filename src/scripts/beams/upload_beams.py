@@ -6,8 +6,8 @@ import genson
 
 from core.opensearch_client import client
 
-BEAMS_DIR = r"C:\Users\hugop\Documents\Work\SteelProductLibrary\data\objects\json"
-SCHEMA_PATH = r"C:\Users\hugop\Documents\Work\SteelProductLibrary\data\schema\beams_schema.json"
+BEAMS_DIR = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\objects\json"
+SCHEMA_PATH = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\schema\beams_schema.json"
 
 
 def convert_schema(schema):
@@ -85,7 +85,7 @@ def create_index(schema, delete_if_exists=True):
 def write_schema():
     id = r"1MqlONWM9DPguUA1H$xl0k"
 
-    with open(rf"C:\Users\hugop\Documents\Work\SteelProductLibrary\data\objects\json\{id}.json", "r") as json_file:
+    with open(rf"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\objects\json\{id}.json", "r") as json_file:
         object_data = json.load(json_file)
 
     builder = genson.SchemaBuilder()
