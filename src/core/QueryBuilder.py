@@ -18,13 +18,12 @@ class OpenSearchQueryBuilder:
             return False
         return value
 
-    def add_filter(self, field, value, operator="term", append_value_to_field=True):
-        if append_value_to_field:
-            field = f"{field}.value"
+    def add_filter(self, field, value, operator="term"):
+        object_path = OpenSearchQueryBuilder.fieldToObjectPath(field)
 
         value = self.__parse_value(value)
 
-        self.query["query"]["bool"]["filter"].append({operator: {field: value}})
+        self.query["query"]["bool"]["filter"].append({operator: {object_path: value}})
         return self
 
     def add_range_filter(self, field, gte, lte):
@@ -43,6 +42,11 @@ class OpenSearchQueryBuilder:
         for key, value in query_params_dict.items():
             self.add_filter(key, value)
         return self
+
+    @staticmethod
+    def fieldToObjectPath(field):
+        return f"property_sets.{field}.value"
+
 
 if __name__ == "__main__":
     # Example usage:
