@@ -19,7 +19,14 @@ class OpenSearchQueryBuilder:
         return value
 
     def add_filter(self, field, value, operator="term"):
+        if value == "":
+            return self
+
+        print(f"Field: {field}, Value: {value}")
+
         object_path = OpenSearchQueryBuilder.fieldToObjectPath(field)
+
+        print(object_path)
 
         value = self.__parse_value(value)
 
@@ -39,6 +46,8 @@ class OpenSearchQueryBuilder:
         return self.query
 
     def from_query_params_dict(self, query_params_dict: dict):
+        print(query_params_dict)
+
         for key, value in query_params_dict.items():
             self.add_filter(key, value)
         return self

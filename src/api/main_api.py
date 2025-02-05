@@ -103,30 +103,14 @@ def send_objects_as_zip(objects: List[LibraryObject]):
     # Send the zip file to the client
     return send_file(zip_buffer, as_attachment=True, download_name="files.zip", mimetype="application/zip")
 
-
-def parse_query_params(query_params_dict: dict) -> dict:
-    result = {}
-
-    for key, values in query_params_dict.items():
-        keys = key.split('.')
-        temp = result
-
-        for part in keys[:-1]:
-            # Traverse or create the nested dictionaries
-            temp = temp.setdefault(part, {})
-
-        # Set the final key's value
-        temp[keys[-1]] = values[0]
-
-    return result
-
 @app.route("/object/filter", methods=['GET'])
 def get_object_by_filter():
     response_format = request.args.get("format", default="json", type=str)
     query_params_dict = request.args.to_dict()
-    query_params_dict = parse_query_params(query_params_dict)
-
+    # TODO drop empty values from the params
     object_filter = OpenSearchQueryBuilder().from_query_params_dict(query_params_dict).build()
+
+    print(object_filter)
 
     found_objects = engine.get_by_filter(object_filter)
     if response_format == "json":
