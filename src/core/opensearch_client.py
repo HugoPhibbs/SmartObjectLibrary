@@ -4,8 +4,8 @@ from opensearchpy import OpenSearch
 
 load_dotenv()
 
-HOST = "http://localhost"
-PORT = 9200
+HOST = os.getenv("OPENSEARCH_HOST")
+PORT = os.getenv("OPENSEARCH_PORT")
 
 auth = ("admin", os.getenv("OPENSEARCH_INITIAL_ADMIN_PASSWORD"))
 
