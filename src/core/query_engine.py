@@ -35,7 +35,7 @@ def get_all_objects(format="ifc") -> List[LibraryObject] | str:
 
 
 def get_by_filter(query_filter: dict) -> List[LibraryObject]:
-    response = client.search(index="objects", body={"query": query_filter})
+    response = client.search(index="objects", body=query_filter)
     return response["hits"]["hits"]
 
 
