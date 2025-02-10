@@ -7,49 +7,63 @@ class OpenSearchQueryBuilder:
             "query": {
                 "bool": {
                     "filter": []
-                }
+                },
+                "range": {}
             }
         }
 
-    def __parse_value(self, value):
-        if value == "true" or value == "True":
+    def __parse_query_params(self, query_params_dict: dict):
+        """
+        Parses query parameters from the request into a dictionary
+
+        :param query_params: query parameters
+        :return: dictionary of query parameters
+        """
+
+        parsed_params = {"bool": {}, "range": {}}
+
+        for key, value in query_params_dict.items():
+            if value == "NaN" or value == "" or not value:
+                continue
+
+            if key.startswith("range_"):
+                value_split = value.split("-")
+                if len(value_split) == 2:
+                    field = key.replace("range_", "")
+                    field_path = OpenSearchQueryBuilder.fieldToObjectPath(field)
+                    parsed_params["range"][field_path] = {"gte": float(value_split[0]), "lte": float(value_split[1])}
+
+            else:
+                field_path = OpenSearchQueryBuilder.fieldToObjectPath(key)
+                parsed_params["bool"][field_path] = self.__parse_bool_value(value)
+
+        return parsed_params
+
+    def __parse_bool_value(self, value):
+        if value in ["true", "True"]:
             return True
-        elif value == "false" or value == "False":
+        elif value in ["false", "False"]:
             return False
         return value
 
-    def add_filter(self, field, value, operator="term"):
-        if value == "":
-            return self
+    def add_filters(self, query_params_dict, bool_operator="term"):
+        for field_path, value in query_params_dict["bool"].items():
+            self.query["query"]["bool"]["filter"].append({bool_operator: {field_path: value}})
 
-        print(f"Field: {field}, Value: {value}")
+        for field_path, value in query_params_dict["range"].items():
+            self.query["query"]["range"][field_path] = value
 
-        object_path = OpenSearchQueryBuilder.fieldToObjectPath(field)
-
-        print(object_path)
-
-        value = self.__parse_value(value)
-
-        self.query["query"]["bool"]["filter"].append({operator: {object_path: value}})
         return self
-
-    def add_range_filter(self, field, gte, lte):
-        raise NotImplementedError
-        # self.query["query"]["bool"]["filter"].append({
-        #     "range": {
-        #         field: {"gte": gte, "lte": lte}
-        #     }
-        # })
-        # return self
 
     def build(self):
         return self.query
 
     def from_query_params_dict(self, query_params_dict: dict):
-        print(query_params_dict)
 
-        for key, value in query_params_dict.items():
-            self.add_filter(key, value)
+        parsed_query_params = self.__parse_query_params(query_params_dict)
+
+        self.add_filters(parsed_query_params)
+
         return self
 
     @staticmethod
@@ -65,16 +79,19 @@ if __name__ == "__main__":
     query_builder = OpenSearchQueryBuilder()
 
     query = (query_builder
-             .add_filter("Pset_BeamCommon.LoadBearing", "True")
+             .from_query_params_dict(
+        {"Pset_BeamCommon.LoadBearing": "True", "range_price": "100-500"})
              # .add_filter("colour", "red")
              # .add_range_filter("price", 100, 500)
              .build())
 
-    import json
+    print(query)
 
-    print(json.dumps(query, indent=2))
-
-    response = client.search(index="objects", body=query)
-
-    print(response)
+    # import json
+    #
+    # print(json.dumps(query, indent=2))
+    #
+    # response = client.search(index="objects", body=query)
+    #
+    # print(response)
     # Output:

@@ -33,30 +33,6 @@ def create_temp_ifc_file(request_file: FileStorage) -> ifcopenshell.file:
         return ifcopenshell.open(temp_file_path)
 
 
-def parse_query_params(query_params: Dict[str, Any]) -> Dict[str, Any]:
-    """
-    Parses query parameters from the request into a dictionary
-
-    :param query_params: query parameters
-    :return: dictionary of query parameters
-    """
-    parsed_params = {"equals": {}, "range": {}}
-
-    for key, value in query_params.items():
-        if value == "NaN" or value == "" or not value:
-            continue
-
-        if key.startswith("range_"):
-            value_split = value.split("-")
-            if len(value_split) == 2:
-                parsed_params["range"][key.replace("range_", "")] = {"gte": value_split[0], "lte": value_split[1]}
-
-        else:
-            parsed_params["equals"][key] = value
-
-    return parsed_params
-
-
 @app.route('/object', methods=['POST'])
 def create_object():
     file = request.files['file']
@@ -132,11 +108,7 @@ def send_objects_as_zip(objects: List[LibraryObject]):
 def get_object_by_filter():
     response_format = request.args.get("format", default="json", type=str)
     query_params_dict = request.args.to_dict()
-    query_params_dict = parse_query_params(query_params_dict)
 
-    print(query_params_dict)
-
-    # TODO drop empty values from the params
     object_filter = OpenSearchQueryBuilder().from_query_params_dict(query_params_dict).build()
 
     print(object_filter)
