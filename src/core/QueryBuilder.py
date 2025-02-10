@@ -54,6 +54,9 @@ class OpenSearchQueryBuilder:
 
     @staticmethod
     def fieldToObjectPath(field):
+        if field in ["ifc_file_path", "ifc_type", "material", "name", "object_placement", "object_type"]:
+            return field
+
         return f"property_sets.{field}.value"
 
 
@@ -62,7 +65,7 @@ if __name__ == "__main__":
     query_builder = OpenSearchQueryBuilder()
 
     query = (query_builder
-             .add_filter("property_sets.Pset_BeamCommon.LoadBearing", "True")
+             .add_filter("Pset_BeamCommon.LoadBearing", "True")
              # .add_filter("colour", "red")
              # .add_range_filter("price", 100, 500)
              .build())
@@ -71,7 +74,7 @@ if __name__ == "__main__":
 
     print(json.dumps(query, indent=2))
 
-    # response = client.search(index="objects", body=query)
+    response = client.search(index="objects", body=query)
 
-    # print(response)
+    print(response)
     # Output:
