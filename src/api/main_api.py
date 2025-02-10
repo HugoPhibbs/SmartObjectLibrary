@@ -32,6 +32,19 @@ def create_temp_ifc_file(request_file: FileStorage) -> ifcopenshell.file:
         temp_file_path = temp_file.name
         return ifcopenshell.open(temp_file_path)
 
+def parse_query_params(query_params: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Parses query parameters from the request into a dictionary
+
+    :param query_params: query parameters
+    :return: dictionary of query parameters
+    """
+    parsed_params = {}
+    for key, value in query_params.items():
+        if value != "NaN" and value !="" and value:
+            parsed_params[key] = value
+    return parsed_params
+
 
 @app.route('/object', methods=['POST'])
 def create_object():
@@ -107,12 +120,15 @@ def send_objects_as_zip(objects: List[LibraryObject]):
 def get_object_by_filter():
     response_format = request.args.get("format", default="json", type=str)
     query_params_dict = request.args.to_dict()
+    query_params_dict = parse_query_params(query_params_dict)
+
     # TODO drop empty values from the params
     object_filter = OpenSearchQueryBuilder().from_query_params_dict(query_params_dict).build()
 
     print(object_filter)
 
     found_objects = engine.get_by_filter(object_filter)
+
     if response_format == "json":
         return jsonify(found_objects)
     elif response_format == "zip":
