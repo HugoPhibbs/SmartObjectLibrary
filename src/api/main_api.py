@@ -73,7 +73,7 @@ def get_all_objects():
 @app.route('/object/<object_id>', methods=['GET'])
 def get_object(object_id: str):
     response_format = request.args.get("format", default="json", type=str)
-    query_response = engine.get_by_id(object_id, response_format)
+    query_response = engine.get_file_by_object_id(object_id, response_format)
 
     if response_format == "json":
         return jsonify(query_response)
@@ -81,6 +81,12 @@ def get_object(object_id: str):
         return send_file(query_response, as_attachment=True)
     else:
         pass  # TODO handle this
+
+
+@app.route("/object/<object_id>/photo", methods=['GET'])
+def get_object_photo(object_id: str):
+    path = engine.get_file_by_object_id(object_id, "png")
+    return send_file(path, as_attachment=True)
 
 
 @app.route("/object/<object_id>", methods=['DELETE'])
