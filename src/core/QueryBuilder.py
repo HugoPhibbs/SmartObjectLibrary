@@ -7,8 +7,7 @@ class OpenSearchQueryBuilder:
             "query": {
                 "bool": {
                     "filter": []
-                },
-                "range": {}
+                }
             }
         }
 
@@ -20,7 +19,7 @@ class OpenSearchQueryBuilder:
         :return: dictionary of query parameters
         """
 
-        parsed_params = {"bool": {}, "range": {}}
+        parsed_params = {"term": {}, "range": {}}
 
         for key, value in query_params_dict.items():
             if value == "NaN" or value == "" or not value:
@@ -35,7 +34,7 @@ class OpenSearchQueryBuilder:
 
             else:
                 field_path = OpenSearchQueryBuilder.fieldToObjectPath(key)
-                parsed_params["bool"][field_path] = self.__parse_bool_value(value)
+                parsed_params["term"][field_path] = self.__parse_bool_value(value)
 
         return parsed_params
 
@@ -47,11 +46,11 @@ class OpenSearchQueryBuilder:
         return value
 
     def add_filters(self, query_params_dict, bool_operator="term"):
-        for field_path, value in query_params_dict["bool"].items():
+        for field_path, value in query_params_dict["term"].items():
             self.query["query"]["bool"]["filter"].append({bool_operator: {field_path: value}})
 
         for field_path, value in query_params_dict["range"].items():
-            self.query["query"]["range"][field_path] = value
+            self.query["query"]["bool"]["filter"].append({"range": {field_path: value}})
 
         return self
 
