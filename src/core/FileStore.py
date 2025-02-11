@@ -1,8 +1,9 @@
+from PIL import Image
 import ifcopenshell
 import json
 import os
 
-OBJECTS_DIR_DEFAULT = r"C:\Users\hugop\Documents\Work\SteelProductLibrary\data\objects"
+OBJECTS_DIR_DEFAULT = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\objects"
 
 
 class FileStore:
@@ -11,45 +12,48 @@ class FileStore:
         self.objects_dir = objects_dir
         self.json_dir = os.path.join(objects_dir, "json")
         self.ifc_dir = os.path.join(objects_dir, "ifc")
+        self.photo_dir = os.path.join(objects_dir, "png")
 
-    def object_json_path(self, object_id):
-        return os.path.join(self.json_dir, f"{object_id}.json")
+    def object_file_path(self, object_id, file_type):
+        if file_type == "ifc":
+            return os.path.join(self.ifc_dir, f"{object_id}.ifc")
+        elif file_type == "json":
+            return os.path.join(self.json_dir, f"{object_id}.json")
+        elif file_type == "png":
+            return os.path.join(self.photo_dir, f"{object_id}.png")
 
-    def object_ifc_path(self, object_id):
-        return os.path.join(self.ifc_dir, f"{object_id}.ifc")
+    def get_object_file(self, object_id: str, file_type: str):
+        file_path = self.object_file_path(object_id, file_type)
 
-    def get_object_json(self, object_id):
-        json_path = self.object_json_path(object_id)
+        if file_type == "ifc":
+            return ifcopenshell.open(file_path)
+        elif file_type == "json":
+            with open(file_path, "r") as json_file:
+                return json.load(json_file)
+        elif file_type == "png":
+            image = Image.open(file_path)
+            return image
 
-        with open(json_path, "r") as json_file:
-            return json.load(json_file)
+        raise ValueError(f"File type {file_type} not supported")
 
-    def get_object_ifc(self, object_id):
-        ifc_path = self.object_ifc_path(object_id)
+    def add_object_file(self, object_id: str, file_data: any, file_type: str):
+        file_path = self.object_file_path(object_id, file_type)
 
-        return ifcopenshell.open(ifc_path)
+        if file_type == "ifc" and isinstance(file_data, ifcopenshell.file):
+            file_data.write(file_path)
+        elif file_type == "json" and isinstance(file_data, dict):
+            with open(file_path, "w") as json_file:
+                json.dump(file_data, json_file)
+        elif file_type == "png" and isinstance(file_data, Image.Image):
+            file_data.save(file_path)
 
-    def delete_object_ifc(self, object_id):
-        ifc_path = self.object_ifc_path(object_id)
+        raise ValueError(f"File type {file_type} not supported for the given file data")
 
-        os.remove(ifc_path)
+    def delete_all_object_files(self, object_id):
+        for file_type in ["ifc", "json", "png"]:
+            self.delete_object_file(object_id, file_type)
 
-    def delete_object_json(self, object_id):
-        json_path = self.object_json_path(object_id)
+    def delete_object_file(self, object_id: str, file_type: str):
+        file_path = self.object_file_path(object_id, file_type)
 
-        os.remove(json_path)
-
-    def add_object_json(self, object_id, object_json):
-        json_path = self.object_json_path(object_id)
-
-        with open(json_path, "w") as json_file:
-            json.dump(object_json, json_file)
-
-        return json_path
-
-    def add_object_ifc(self, object_id, object_ifc: ifcopenshell.file):
-        ifc_path = self.object_ifc_path(object_id)
-
-        object_ifc.write(ifc_path)
-
-        return ifc_path
+        os.remove(file_path)
