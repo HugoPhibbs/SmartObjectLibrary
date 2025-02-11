@@ -1,7 +1,7 @@
 import os
 from PIL import Image
 
-img = Image.open(r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\img.png")
+img = Image.open(r"/img.png")
 
 img_dir = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\objects\png"
 ifc_dir = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\objects\ifc"
