@@ -43,15 +43,17 @@ class OpenSearchQueryBuilder:
 
             else:
                 field_path = OpenSearchQueryBuilder.fieldToObjectPath(key)
-                parsed_params["term"][field_path] = self.__parse_bool_value(value)
+                parsed_params["term"][field_path] = self.__parse_term_value(value)
 
         return parsed_params
 
-    def __parse_bool_value(self, value):
+    def __parse_term_value(self, value):
         if value in ["true", "True"]:
             return True
         elif value in ["false", "False"]:
             return False
+        elif value.isdigit():
+            return float(value)
         return value
 
     def __add_filters(self, query_params_dict, bool_operator="term"):
