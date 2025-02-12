@@ -6,10 +6,14 @@ class OpenSearchQueryBuilder:
         self.query = {
             "query": {
                 "bool": {
-                    "filter": []
+                    "filter": [],
+                    "should": []
                 }
             }
         }
+
+    def build(self):
+        return self.query
 
     def __parse_query_params(self, query_params_dict: dict):
         """
@@ -19,7 +23,7 @@ class OpenSearchQueryBuilder:
         :return: dictionary of query parameters
         """
 
-        parsed_params = {"term": {}, "range": {}}
+        parsed_params = {"term": {}, "range": {}, "match": {}}
 
         for key, value in query_params_dict.items():
             if value == "NaN" or value == "" or not value:
@@ -31,6 +35,11 @@ class OpenSearchQueryBuilder:
                     field = key.replace("range_", "")
                     field_path = OpenSearchQueryBuilder.fieldToObjectPath(field)
                     parsed_params["range"][field_path] = {"gte": float(value_split[0]), "lte": float(value_split[1])}
+
+            elif key.startswith("match_"):
+                field = key.replace("match_", "")
+                field_path = OpenSearchQueryBuilder.fieldToObjectPath(field)
+                parsed_params["match"][field_path] = value
 
             else:
                 field_path = OpenSearchQueryBuilder.fieldToObjectPath(key)
@@ -45,23 +54,30 @@ class OpenSearchQueryBuilder:
             return False
         return value
 
-    def add_filters(self, query_params_dict, bool_operator="term"):
+    def __add_filters(self, query_params_dict, bool_operator="term"):
         for field_path, value in query_params_dict["term"].items():
             self.query["query"]["bool"]["filter"].append({bool_operator: {field_path: value}})
 
         for field_path, value in query_params_dict["range"].items():
             self.query["query"]["bool"]["filter"].append({"range": {field_path: value}})
 
-        return self
+        for field_path, value in query_params_dict["match"].items():
+            self.query["query"]["bool"]["should"].append({
+                "match": {
+                    field_path: {
+                        "query": value,
+                        "fuzziness": "AUTO"
+                    }
+                }
+            })
 
-    def build(self):
-        return self.query
+        return self
 
     def from_query_params_dict(self, query_params_dict: dict):
 
         parsed_query_params = self.__parse_query_params(query_params_dict)
 
-        self.add_filters(parsed_query_params)
+        self.__add_filters(parsed_query_params)
 
         return self
 
@@ -79,7 +95,7 @@ if __name__ == "__main__":
 
     query = (query_builder
              .from_query_params_dict(
-        {"Pset_BeamCommon.LoadBearing": "True", "range_price": "100-500"})
+        {"Pset_BeamCommon.LoadBearing": "True", "range_price": "100-500", "match_material": "steel"})
              # .add_filter("colour", "red")
              # .add_range_filter("price", 100, 500)
              .build())
