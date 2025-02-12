@@ -1,3 +1,5 @@
+import re
+
 from src.core.opensearch_client import client
 
 
@@ -15,6 +17,12 @@ class OpenSearchQueryBuilder:
     def build(self):
         return self.query
 
+    def __parse_range_string(self, range_string: str):
+        match = re.match(r'^(?P<min>-?\d+)?to(?P<max>-?\d+)?$', range_string)
+        if match:
+            return {k: float(v) if v is not None else None for k, v in match.groupdict().items()}
+        return None
+
     def __parse_query_params(self, query_params_dict: dict):
         """
         Parses query parameters from the request into a dictionary
@@ -30,11 +38,16 @@ class OpenSearchQueryBuilder:
                 continue
 
             if key.startswith("range_"):
-                value_split = value.split("-")
-                if len(value_split) == 2:
+                min_max = self.__parse_range_string(value)
+                print("min_max ", min_max)
+                if min_max is not None:
                     field = key.replace("range_", "")
                     field_path = OpenSearchQueryBuilder.fieldToObjectPath(field)
-                    parsed_params["range"][field_path] = {"gte": float(value_split[0]), "lte": float(value_split[1])}
+                    parsed_params["range"][field_path] = {}
+                    if min_max["min"] is not None:
+                        parsed_params["range"][field_path]["gte"] = min_max["min"]
+                    if min_max["max"] is not None:
+                        parsed_params["range"][field_path]["lte"] = min_max["max"]
 
             elif key.startswith("match_"):
                 field = key.replace("match_", "")
