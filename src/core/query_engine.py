@@ -12,7 +12,7 @@ file_store = FileStore()
 def get_file_by_object_id(object_id: str, file_type="ifc") -> LibraryObject | str:
     if file_type == "json":
         response = client.get(index="objects", id=object_id)
-        return response["_source"]
+        return response
 
     elif file_type == "ifc":
         return file_store.object_file_path(object_id, "ifc")
