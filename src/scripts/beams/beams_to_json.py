@@ -3,7 +3,7 @@ import json
 import ifcopenshell.file
 from src.core.LibraryObject import LibraryObject
 
-OBJECTS_DIR = r"C:\Users\hugop\Documents\Work\SteelProductLibrary\data\objects"
+OBJECTS_DIR = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\objects"
 
 if __name__ == "__main__":
 
@@ -19,5 +19,7 @@ if __name__ == "__main__":
         ifc_file = ifcopenshell.open(file_path)
         object, _ = LibraryObject.from_ifc_file(ifc_file)
 
+        object_dict = object.to_dict()
+
         with open(os.path.join(json_dir, f"{object.id}.json"), "w") as json_file:
-            json.dump(object, json_file, indent=4)
+            json.dump(object_dict, json_file, indent=4)
