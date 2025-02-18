@@ -26,6 +26,7 @@ class LibraryObject:
     Wrapper for a library object
     """
 
+    id: str
     name: str
     object_type: str
     material: str
@@ -49,6 +50,7 @@ class LibraryObject:
 
     def to_dict(self):
         return {
+            "id": self.id,
             "name": self.name,
             "object_type": self.object_type,
             "material": self.material,
@@ -81,6 +83,20 @@ class LibraryObject:
             return LibraryObject.__from_ifc_object(ifc_file, ifc_object, file_name), file_name
 
         return None, None
+
+    @staticmethod
+    def from_opensearch_hit(hit: dict) -> LibraryObject:
+        return LibraryObject(
+            name=hit["_source"]["name"],
+            object_type=hit["_source"]["object_type"],
+            material=hit["_source"]["material"],
+            object_placement=hit["_source"]["object_placement"],
+            ifc_type=hit["_source"]["ifc_type"],
+            ifc_file_path=hit["_source"]["ifc_file_path"],
+            units=hit["_source"]["units"],
+            property_sets=hit["_source"]["property_sets"],
+            id=hit["_id"]
+        )
 
     @staticmethod
     def __from_ifc_object(ifc_file: ifcopenshell.file, ifc_object: ifcopenshell.entity_instance,

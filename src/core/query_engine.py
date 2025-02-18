@@ -12,7 +12,7 @@ file_store = FileStore()
 def get_file_by_object_id(object_id: str, file_type="ifc") -> LibraryObject | str:
     if file_type == "json":
         response = client.get(index="objects", id=object_id)
-        return response
+        return LibraryObject.from_opensearch_hit(response).to_dict()
 
     elif file_type == "ifc":
         return file_store.object_file_path(object_id, "ifc")
@@ -26,7 +26,8 @@ def get_file_by_object_id(object_id: str, file_type="ifc") -> LibraryObject | st
 def get_all_objects(format="ifc") -> List[LibraryObject] | str:
     if format == "json":
         response = client.search(index="objects", body={"query": {"match_all": {}}})
-        return response["hits"]["hits"]
+        results = convert_hits_to_objects_with_score(response["hits"]["hits"])
+        return results
 
     elif format == "ifc":
         objects = []
@@ -37,10 +38,19 @@ def get_all_objects(format="ifc") -> List[LibraryObject] | str:
 
         return objects
 
+def convert_hits_to_objects_with_score(hits):
+    results = []
+
+    for hit in hits:
+        results.append({'score': hit["_score"], "object": LibraryObject.from_opensearch_hit(hit).to_dict()})
+
+    return results
+
 
 def get_by_filter(query_filter: dict) -> List[LibraryObject]:
     response = client.search(index="objects", body=query_filter)
-    return response["hits"]["hits"]
+    results = convert_hits_to_objects_with_score(response["hits"]["hits"])
+    return results
 
 
 def get_by_nlp(nlp_query) -> List[LibraryObject]:
