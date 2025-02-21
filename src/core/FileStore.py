@@ -1,5 +1,6 @@
 from PIL import Image
 import ifcopenshell
+import ifcopenshell.file
 import json
 import os
 
@@ -46,8 +47,8 @@ class FileStore:
                 json.dump(file_data, json_file)
         elif file_type == "png" and isinstance(file_data, Image.Image):
             file_data.save(file_path)
-
-        raise ValueError(f"File type {file_type} not supported for the given file data")
+        else:
+            raise ValueError(f"File type {file_type} not supported for the given file data")
 
     def delete_all_object_files(self, object_id):
         for file_type in ["ifc", "json", "png"]:
