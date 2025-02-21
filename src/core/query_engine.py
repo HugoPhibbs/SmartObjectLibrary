@@ -6,6 +6,8 @@ from core.opensearch_client import client
 from src.core.FileStore import FileStore
 from src.core.LibraryObject import LibraryObject
 
+from PIL import Image
+
 file_store = FileStore()
 
 
@@ -85,3 +87,8 @@ def create_object(object_ifc_file: ifcopenshell.file, ifc_type="IfcBeam", custom
     file_store.add_object_file(object.id, object_ifc_file, "ifc")
 
     return response
+
+
+def add_object_photo(object_id: str, photo : Image.Image):
+    file_store.add_object_file(object_id, photo, "png")
+    return "File added"

@@ -2,6 +2,7 @@ import io
 import os
 from typing import List, Dict, Any
 
+from PIL import Image
 import ifcopenshell
 from flask import Flask, request, jsonify, send_file
 from werkzeug.datastructures.file_storage import FileStorage
@@ -94,6 +95,17 @@ def get_object(object_id: str):
 def get_object_photo(object_id: str):
     path = engine.get_file_by_object_id(object_id, "png")
     return send_file(path, as_attachment=True)
+
+
+@app.route("/object/<object_id>/photo", methods=['POST'])
+def add_object_photo(object_id: str):
+    file = request.files['file']
+
+    if file:
+        image = Image.open(file.stream)
+        engine.add_object_photo(object_id, image)
+        return "Photo added"
+    return "No file provided"
 
 
 @app.route("/object/<object_id>", methods=['DELETE'])
