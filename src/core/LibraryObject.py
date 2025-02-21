@@ -74,9 +74,12 @@ class LibraryObject:
         return "NO-UNIT"
 
     @staticmethod
-    def from_ifc_file(ifc_file: ifcopenshell.file, object_type="IfcBeam") \
+    def from_ifc_file(ifc_file: ifcopenshell.file, object_type="IfcBeam", customID: str = None) \
             -> tuple[LibraryObject, str] | tuple[None, None]:
         ifc_object = ifc_file.by_type(object_type)[0]
+
+        if customID:
+            ifc_object.GlobalId = customID
 
         if ifc_object:
             file_name = f"{ifc_object.GlobalId}.ifc"
@@ -129,7 +132,8 @@ class LibraryObject:
 
                     for prop in pset.HasProperties:
                         object.property_sets[pset.Name][prop.Name] = {
-                            "value": prop.NominalValue.wrappedValue if hasattr(prop.NominalValue, 'wrappedValue') else str(
+                            "value": prop.NominalValue.wrappedValue if hasattr(prop.NominalValue,
+                                                                               'wrappedValue') else str(
                                 prop.NominalValue),
                             "unit": LibraryObject.__unit_for_property(prop)
                         }

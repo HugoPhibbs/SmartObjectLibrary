@@ -36,12 +36,19 @@ def create_temp_ifc_file(request_file: FileStorage) -> ifcopenshell.file:
 @app.route('/object', methods=['POST'])
 def create_object():
     file = request.files['file']
+    form_key_values = request.form.to_dict()
 
     if file:
         ifc_file = create_temp_ifc_file(file)
-        engine.create_object(ifc_file)
+        customID = form_key_values["customID"] if "customID" in form_key_values else None
 
-        return "Object created"
+        response = engine.create_object(ifc_file, customID=customID)
+        result = response["result"]
+
+        if result == "created":
+            return "Object created", 201
+        elif result == "updated":
+            return "Object updated", 200
 
     return "No file provided"
 

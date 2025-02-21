@@ -38,6 +38,7 @@ def get_all_objects(format="ifc") -> List[LibraryObject] | str:
 
         return objects
 
+
 def convert_hits_to_objects_with_score(hits):
     results = []
 
@@ -69,7 +70,7 @@ def update_by_id(object_id: str, ifc_file: ifcopenshell.file):
     return response
 
 
-def create_object(object_ifc_file: ifcopenshell.file, ifc_type="IfcBeam"):
+def create_object(object_ifc_file: ifcopenshell.file, ifc_type="IfcBeam", customID: str = None):
     """
     Handles creating a new object in the OpenSearch index
 
@@ -78,8 +79,9 @@ def create_object(object_ifc_file: ifcopenshell.file, ifc_type="IfcBeam"):
     :param object_ifc_file: ifc file
     :return:
     """
-    object, _ = LibraryObject.from_ifc_file(object_ifc_file, ifc_type)
-    response = client.index(index="objects", body=object, id=object.id)
+    object, _ = LibraryObject.from_ifc_file(object_ifc_file, ifc_type, customID)
+
+    response = client.index(index="objects", body=object.to_dict(), id=object.id)
     file_store.add_object_file(object.id, object_ifc_file, "ifc")
 
     return response
