@@ -15,25 +15,23 @@ connections_list = []
 
 for index, row in enumerate(df_dict):
     new_dict = {}
-    new_dict["Member Section"] = row["Member Section"]
-    new_dict["Mass"] = row["Mass (Kg/m)"]
-    new_dict["Moment (%)"] = row["Moment"]
-    new_dict["Shear (%)"] = row["Shear"]
+
+    new_dict["id"] = f"m{row['Moment (%)']}-s{row['Shear (%)']}-section{row["Member"]}-mass{row['Mass']}"
 
     new_dict["Connection"] = {}
 
-    cleat = {"Thickness": row["Thick. (mm)"], "Width": row["Width (mm)"], "Length": row["Length (mm)"]}
+    cleat = {"Thickness": row["Thick."], "Width": row["Width"], "Length": row["Length"]}
     new_dict["Connection"]["Cleat"] = cleat
 
-    bolts = {"Total Bolts": row["Total Bolts"], "Diameter": row["Dia. (mm)"]}
+    bolts = {"Total Top": row["Top"], "Total Bottom": row["Bottom"], "Diameter": row["Dia."]}
     new_dict["Connection"]["Bolts"] = bolts
 
-    fillet_welds = {"Flange": row["Flange Weld (mm)"], "Web": row["Web Weld (mm)"]}
+    fillet_welds = {"Flange": row["Flange"], "Web": row["Web"]}
     new_dict["Connection"]["Fillet Welds"] = fillet_welds
 
-    new_dict["Design Capacity"] = {"Moment (Top)": row["Moment Capacity (Top) (KNm)"],
-                                   "Moment (Bottom)": row["Moment Capacity (Bottom) (KNm)"],
-                                   "Shear": row["Shear Capacity (KN)"]}
+    new_dict["Design Capacity"] = {"Moment (Top)": row["Moment"],
+                                   "Moment (Bottom)": row["Moment.1"],
+                                   "Shear": row["Shear"]}
 
     connections_list.append(new_dict)
 
@@ -55,4 +53,4 @@ client.indices.create(index="connections", body={
 })
 
 for index, connection in enumerate(connections_list):
-    response = client.index(index="connections", body=connection, id=index)
+    response = client.index(index="connections", body=connection, id=connection["id"])
