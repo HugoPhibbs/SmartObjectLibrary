@@ -1,46 +1,13 @@
 import json
 import os
-import re
 
 import genson
 
 from core.opensearch_client import client
+from scripts.utils import convert_schema
 
 BEAMS_DIR = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\objects\json"
 SCHEMA_PATH = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\schema\beams_schema.json"
-
-
-def convert_schema(schema):
-    """
-    Convert json schema to opensearch schema
-
-    Should turn all values of "string" to "text", and "number" to "float"
-
-    :param schema:
-    :return:
-    """
-    schema_string = json.dumps(schema)
-    schema_string = schema_string.replace('"string"', '"text"')
-    schema_string = schema_string.replace('"number"', '"float"')
-    schema_string = re.sub(r',\s*"required":\s*\[[^\]]*\]', '', schema_string)
-
-    schema_json = json.loads(schema_string)
-
-    return schema_json["properties"]
-
-
-def ifcC4NZ_to_opensearch_schema(json_data):
-    """
-    Creates an opensearch index schema from custom IFC Construction 4.0 NZ data json
-
-    :param json_data: json data as a dict
-    :return: opensearch properties schema as a dict
-    """
-    builder = genson.SchemaBuilder()
-    builder.add_object(json_data)
-    schema = builder.to_schema()
-
-    return convert_schema(schema)
 
 
 def add_object(object_data, id):
