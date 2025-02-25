@@ -2,7 +2,9 @@ from typing import List
 
 import ifcopenshell
 
+from core.QueryBuilder import OpenSearchQueryBuilder
 from core.opensearch_client import client
+from core.utils import opensearch_hits_to_dicts
 from src.core.FileStore import FileStore
 from src.core.LibraryObject import LibraryObject
 
@@ -28,7 +30,7 @@ def get_file_by_object_id(object_id: str, file_type="ifc") -> LibraryObject | st
 def get_all_objects(format="ifc") -> List[LibraryObject] | str:
     if format == "json":
         response = client.search(index="objects", body={"query": {"match_all": {}}})
-        results = convert_hits_to_objects_with_score(response["hits"]["hits"])
+        results = opensearch_hits_to_dicts(response["hits"]["hits"])
         return results
 
     elif format == "ifc":
@@ -41,18 +43,12 @@ def get_all_objects(format="ifc") -> List[LibraryObject] | str:
         return objects
 
 
-def convert_hits_to_objects_with_score(hits):
-    results = []
+def get_by_filter(query_params: dict) -> List[LibraryObject]:
+    query_filter = OpenSearchQueryBuilder("object").from_query_params_dict(query_params).build()
 
-    for hit in hits:
-        results.append({'score': hit["_score"], "object": LibraryObject.from_opensearch_hit(hit).to_dict()})
-
-    return results
-
-
-def get_by_filter(query_filter: dict) -> List[LibraryObject]:
     response = client.search(index="objects", body=query_filter)
-    results = convert_hits_to_objects_with_score(response["hits"]["hits"])
+    results = opensearch_hits_to_dicts(response["hits"]["hits"])
+
     return results
 
 

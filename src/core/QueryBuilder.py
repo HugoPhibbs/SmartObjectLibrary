@@ -4,7 +4,7 @@ from src.core.opensearch_client import client
 
 
 class OpenSearchQueryBuilder:
-    def __init__(self):
+    def __init__(self, object_type: str):
         self.query = {
             "query": {
                 "bool": {
@@ -13,6 +13,7 @@ class OpenSearchQueryBuilder:
                 }
             }
         }
+        self.object_type = object_type
 
     def build(self):
         return self.query
@@ -42,7 +43,7 @@ class OpenSearchQueryBuilder:
                 print("min_max ", min_max)
                 if min_max is not None:
                     field = key.replace("range_", "")
-                    field_path = OpenSearchQueryBuilder.fieldToObjectPath(field)
+                    field_path = self.fieldToObjectPath(field)
                     parsed_params["range"][field_path] = {}
                     if min_max["min"] is not None:
                         parsed_params["range"][field_path]["gte"] = min_max["min"]
@@ -51,11 +52,11 @@ class OpenSearchQueryBuilder:
 
             elif key.startswith("match_"):
                 field = key.replace("match_", "")
-                field_path = OpenSearchQueryBuilder.fieldToObjectPath(field)
+                field_path = self.fieldToObjectPath(field)
                 parsed_params["match"][field_path] = value
 
             else:
-                field_path = OpenSearchQueryBuilder.fieldToObjectPath(key)
+                field_path = self.fieldToObjectPath(key)
                 parsed_params["term"][field_path] = self.__parse_term_value(value)
 
         return parsed_params
@@ -96,17 +97,24 @@ class OpenSearchQueryBuilder:
 
         return self
 
-    @staticmethod
-    def fieldToObjectPath(field):
-        if field in ["ifc_file_path", "ifc_type", "material", "name", "object_placement", "object_type"]:
-            return field
+    def fieldToObjectPath(self, field):
+        if self.object_type == "object":
+            if field in ["ifc_file_path", "ifc_type", "material", "name", "object_placement", "object_type"]:
+                return field
 
-        return f"property_sets.{field}.value"
+            return f"property_sets.{field}.value"
+
+        elif self.object_type == "connection":
+            if field in ["moment", "shear", "mass", "section"]:
+                return field
+            return "implement-me"
+
+        return field
 
 
 if __name__ == "__main__":
     # Example usage:
-    query_builder = OpenSearchQueryBuilder()
+    query_builder = OpenSearchQueryBuilder("object")
 
     query = (query_builder
              .from_query_params_dict(
