@@ -15,23 +15,27 @@ connections_list = []
 
 for index, row in enumerate(df_dict):
     new_dict = {}
+    new_dict["section"] = row["Member"]
+    new_dict["mass"] = row["Mass"]
+    new_dict["moment"] = row["Moment (%)"]
+    new_dict["shear"] = row["Shear (%)"]
 
-    new_dict["id"] = f"m{row['Moment (%)']}-s{row['Shear (%)']}-section{row["Member"]}-mass{row['Mass']}"
+    new_dict["id"] = f"m{row['Moment (%)']}-s{row['Shear (%)']}-section{row['Member']}-mass{row['Mass']}"
 
-    new_dict["Connection"] = {}
+    new_dict["connection"] = {}
 
-    cleat = {"Thickness": row["Thick."], "Width": row["Width"], "Length": row["Length"]}
-    new_dict["Connection"]["Cleat"] = cleat
+    cleat = {"thickness": row["Thick."], "width": row["Width"], "length": row["Length"]}
+    new_dict["connection"]["cleat"] = cleat
 
-    bolts = {"Total Top": row["Top"], "Total Bottom": row["Bottom"], "Diameter": row["Dia."]}
-    new_dict["Connection"]["Bolts"] = bolts
+    bolts = {"total_top": row["Top"], "total_bottom": row["Bottom"], "diameter": row["Dia."]}
+    new_dict["connection"]["bolts"] = bolts
 
-    fillet_welds = {"Flange": row["Flange"], "Web": row["Web"]}
-    new_dict["Connection"]["Fillet Welds"] = fillet_welds
+    fillet_welds = {"flange": row["Flange"], "web": row["Web"]}
+    new_dict["connection"]["fillet_welds"] = fillet_welds
 
-    new_dict["Design Capacity"] = {"Moment (Top)": row["Moment"],
-                                   "Moment (Bottom)": row["Moment.1"],
-                                   "Shear": row["Shear"]}
+    new_dict["design_capacity"] = {"moment_top": row["Moment"],
+                                   "moment_bottom": row["Moment.1"],
+                                   "shear": row["Shear"]}
 
     connections_list.append(new_dict)
 
