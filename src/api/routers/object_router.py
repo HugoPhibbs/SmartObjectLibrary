@@ -11,7 +11,6 @@ from werkzeug.datastructures import FileStorage
 
 import src.core.query_engines.object_query_engine as engine
 from core.LibraryObject import LibraryObject
-from core.QueryBuilder import OpenSearchQueryBuilder
 
 from flask import Blueprint
 

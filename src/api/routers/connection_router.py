@@ -1,7 +1,6 @@
 from flask import Blueprint, request
 
 import core.query_engines.connection_query_engine as query_engine
-from core.QueryBuilder import OpenSearchQueryBuilder
 
 connection_bp = Blueprint('connection', __name__)
 
