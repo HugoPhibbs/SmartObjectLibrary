@@ -25,3 +25,12 @@ def get_connections_by_filter(query_params):
     results = opensearch_hits_to_dicts(response["hits"]["hits"])
 
     return results
+
+
+def get_section_types():
+    response = client.search(index="connections",
+                             body={"size": 0, "aggs": {"unique_values": {"terms": {"field": "section"}}}})
+    unique_values = [bucket["key"] for bucket in response["aggregations"]["unique_values"]["buckets"]]
+
+    return unique_values
+

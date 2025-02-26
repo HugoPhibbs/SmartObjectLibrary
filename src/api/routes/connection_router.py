@@ -24,3 +24,8 @@ def get_connections_by_filter():
 def get_all_connections():
     connections = query_engine.get_all_connections()
     return connections, 200
+
+@connection_bp.route("/section-type", methods=['GET'])
+def get_section_types():
+    member_types = query_engine.get_section_types()
+    return member_types, 200

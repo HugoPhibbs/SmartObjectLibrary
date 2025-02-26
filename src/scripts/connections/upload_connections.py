@@ -35,7 +35,9 @@ for index, row in enumerate(df_dict):
 
     new_dict["design_capacity"] = {"moment_top": row["Moment"],
                                    "moment_bottom": row["Moment.1"],
-                                   "shear": row["Shear"]}
+                                   "shear_capacity": row["Shear"]}
+
+    new_dict["connection_type"] = "MEP-8"
 
     connections_list.append(new_dict)
 
@@ -46,6 +48,9 @@ builder.add_object(data_dict)
 schema = builder.to_schema()
 
 schema = convert_schema(schema)
+
+# Adjust section type to be a keyword
+schema["section"]["type"] = "keyword"
 
 if client.indices.exists(index="connections"):
     client.indices.delete(index="connections")
