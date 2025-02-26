@@ -1,6 +1,6 @@
 from flask import Blueprint, request
 
-import core.query_engines.connection_query_engine as query_engine
+import src.core.query_engines.connection_query_engine as query_engine
 
 connection_bp = Blueprint('connection', __name__)
 

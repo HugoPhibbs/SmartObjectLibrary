@@ -7,7 +7,7 @@
       <excludeFolder url="file://$MODULE_DIR$/.venv" />
       <excludeFolder url="file://$MODULE_DIR$/ifcJSON" />
     </content>
-    <orderEntry type="jdk" jdkName="SteelProductLibrary (3)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="SmartObjectLibrary" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>

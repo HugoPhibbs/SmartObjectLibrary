@@ -10,7 +10,7 @@ from flask import request, jsonify, send_file
 from werkzeug.datastructures import FileStorage
 
 import src.core.query_engines.object_query_engine as engine
-from core.LibraryObject import LibraryObject
+from src.core.LibraryObject import LibraryObject
 
 from flask import Blueprint
 

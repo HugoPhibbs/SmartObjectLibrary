@@ -3,7 +3,7 @@ import os
 
 import genson
 
-from core.opensearch_client import client
+from src.core.opensearch_client import client
 from scripts.utils import convert_schema
 
 # Script to upload all beam objects to OpenSearch

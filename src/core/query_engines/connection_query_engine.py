@@ -1,5 +1,5 @@
-from core.QueryBuilder import OpenSearchQueryBuilder
-from core.utils import opensearch_hits_to_dicts
+from src.core.QueryBuilder import OpenSearchQueryBuilder
+from src.core.utils import opensearch_hits_to_dicts
 from src.core.opensearch_client import client
 
 

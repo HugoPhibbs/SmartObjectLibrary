@@ -2,9 +2,9 @@ from typing import List
 
 import ifcopenshell
 
-from core.QueryBuilder import OpenSearchQueryBuilder
-from core.opensearch_client import client
-from core.utils import opensearch_hits_to_dicts
+from src.core.QueryBuilder import OpenSearchQueryBuilder
+from src.core.opensearch_client import client
+from src.core.utils import opensearch_hits_to_dicts
 from src.core.FileStore import FileStore
 from src.core.LibraryObject import LibraryObject
 
