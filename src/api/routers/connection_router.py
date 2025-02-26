@@ -12,6 +12,7 @@ def get_connection(connection_id: str):
     connection = query_engine.get_connection_by_id(connection_id)
     return connection, 200 if connection else None, 404
 
+
 @connection_bp.route("/filter", methods=["GET"])
 def get_connections_by_filter():
     query_params = request.args.to_dict()
@@ -24,6 +25,7 @@ def get_connections_by_filter():
 def get_all_connections():
     connections = query_engine.get_all_connections()
     return connections, 200
+
 
 @connection_bp.route("/section-type", methods=['GET'])
 def get_section_types():

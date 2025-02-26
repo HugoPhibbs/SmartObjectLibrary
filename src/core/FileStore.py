@@ -8,6 +8,11 @@ OBJECTS_DIR_DEFAULT = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\ob
 
 
 class FileStore:
+    """
+    Manages the storage of object files (IFC, JSON, PNG) in the file system
+
+    Way to abstract this functionality away, so can easily switch to cloud storage in the future
+    """
 
     def __init__(self, objects_dir=OBJECTS_DIR_DEFAULT):
         self.objects_dir = objects_dir

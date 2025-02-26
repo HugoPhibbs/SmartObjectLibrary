@@ -1,19 +1,25 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Tuple, List
+from typing import List
 
 import ifcopenshell
 
 
-class IfcMeasureToUnit:
-
-    def __init__(self, measures_list: List[str], unit):
-        self.measures_list = measures_list
-        self.unit = unit
-
-
 class IfcMeasureToUnitEnum(Enum):
+    """
+    Enum to map units to ifc measure types, and hence ifc units
+    """
+
+    class IfcMeasureToUnit:
+        """
+        Object to map IFC measure types to unit types
+        """
+
+        def __init__(self, measures_list: List[str], unit):
+            self.measures_list = measures_list
+            self.unit = unit
+
     LENGTH = IfcMeasureToUnit(["IfcPositiveLengthMeasure", "IfcLengthMeasure"], "LENGTHUNIT")
     AREA = IfcMeasureToUnit(["IfcAreaMeasure"], "AREAUNIT")
     ANGLE = IfcMeasureToUnit(["IfcPlaneAngleMeasure"], "PLANEANGLEUNIT")
@@ -24,6 +30,8 @@ class IfcMeasureToUnitEnum(Enum):
 class LibraryObject:
     """
     Wrapper for a library object
+
+    Represents what is stored in cloud storage
     """
 
     id: str
@@ -63,6 +71,7 @@ class LibraryObject:
 
     @staticmethod
     def __unit_for_property(prop):
+        """Finds unit for an ifcopenshell property"""
         if hasattr(prop, 'Unit') and prop.Unit is not None:
             return prop.Unit
 
@@ -117,11 +126,11 @@ class LibraryObject:
             id=ifc_object.GlobalId
         )
 
-        LibraryObject.__add_associations(ifc_object, object)
+        LibraryObject.__add_material(ifc_object, object)
 
         LibraryObject.__add_units(object, ifc_file)
 
-        # Retrieve related property sets
+        # Add property sets to object
         property_sets = ifc_file.get_inverse(ifc_object, True)
         for rel in property_sets:
             if rel.is_a("IfcRelDefinesByProperties"):
@@ -141,7 +150,7 @@ class LibraryObject:
         return object
 
     @staticmethod
-    def __add_associations(ifc_object: ifcopenshell.entity_instance, object: LibraryObject):
+    def __add_material(ifc_object: ifcopenshell.entity_instance, object: LibraryObject):
         if ifc_object.HasAssociations:
             for association in ifc_object.HasAssociations:
                 if association.is_a("IfcRelAssociatesMaterial"):

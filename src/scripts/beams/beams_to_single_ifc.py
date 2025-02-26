@@ -10,6 +10,8 @@ import ifcopenshell.api.aggregate
 import ifcopenshell.api.geometry
 import ifcopenshell.api.spatial
 
+# Script to extract beams from the S&T beams ifc file and write them to individual ifc files
+
 def write_objects_to_single_ifc(ifc_file_path, objects_dir, object_type="IfcBeam"):
     ifc_file = ifcopenshell.open(ifc_file_path)
 
@@ -20,11 +22,11 @@ def write_objects_to_single_ifc(ifc_file_path, objects_dir, object_type="IfcBeam
     unique_objects = {}
 
     for i in trange(num_objects):
-        
+
         if not keep_ifc_column(objects[i], unique_objects):
             continue
 
-        ifc_file_copy = ifcopenshell.open(ifc_file_path)\
+        ifc_file_copy = ifcopenshell.open(ifc_file_path)
 
         while len(ifc_file_copy.by_type("IfcBuilding")) > 0:
             ifc_file_copy.remove(ifc_file_copy.by_type("IfcBuilding")[0])
@@ -52,6 +54,7 @@ def write_objects_to_single_ifc(ifc_file_path, objects_dir, object_type="IfcBeam
 
         ifc_file_copy.write(os.path.join(object_dir, f"{curr_id}.ifc"))
 
+
 def keep_ifc_column(ifc_column, unique_columns):
     pattern = r"^Structural Columns [1-5]:Structural Columns [1-5]$"
 
@@ -69,7 +72,6 @@ def keep_ifc_column(ifc_column, unique_columns):
 
 
 if __name__ == "__main__":
-
     # For beams
     # IFC_FILE_PATH = r"C:\Users\hugop\Documents\Work\SteelProductLibrary\data\ifc\Steel-UB Universal Beam-Steel & Tube-300.ifc"
     # OBJECTS_DIR = r"C:\Users\hugop\Documents\Work\SteelProductLibrary\data\objects"

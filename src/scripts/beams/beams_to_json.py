@@ -3,6 +3,8 @@ import json
 import ifcopenshell.file
 from src.core.LibraryObject import LibraryObject
 
+# Script to convert all IFC files in the single beams directory to JSON files
+
 OBJECTS_DIR = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\objects"
 
 if __name__ == "__main__":

@@ -10,6 +10,8 @@ from src.core.LibraryObject import LibraryObject
 
 from PIL import Image
 
+# Query engine for objects
+
 file_store = FileStore()
 
 
@@ -70,12 +72,10 @@ def update_by_id(object_id: str, ifc_file: ifcopenshell.file):
 
 def create_object(object_ifc_file: ifcopenshell.file, ifc_type="IfcBeam", customID: str = None):
     """
-    Handles creating a new object in the OpenSearch index
-
-    Assumes that the new object data is an ifc file
+    Handles creating a new object in the OpenSearch index from an IFC file
 
     :param object_ifc_file: ifc file
-    :return:
+    :return: response from OpenSearch
     """
     object, _ = LibraryObject.from_ifc_file(object_ifc_file, ifc_type, customID)
 
@@ -85,6 +85,6 @@ def create_object(object_ifc_file: ifcopenshell.file, ifc_type="IfcBeam", custom
     return response
 
 
-def add_object_photo(object_id: str, photo : Image.Image):
+def add_object_photo(object_id: str, photo: Image.Image):
     file_store.add_object_file(object_id, photo, "png")
     return "File added"

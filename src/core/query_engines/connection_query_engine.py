@@ -3,6 +3,8 @@ from core.utils import opensearch_hits_to_dicts
 from src.core.opensearch_client import client
 
 
+# Query engine for connections
+
 def get_connection_by_id(connection_id):
     response = client.get(index="connections", id=connection_id)
     if response["found"]:
@@ -18,8 +20,6 @@ def get_all_connections():
 def get_connections_by_filter(query_params):
     connections_filter = OpenSearchQueryBuilder("connection").from_query_params_dict(query_params).build()
 
-    print(connections_filter)
-
     response = client.search(index="connections", body=connections_filter)
 
     results = opensearch_hits_to_dicts(response["hits"]["hits"])
@@ -33,4 +33,3 @@ def get_section_types():
     unique_values = [bucket["key"] for bucket in response["aggregations"]["unique_values"]["buckets"]]
 
     return unique_values
-

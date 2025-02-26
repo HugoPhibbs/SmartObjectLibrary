@@ -4,7 +4,7 @@ import re
 
 def convert_schema(schema):
     """
-    Convert json schema to opensearch schema
+    Convert ifc json schema to opensearch schema
 
     Should turn all values of "string" to "text", and "number" to "float"
 

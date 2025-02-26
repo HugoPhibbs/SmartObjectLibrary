@@ -1,14 +1,10 @@
 import re
 import random
 import os
-import ifcopenshell
 import ifcopenshell.api
 
-file = ifcopenshell.open(
-    r"/objects/ifc/1MqlONWM9DPguUA1H$xl0k.ifc")
-
-# Get the first beam
-beam = file.by_type("IfcBeam")[0]
+# Script to add mock property sets to all beams in the ifc directory
+# For testing and demo purposes
 
 property_sets = {
     "Pset_EnvironmentalImpactIndicators": {

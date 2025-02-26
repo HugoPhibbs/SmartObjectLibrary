@@ -1,9 +1,25 @@
 import re
 
-from src.core.opensearch_client import client
-
 
 class OpenSearchQueryBuilder:
+    """
+    Class to build an OpenSearch query from query parameters
+
+    Intended to convert query params received from an API request
+
+    Example usage:
+    query_builder = OpenSearchQueryBuilder("object")
+
+    query = (query_builder
+             .from_query_params_dict(
+        {"Pset_BeamCommon.LoadBearing": "True", "range_price": "100to500", "match_material": "steel"})
+             # .add_filter("colour", "red")
+             # .add_range_filter("price", 100, 500)
+             .build())
+
+    print(query)
+    """
+
     def __init__(self, object_type: str):
         self.query = {
             "query": {
@@ -15,10 +31,38 @@ class OpenSearchQueryBuilder:
         }
         self.object_type = object_type
 
+    def from_query_params_dict(self, query_params_dict: dict):
+        """
+        Builds a query from a dictionary of query parameters
+
+        :param query_params_dict: dictionary of query parameters
+        :return: self
+        """
+
+        parsed_query_params = self.__parse_query_params(query_params_dict)
+
+        self.__add_filters(parsed_query_params)
+
+        return self
+
     def build(self):
+        """
+        Builds the query
+
+        :return: query as a dictionary
+        """
         return self.query
 
-    def __parse_range_string(self, range_string: str):
+    @staticmethod
+    def __parse_range_string(range_string: str):
+        """
+        Parses a range string into a dictionary
+
+        Example: "100to500" -> {"min": 100, "max": 500}, "-100to" -> {"min": -100, "max": None}
+
+        :param range_string: range string
+        :return: dictionary with min and max values
+        """
         match = re.match(r'^(?P<min>-?\d+)?to(?P<max>-?\d+)?$', range_string)
         if match:
             return {k: float(v) if v is not None else None for k, v in match.groupdict().items()}
@@ -39,7 +83,7 @@ class OpenSearchQueryBuilder:
                 continue
 
             if key.startswith("range_"):
-                min_max = self.__parse_range_string(value)
+                min_max = OpenSearchQueryBuilder.__parse_range_string(value)
                 print("min_max ", min_max)
                 if min_max is not None:
                     field = key.replace("range_", "")
@@ -57,11 +101,12 @@ class OpenSearchQueryBuilder:
 
             else:
                 field_path = self.fieldToObjectPath(key)
-                parsed_params["term"][field_path] = self.__parse_term_value(value)
+                parsed_params["term"][field_path] = OpenSearchQueryBuilder.__parse_term_value(value)
 
         return parsed_params
 
-    def __parse_term_value(self, value):
+    @staticmethod
+    def __parse_term_value(value):
         if value in ["true", "True"]:
             return True
         elif value in ["false", "False"]:
@@ -89,15 +134,15 @@ class OpenSearchQueryBuilder:
 
         return self
 
-    def from_query_params_dict(self, query_params_dict: dict):
-
-        parsed_query_params = self.__parse_query_params(query_params_dict)
-
-        self.__add_filters(parsed_query_params)
-
-        return self
-
     def fieldToObjectPath(self, field):
+        """
+        Maps a field to the object path in a OpenSearch index
+
+        :param field: field name
+        :return: the object path
+        """
+        # This method is pretty hacky, and hardcodes the object structure, but it works for now
+
         if self.object_type == "object":
             if field in ["ifc_file_path", "ifc_type", "material", "name", "object_placement", "object_type"]:
                 return field
@@ -107,7 +152,7 @@ class OpenSearchQueryBuilder:
         elif self.object_type == "connection":
             if field in ["moment", "shear", "mass", "section"]:
                 return field
-            return "implement-me"
+            raise NotImplementedError(f"Field {field} not supported yet for object type {self.object_type}")
 
         return field
 
@@ -118,18 +163,9 @@ if __name__ == "__main__":
 
     query = (query_builder
              .from_query_params_dict(
-        {"Pset_BeamCommon.LoadBearing": "True", "range_price": "100-500", "match_material": "steel"})
+        {"Pset_BeamCommon.LoadBearing": "True", "range_price": "100to500", "match_material": "steel"})
              # .add_filter("colour", "red")
              # .add_range_filter("price", 100, 500)
              .build())
 
     print(query)
-
-    # import json
-    #
-    # print(json.dumps(query, indent=2))
-    #
-    # response = client.search(index="objects", body=query)
-    #
-    # print(response)
-    # Output:

@@ -6,13 +6,10 @@ import genson
 from core.opensearch_client import client
 from scripts.utils import convert_schema
 
+# Script to upload all beam objects to OpenSearch
+
 BEAMS_DIR = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\objects\json"
 SCHEMA_PATH = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\schema\beams_schema.json"
-
-
-def add_object(object_data, id):
-    response = client.index(index="objects", body=object_data, id=id)
-    return response
 
 
 def add_file(file_path):
@@ -21,14 +18,14 @@ def add_file(file_path):
     with open(file_path, "r") as json_file:
         object_data = json.load(json_file)
 
-    return add_object(object_data, object_id)
+    response = client.index(index="objects", body=object_data, id=object_id)
+    return response
 
 
 def add_all_files():
     for file in os.listdir(BEAMS_DIR):
         file_path = os.path.join(BEAMS_DIR, file)
         if os.path.isfile(file_path) and file.endswith(".json"):
-
             add_file(file_path)
 
 
@@ -50,6 +47,7 @@ def create_index(schema, delete_if_exists=True):
 
 
 def write_schema():
+    # Choose the first object to generate the schema, assume all objects have the same schema
     id = r"1MqlONWM9DPguUA1H$xl0k"
 
     with open(rf"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\objects\json\{id}.json", "r") as json_file:

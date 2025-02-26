@@ -2,6 +2,9 @@ import re
 import os
 import pandas as pd
 
+# Script to combine all individual connection csv files into one complete csv file
+# This is only for demo purposes - all the connection csvs are related to a MEP-8 connection
+
 CONNECTIONS_CSV_DIR = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\connections\csv\individual"
 complete_csv_path = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\connections\csv\all_connections.csv"
 

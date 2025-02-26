@@ -2,6 +2,10 @@ import os
 from dotenv import load_dotenv
 from opensearchpy import OpenSearch
 
+# Script to load the OpenSearch client
+
+__all__ = ["client"]
+
 load_dotenv()
 
 HOST = os.getenv("OPENSEARCH_HOST")
