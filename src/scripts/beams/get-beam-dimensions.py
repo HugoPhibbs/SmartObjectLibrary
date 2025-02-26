@@ -1,7 +1,7 @@
 import ifcopenshell
 
 # Open IFC file
-ifc_file = ifcopenshell.open(r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\objects\ifc\1MqlONWM9DPguUA1H$xl0k.ifc")
+ifc_file = ifcopenshell.open(r"/objects/ifc/1MqlONWM9DPguUA1H$xl0k.ifc")
 
 # Get beam
 beam = ifc_file.by_type("IfcBeam")[0]

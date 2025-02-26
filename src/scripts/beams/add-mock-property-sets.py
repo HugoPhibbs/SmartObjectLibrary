@@ -5,7 +5,7 @@ import ifcopenshell
 import ifcopenshell.api
 
 file = ifcopenshell.open(
-    r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\objects\ifc\1MqlONWM9DPguUA1H$xl0k.ifc")
+    r"/objects/ifc/1MqlONWM9DPguUA1H$xl0k.ifc")
 
 # Get the first beam
 beam = file.by_type("IfcBeam")[0]
@@ -129,7 +129,7 @@ def change_ifc_schema(file_path):
 
 
 if __name__ == "__main__":
-    ifc_dir = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\objects\ifc"
+    ifc_dir = r"/objects/ifc"
 
     for file in os.listdir(ifc_dir):
         if file.endswith(".ifc"):
