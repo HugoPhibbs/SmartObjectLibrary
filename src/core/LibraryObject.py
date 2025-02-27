@@ -5,20 +5,19 @@ from typing import List
 
 import ifcopenshell
 
+class IfcMeasureToUnit:
+    """
+    Object to map IFC measure types to unit types
+    """
+
+    def __init__(self, measures_list: List[str], unit):
+        self.measures_list = measures_list
+        self.unit = unit
 
 class IfcMeasureToUnitEnum(Enum):
     """
     Enum to map units to ifc measure types, and hence ifc units
     """
-
-    class IfcMeasureToUnit:
-        """
-        Object to map IFC measure types to unit types
-        """
-
-        def __init__(self, measures_list: List[str], unit):
-            self.measures_list = measures_list
-            self.unit = unit
 
     LENGTH = IfcMeasureToUnit(["IfcPositiveLengthMeasure", "IfcLengthMeasure"], "LENGTHUNIT")
     AREA = IfcMeasureToUnit(["IfcAreaMeasure"], "AREAUNIT")
