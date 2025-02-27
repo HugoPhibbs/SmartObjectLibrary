@@ -56,7 +56,7 @@ def match_connection(connection_type, beam_id, moment, shear):
         "moment": moment,
         "shear": shear,
         "section": model_dict["section"],
-        "mass": model_dict["mass_per_length"]
+        "mass_per_length": model_dict["mass_per_length"]
     }
 
     connections = get_connections_by_filter(query_params)

@@ -26,6 +26,11 @@ def get_all_connections():
     return connections, 200
 
 
+@connection_bp.route("/section-type", methods=['GET'])
+def get_section_types():
+    member_types = query_engine.get_section_types()
+    return member_types, 200
+
 @connection_bp.route("/match_connection/", methods=['GET'])
 def get_connection_for_type_and_beam(connection_type: str, beam_id: str):
     query_params = request.args.to_dict()

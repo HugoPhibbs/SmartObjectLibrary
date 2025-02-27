@@ -16,7 +16,7 @@ connections_list = []
 for index, row in enumerate(df_dict):
     new_dict = {}
     new_dict["section"] = row["Member"]
-    new_dict["mass"] = row["Mass"]
+    new_dict["mass_per_length"] = row["Mass"]
     new_dict["moment"] = row["Moment (%)"]
     new_dict["shear"] = row["Shear (%)"]
 
