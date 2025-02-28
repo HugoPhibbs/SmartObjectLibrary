@@ -15,8 +15,8 @@ connections_list = []
 
 for index, row in enumerate(df_dict):
     new_dict = {}
-    new_dict["section"] = row["Member"]
-    new_dict["mass"] = row["Mass"]
+    new_dict["section_type"] = row["Member"]
+    new_dict["mass_per_length"] = row["Mass"]
     new_dict["moment"] = row["Moment (%)"]
     new_dict["shear"] = row["Shear (%)"]
 
@@ -50,7 +50,7 @@ schema = builder.to_schema()
 schema = convert_schema(schema)
 
 # Adjust section type to be a keyword
-schema["section"]["type"] = "keyword"
+schema["section_type"]["type"] = "keyword"
 
 if client.indices.exists(index="connections"):
     client.indices.delete(index="connections")

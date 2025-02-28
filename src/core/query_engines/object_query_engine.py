@@ -15,7 +15,7 @@ from PIL import Image
 file_store = FileStore()
 
 
-def get_file_by_object_id(object_id: str, file_type="ifc") -> LibraryObject | str:
+def get_file_by_object_id(object_id: str, file_type="ifc") -> dict| str:
     if file_type == "json":
         response = client.get(index="objects", id=object_id)
         return LibraryObject.from_opensearch_hit(response).to_dict()
