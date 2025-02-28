@@ -23,7 +23,7 @@ def add_section_type(object_dict):
     match = re.match(pattern, model)
     if match:
         # TODO integrate this line of code into LibraryObject.from_ifc_file
-        object_dict["property_sets"]["Identity Data"]["section_type"] = {"value": match.group("section"), "unit": "NO_UNIT"}
+        object_dict["property_sets"]["Identity Data"]["section_type"] = {"value": match.group("section_type"), "unit": "NO_UNIT"}
     else:
         raise Exception(f"Model: {model} does not match pattern")
 

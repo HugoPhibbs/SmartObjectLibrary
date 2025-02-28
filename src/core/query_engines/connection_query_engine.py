@@ -33,7 +33,7 @@ def get_connections_by_filter(query_params):
 
 def get_section_types():
     response = client.search(index="connections",
-                             body={"size": 0, "aggs": {"unique_values": {"terms": {"field": "section"}}}})
+                             body={"size": 0, "aggs": {"unique_values": {"terms": {"field": "section_type"}}}})
     unique_values = [bucket["key"] for bucket in response["aggregations"]["unique_values"]["buckets"]]
 
     return unique_values
@@ -47,7 +47,7 @@ def match_connection(connection_type, beam_id, moment, shear):
     pattern = r"(\d+LL)(\d+\.\d+)"
     match = re.match(pattern, model)
     if match:
-        model_dict = {"section": match.group(1), "mass_per_length": match.group(2)}
+        model_dict = {"section_type": match.group(1), "mass_per_length": match.group(2)}
     else:
         return None
 
@@ -55,7 +55,7 @@ def match_connection(connection_type, beam_id, moment, shear):
         "match_connection_type": connection_type,
         "moment": moment,
         "shear": shear,
-        "section": model_dict["section"],
+        "section_type": model_dict["section_type"],
         "mass_per_length": model_dict["mass_per_length"]
     }
 
