@@ -25,8 +25,8 @@ def get_all_connections():
     connections = query_engine.get_all_connections()
     return connections, 200
 
-
-@connection_bp.route("/section-type", methods=['GET'])
-def get_section_types():
-    member_types = query_engine.get_section_types()
-    return member_types, 200
+@connection_bp.route("/unique-values", methods=['GET'])
+def get_unique_fields_values():
+    field = request.args.get("field", default=None)
+    unique_values = query_engine.get_unique_values(field)
+    return unique_values, 200
