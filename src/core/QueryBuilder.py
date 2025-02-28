@@ -150,7 +150,7 @@ class OpenSearchQueryBuilder:
             return f"property_sets.{field}.value"
 
         elif self.object_type == "connection":
-            if field in ["moment", "shear", "mass", "section"]:
+            if field in ["moment", "shear", "mass_per_length", "section_type"]:
                 return field
             raise NotImplementedError(f"Field {field} not supported yet for object type {self.object_type}")
 

@@ -92,7 +92,10 @@ def get_object(object_id: str):
 @object_bp.route("/<object_id>/photo", methods=['GET'])
 def get_object_photo(object_id: str):
     path = engine.get_file_by_object_id(object_id, "png")
-    return send_file(path, as_attachment=True)
+    try:
+        return send_file(path, as_attachment=True)
+    except FileNotFoundError:
+        return "Photo not found", 404
 
 
 @object_bp.route("/<object_id>/photo", methods=['POST'])

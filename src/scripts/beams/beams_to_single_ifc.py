@@ -12,6 +12,8 @@ import ifcopenshell.api.spatial
 
 # Script to extract beams from the S&T beams ifc file and write them to individual ifc files
 
+__all__ = ["main"]
+
 def write_objects_to_single_ifc(ifc_file_path, objects_dir, object_type="IfcBeam"):
     ifc_file = ifcopenshell.open(ifc_file_path)
 
@@ -70,13 +72,16 @@ def keep_ifc_column(ifc_column, unique_columns):
 
     return False
 
+def main():
+    IFC_FILE_PATH = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\ifc\JX-B405-REVIT - Mar18_hphi344-structuralifc.ifc"
+    OBJECTS_DIR = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\objects\eng-building"
+
+    write_objects_to_single_ifc(IFC_FILE_PATH, OBJECTS_DIR, object_type="IfcBeam")
 
 if __name__ == "__main__":
     # For beams
     # IFC_FILE_PATH = r"C:\Users\hugop\Documents\Work\SteelProductLibrary\data\ifc\Steel-UB Universal Beam-Steel & Tube-300.ifc"
     # OBJECTS_DIR = r"C:\Users\hugop\Documents\Work\SteelProductLibrary\data\objects"
 
-    IFC_FILE_PATH = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\ifc\JX-B405-REVIT - Mar18_hphi344-structuralifc.ifc"
-    OBJECTS_DIR = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\objects\eng-building"
+    main()
 
-    write_objects_to_single_ifc(IFC_FILE_PATH, OBJECTS_DIR, object_type="IfcBeam")
