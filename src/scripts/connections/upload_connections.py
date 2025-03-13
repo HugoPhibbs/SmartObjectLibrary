@@ -49,8 +49,10 @@ schema = builder.to_schema()
 
 schema = convert_schema(schema)
 
-# Adjust section type to be a keyword
+# Adjust some fields to be keywords
 schema["section_type"]["type"] = "keyword"
+schema["id"]["type"] = "keyword"
+schema["connection_type"]["type"] = "keyword"
 
 if client.indices.exists(index="connections"):
     client.indices.delete(index="connections")

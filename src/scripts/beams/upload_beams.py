@@ -58,6 +58,9 @@ def write_schema():
     schema = builder.to_schema()
     schema = convert_schema(schema)
 
+    # Adjust some fields to be keywords
+    schema["id"]["type"] = "keyword"
+
     with open(SCHEMA_PATH, "w") as schema_file:
         json.dump(schema, schema_file)
 
