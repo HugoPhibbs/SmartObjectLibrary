@@ -4,6 +4,8 @@ import ifcopenshell.file
 import json
 import os
 
+from werkzeug.datastructures import FileStorage
+
 OBJECTS_DIR_DEFAULT = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\objects"
 
 
@@ -19,6 +21,10 @@ class FileStore:
         self.json_dir = os.path.join(objects_dir, "json")
         self.ifc_dir = os.path.join(objects_dir, "ifc")
         self.photo_dir = os.path.join(objects_dir, "png")
+        self.environment_dir = os.path.join(objects_dir, "environment")
+
+    def environment_file_path(self, object_id):
+        return os.path.join(self.environment_dir, f"{object_id}.pdf")
 
     def object_file_path(self, object_id, file_type):
         if file_type == "ifc":
@@ -51,6 +57,8 @@ class FileStore:
             with open(file_path, "w") as json_file:
                 json.dump(file_data, json_file)
         elif file_type == "png" and isinstance(file_data, Image.Image):
+            file_data.save(file_path)
+        elif file_type == "environment" and isinstance(file_data, FileStorage):
             file_data.save(file_path)
         else:
             raise ValueError(f"File type {file_type} not supported for the given file data")

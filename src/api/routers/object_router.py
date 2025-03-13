@@ -154,3 +154,22 @@ def get_object_by_nlp():
         return jsonify(found_objects)
     else:
         pass
+
+
+@object_bp.route("/<object_id>/environmental-impact", methods=["GET"])
+def get_environmental_impact_assessment(object_id: str):
+    path = engine.get_environment_impact_assessment(object_id)
+    try:
+        return send_file(path, as_attachment=True)
+    except FileNotFoundError:
+        return "Environmental impact assessment not found", 404
+
+
+@object_bp.route("/<object_id>/environmental-impact", methods=["POST"])
+def add_environmental_impact_assessment(object_id: str):
+    file = request.files['file']
+
+    if file:
+        engine.add_environmental_impact_assessment(file, object_id)
+        return "Environmental impact assessment added"
+    return "No file provided"

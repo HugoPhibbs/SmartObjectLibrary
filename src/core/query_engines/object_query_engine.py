@@ -8,6 +8,8 @@ from src.core.utils import opensearch_hits_to_dicts
 from src.core.FileStore import FileStore
 from src.core.LibraryObject import LibraryObject
 
+from werkzeug.datastructures import FileStorage
+
 from PIL import Image
 
 # Query engine for objects
@@ -15,7 +17,7 @@ from PIL import Image
 file_store = FileStore()
 
 
-def get_file_by_object_id(object_id: str, file_type="ifc") -> dict| str:
+def get_file_by_object_id(object_id: str, file_type="ifc") -> dict | str:
     if file_type == "json":
         response = client.get(index="objects", id=object_id)
         return LibraryObject.from_opensearch_hit(response).to_dict()
@@ -87,4 +89,13 @@ def create_object(object_ifc_file: ifcopenshell.file, ifc_type="IfcBeam", custom
 
 def add_object_photo(object_id: str, photo: Image.Image):
     file_store.add_object_file(object_id, photo, "png")
+    return "File added"
+
+
+def get_environment_impact_assessment(object_id: str):
+    return file_store.environment_file_path(object_id)
+
+
+def add_environmental_impact_assessment(file: FileStorage, object_id: str):
+    file_store.add_object_file(object_id, file, "environment")
     return "File added"
