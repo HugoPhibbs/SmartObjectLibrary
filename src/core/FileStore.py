@@ -1,3 +1,5 @@
+from typing import Literal
+
 from PIL import Image
 import ifcopenshell
 import ifcopenshell.file
@@ -7,6 +9,8 @@ import os
 from werkzeug.datastructures import FileStorage
 
 OBJECTS_DIR_DEFAULT = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\objects"
+
+FileType = Literal["ifc", "json", "png", "environment", "manufacturers-booklet"]
 
 
 class FileStore:
@@ -22,19 +26,21 @@ class FileStore:
         self.ifc_dir = os.path.join(objects_dir, "ifc")
         self.photo_dir = os.path.join(objects_dir, "png")
         self.environment_dir = os.path.join(objects_dir, "environment")
+        self.manufacturers_booklet_dir = os.path.join(objects_dir, "manufacturers-booklet")
 
-    def environment_file_path(self, object_id):
-        return os.path.join(self.environment_dir, f"{object_id}.pdf")
-
-    def object_file_path(self, object_id, file_type):
+    def object_file_path(self, object_id, file_type: FileType):
         if file_type == "ifc":
             return os.path.join(self.ifc_dir, f"{object_id}.ifc")
         elif file_type == "json":
             return os.path.join(self.json_dir, f"{object_id}.json")
         elif file_type == "png":
             return os.path.join(self.photo_dir, f"{object_id}.png")
+        elif file_type == "environment":
+            return os.path.join(self.environment_dir, f"{object_id}.pdf")
+        elif file_type == "manufacturers-booklet":
+            return os.path.join(self.manufacturers_booklet_dir, f"{object_id}.pdf")
 
-    def get_object_file(self, object_id: str, file_type: str):
+    def get_object_file(self, object_id: str, file_type: FileType):
         file_path = self.object_file_path(object_id, file_type)
 
         if file_type == "ifc":
@@ -48,7 +54,7 @@ class FileStore:
 
         raise ValueError(f"File type {file_type} not supported")
 
-    def add_object_file(self, object_id: str, file_data: any, file_type: str):
+    def add_object_file(self, object_id: str, file_data: any, file_type: FileType):
         file_path = self.object_file_path(object_id, file_type)
 
         if file_type == "ifc" and isinstance(file_data, ifcopenshell.file):

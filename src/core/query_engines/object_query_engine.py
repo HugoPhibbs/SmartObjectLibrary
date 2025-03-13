@@ -92,8 +92,12 @@ def add_object_photo(object_id: str, photo: Image.Image):
     return "File added"
 
 
+def get_manufacturers_booklet(object_id: str):
+    return file_store.object_file_path(object_id, "manufacturers-booklet")
+
+
 def get_environment_impact_assessment(object_id: str):
-    return file_store.environment_file_path(object_id)
+    return file_store.object_file_path(object_id, "environment")
 
 
 def add_environmental_impact_assessment(file: FileStorage, object_id: str):

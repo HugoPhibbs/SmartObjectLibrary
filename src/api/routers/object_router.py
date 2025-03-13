@@ -172,4 +172,13 @@ def add_environmental_impact_assessment(object_id: str):
     if file:
         engine.add_environmental_impact_assessment(file, object_id)
         return "Environmental impact assessment added"
-    return "No file provided"
+    return "No file provided", 400
+
+
+@object_bp.route("/<object_id>/manufacturers-booklet", methods=["GET"])
+def get_manufacturers_booklet(object_id: str):
+    path = engine.get_manufacturers_booklet(object_id)
+    try:
+        return send_file(path, as_attachment=True)
+    except FileNotFoundError:
+        return "Manufacturers booklet not found", 404
