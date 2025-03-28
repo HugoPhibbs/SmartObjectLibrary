@@ -33,7 +33,7 @@ def create_temp_ifc_file(request_file: FileStorage) -> ifcopenshell.file:
 
 
 @object_bp.route('/', methods=['POST'])
-def create_object():
+def create_object_from_ifc():
     file = request.files['file']
     form_key_values = request.form.to_dict()
 
@@ -45,15 +45,15 @@ def create_object():
         result = response["result"]
 
         if result == "created":
-            return "Object created", 201
+            return jsonify({"message": "Object Created", "object_id": response["_id"]}), 201
         elif result == "updated":
-            return "Object updated", 200
+            return jsonify({"message": "Object Updated", "object_id": response["_id"]}), 200
 
-    return "No file provided"
+    return "No file provided", 400
 
 
 @object_bp.route("/<object_id>", methods=['PUT'])
-def update_object(object_id: str):
+def update_object_from_ifc(object_id: str):
     file = request.files['file']
 
     if file:
@@ -182,3 +182,35 @@ def get_manufacturers_booklet(object_id: str):
         return send_file(path, as_attachment=True)
     except FileNotFoundError:
         return "Manufacturers booklet not found", 404
+
+
+@object_bp.route("/<object_id>/manufacturers-booklet", methods=["POST"])
+def add_manufacturers_booklet(object_id: str):
+    file = request.files['file']
+
+    if file:
+        engine.add_manufacturers_booklet(file, object_id)
+        return "Manufacturers booklet added"
+    return "No file provided", 400
+
+
+@object_bp.route("/<object_id>/inspection-record", methods=["GET"])
+def get_inspection_record(object_id: str):
+    date = request.args.get("date", default=None, type=str)
+    path = engine.get_inspection_record(object_id, date)
+
+    try:
+        return send_file(path, as_attachment=True)
+    except FileNotFoundError:
+        return "Inspection record not found", 404
+
+
+@object_bp.route("/<object_id>/inspection-record", methods=["POST"])
+def add_inspection_record(object_id: str):
+    file = request.files['file']
+    date = request.form.get("date", default=None, type=str)
+
+    if file:
+        engine.add_inspection_record(file, object_id, date)
+        return "Inspection record added"
+    return "No file provided", 400

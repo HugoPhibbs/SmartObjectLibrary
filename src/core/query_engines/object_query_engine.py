@@ -2,6 +2,7 @@ from typing import List
 
 import ifcopenshell
 
+from core.InspectionRecordStore import InspectionRecordStore
 from src.core.QueryBuilder import OpenSearchQueryBuilder
 from src.core.opensearch_client import client
 from src.core.utils import opensearch_hits_to_dicts
@@ -15,6 +16,7 @@ from PIL import Image
 # Query engine for objects
 
 file_store = FileStore()
+inspection_record_store = InspectionRecordStore()
 
 
 def get_file_by_object_id(object_id: str, file_type="ifc") -> dict | str:
@@ -96,10 +98,24 @@ def get_manufacturers_booklet(object_id: str):
     return file_store.object_file_path(object_id, "manufacturers-booklet")
 
 
+def add_manufacturers_booklet(file: FileStorage, object_id: str):
+    file_store.add_object_file(object_id, file, "manufacturers-booklet")
+    return "File added"
+
+
 def get_environment_impact_assessment(object_id: str):
     return file_store.object_file_path(object_id, "environment")
 
 
 def add_environmental_impact_assessment(file: FileStorage, object_id: str):
     file_store.add_object_file(object_id, file, "environment")
+    return "File added"
+
+
+def get_inspection_record(object_id: str, date: str):
+    return inspection_record_store.inspection_record_path(object_id, date)
+
+
+def add_inspection_record(file: FileStorage, object_id: str, date: str):
+    inspection_record_store.add_inspection_record(object_id, file, date)
     return "File added"
