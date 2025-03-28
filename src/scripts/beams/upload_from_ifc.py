@@ -1,4 +1,4 @@
-import src.scripts.beams.upload_beams as upload_beams
+import src.scripts.beams.upload_from_json as upload_beams
 import src.scripts.beams.beams_to_json as beams_to_json
 import src.scripts.beams.beams_to_single_ifc as beams_to_single_ifc
 
