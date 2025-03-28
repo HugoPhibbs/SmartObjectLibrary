@@ -94,6 +94,13 @@ class OpenSearchQueryBuilder:
                     if min_max["max"] is not None:
                         parsed_params["range"][field_path]["lte"] = min_max["max"]
 
+            if key.startswith("bool_"):
+                field = key.replace("bool_", "")
+                field_path = self.fieldToObjectPath(field)
+                if value.isdigit(): value = int(value)
+                parsed_params["term"][field_path] = True if value == 1 else False
+                print(value)
+
             elif key.startswith("match_"):
                 field = key.replace("match_", "")
                 field_path = self.fieldToObjectPath(field)
@@ -103,15 +110,13 @@ class OpenSearchQueryBuilder:
                 field_path = self.fieldToObjectPath(key)
                 parsed_params["term"][field_path] = OpenSearchQueryBuilder.__parse_term_value(value)
 
+        print("parsed_params ", parsed_params)
+
         return parsed_params
 
     @staticmethod
     def __parse_term_value(value):
-        if value in ["true", "True"]:
-            return True
-        elif value in ["false", "False"]:
-            return False
-        elif value.isdigit():
+        if value.isdigit():
             return float(value)
         return value
 
@@ -144,7 +149,8 @@ class OpenSearchQueryBuilder:
         # This method is pretty hacky, and hardcodes the object structure, but it works for now
 
         if self.object_type == "object":
-            if field in ["ifc_file_path", "ifc_type", "material", "name", "object_placement", "object_type"]:
+            if field in ["ifc_file_path", "ifc_type", "material", "name", "object_placement", "object_type",
+                         "is_recycled"]:
                 return field
 
             return f"property_sets.{field}.value"
