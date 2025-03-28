@@ -5,10 +5,11 @@ import ifcopenshell
 import ifcopenshell.file
 import json
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 from werkzeug.datastructures import FileStorage
-
-OBJECTS_DIR_DEFAULT = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\objects"
 
 FileType = Literal["ifc", "json", "png", "environment", "manufacturers-booklet"]
 
@@ -20,7 +21,7 @@ class FileStore:
     Way to abstract this functionality away, so can easily switch to cloud storage in the future
     """
 
-    def __init__(self, objects_dir=OBJECTS_DIR_DEFAULT):
+    def __init__(self, objects_dir=os.getenv("OBJECTS_DIR_DEFAULT")):
         self.objects_dir = objects_dir
         self.json_dir = os.path.join(objects_dir, "json")
         self.ifc_dir = os.path.join(objects_dir, "ifc")
@@ -54,7 +55,8 @@ class FileStore:
 
         raise ValueError(f"File type {file_type} not supported")
 
-    def add_object_file(self, object_id: str, file_data: any, file_type: FileType):
+    def add_object_file(self, object_id: str, file_data: ifcopenshell.file | dict | Image.Image | FileStorage,
+                        file_type: FileType):
         file_path = self.object_file_path(object_id, file_type)
 
         if file_type == "ifc" and isinstance(file_data, ifcopenshell.file):
@@ -66,14 +68,16 @@ class FileStore:
             file_data.save(file_path)
         elif file_type == "environment" and isinstance(file_data, FileStorage):
             file_data.save(file_path)
+        elif file_type == "manufacturers-booklet" and isinstance(file_data, FileStorage):
+            file_data.save(file_path)
         else:
             raise ValueError(f"File type {file_type} not supported for the given file data")
 
-    def delete_all_object_files(self, object_id):
-        for file_type in ["ifc", "json", "png"]:
+    def delete_all_object_files(self, object_id: str):
+        for file_type in ["ifc", "json", "png", "environment", "manufacturers-booklet"]:
             self.delete_object_file(object_id, file_type)
 
-    def delete_object_file(self, object_id: str, file_type: str):
+    def delete_object_file(self, object_id: str, file_type: FileType):
         file_path = self.object_file_path(object_id, file_type)
 
         os.remove(file_path)
