@@ -42,9 +42,12 @@ class LibraryObject:
     ifc_file_path: str
     units: dict
     property_sets: dict
+    manufacturer_link: str
 
     def __init__(self, name, object_type, material, object_placement, ifc_type, ifc_file_path, units, property_sets,
-                 id=None):
+                 manufacturer_link=None,
+                 id=None,
+                 is_recycled=False):
         self.name = name
         self.object_type = object_type
         self.material = material
@@ -53,7 +56,9 @@ class LibraryObject:
         self.ifc_file_path = ifc_file_path
         self.units = units
         self.property_sets = property_sets
+        self.manufacturer_link = manufacturer_link
         self.id = id
+        self.is_recycled = is_recycled
 
     def to_dict(self):
         return {
@@ -63,7 +68,9 @@ class LibraryObject:
             "material": self.material,
             "object_placement": self.object_placement,
             "ifc_type": self.ifc_type,
+            "manufacturer_link": self.manufacturer_link,
             "ifc_file_path": self.ifc_file_path,
+            "is_recycled": self.is_recycled,
             "units": self.units,
             "property_sets": self.property_sets
         }
@@ -103,10 +110,12 @@ class LibraryObject:
             material=hit["_source"]["material"],
             object_placement=hit["_source"]["object_placement"],
             ifc_type=hit["_source"]["ifc_type"],
+            manufacturer_link=hit["_source"]["manufacturer_link"],
             ifc_file_path=hit["_source"]["ifc_file_path"],
             units=hit["_source"]["units"],
             property_sets=hit["_source"]["property_sets"],
-            id=hit["_id"]
+            id=hit["_id"],
+            is_recycled=hit["_source"]["is_recycled"]
         )
 
     @staticmethod
