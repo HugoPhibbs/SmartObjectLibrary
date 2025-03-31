@@ -25,7 +25,8 @@ class OpenSearchQueryBuilder:
             "query": {
                 "bool": {
                     "filter": [],
-                    "should": []
+                    "should": [],
+                    "must": []
                 }
             }
         }
@@ -76,7 +77,7 @@ class OpenSearchQueryBuilder:
         :return: dictionary of query parameters
         """
 
-        parsed_params = {"term": {}, "range": {}, "match": {}}
+        parsed_params = {"term": {}, "range": {}, "should_match": {}, "must_match": {}}
 
         for key, value in query_params_dict.items():
             if value == "NaN" or value == "" or not value:
@@ -101,10 +102,15 @@ class OpenSearchQueryBuilder:
                 parsed_params["term"][field_path] = True if value == 1 else False
                 print(value)
 
-            elif key.startswith("match_"):
+            elif key.startswith("match_"): # Assume match by itself is "should"
                 field = key.replace("match_", "")
                 field_path = self.fieldToObjectPath(field)
-                parsed_params["match"][field_path] = value
+                parsed_params["should_match"][field_path] = value
+
+            elif key.startswith("must_match_"):
+                field = key.replace("must_match_", "")
+                field_path = self.fieldToObjectPath(field)
+                parsed_params["must_match"][field_path] = value
 
             else:
                 field_path = self.fieldToObjectPath(key)
@@ -127,15 +133,20 @@ class OpenSearchQueryBuilder:
         for field_path, value in query_params_dict["range"].items():
             self.query["query"]["bool"]["filter"].append({"range": {field_path: value}})
 
-        for field_path, value in query_params_dict["match"].items():
-            self.query["query"]["bool"]["should"].append({
-                "match": {
-                    field_path: {
-                        "query": value,
-                        "fuzziness": "AUTO"
-                    }
+        create_match_query = lambda path, val: {
+            "match": {
+                path: {
+                    "query": val,
+                    "fuzziness": "AUTO"
                 }
-            })
+            }
+        }
+
+        for field_path, value in query_params_dict["should_match"].items():
+            self.query["query"]["bool"]["should"].append(create_match_query(field_path, value))
+
+        for field_path, value in query_params_dict["must_match"].items():
+            self.query["query"]["bool"]["must"].append(create_match_query(field_path, value))
 
         return self
 
