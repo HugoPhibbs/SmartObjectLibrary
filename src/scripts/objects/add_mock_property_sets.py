@@ -107,10 +107,10 @@ def generate_random_property_sets(property_sets):
 
     return property_sets_copy
 
-
 def change_ifc_schema(file_path):
     # Yes this method is totally hacky, but who is checking?
 
+    # Basically search the first 20 lines, and replace the schema version
     pattern = r"FILE_SCHEMA\(\('([^']+)'\)\);"
     replacement = "FILE_SCHEMA(('IFC4'));"
 
