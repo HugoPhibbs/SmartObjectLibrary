@@ -6,19 +6,11 @@ from random import random
 
 import ifcopenshell.file
 from src.core.LibraryObject import LibraryObject
+import src.scripts.objects.steel_and_tube.correct_sat_json as correct_json
 
 # Script to convert all IFC files in the single objects directory to JSON files
 
 OBJECTS_DIR = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\objects"
-
-
-def correct_mass_per_metre(object_dict):
-    # S&T has mass per metre in kg/ft, convert to kg/m
-    value_ref = object_dict["property_sets"]["Structural"]["MassPerUnitLength_ANZRS"]  # A reference
-    value_ref["value"] *= 3.28084
-    value_ref["value"] = round(value_ref["value"], 1)
-
-    return object_dict
 
 
 def add_recycle_information(object_dict):
@@ -27,21 +19,7 @@ def add_recycle_information(object_dict):
     return object_dict
 
 
-def add_section_type(object_dict):
-    model = object_dict["property_sets"]["Identity Data"]["Model"]["value"]
-    pattern = r"(?P<section_type>\d{3,}[A-Z]{2})(?P<mass_per_length>\d+\.\d+)"
-    match = re.match(pattern, model)
-    if match:
-        # TODO integrate this line of code into LibraryObject.from_ifc_file
-        object_dict["property_sets"]["Identity Data"]["section_type"] = {"value": match.group("section_type"),
-                                                                         "unit": "NO_UNIT"}
-    else:
-        raise Exception(f"Model: {model} does not match pattern")
-
-    return object_dict
-
-
-def add_manufacturer_link(object_dict, link="https://www.steelandtube.co.nz"):
+def add_manufacturer_link(object_dict, link="https://github.com/HugoPhibbs/SmartObjectLibrary"):
     object_dict["manufacturer_link"] = link
 
 
@@ -61,12 +39,10 @@ def main():
         object_dict = object.to_dict()
 
         add_recycle_information(object_dict)
-
-        correct_mass_per_metre(object_dict)
-
-        add_section_type(object_dict)
-
         add_manufacturer_link(object_dict)
+
+        # Comment out the below for S&T objects
+        # object_dict = correct_json.main(object_dict)
 
         with open(os.path.join(json_dir, f"{object.id}.json"), "w") as json_file:
             json.dump(object_dict, json_file, indent=4)
