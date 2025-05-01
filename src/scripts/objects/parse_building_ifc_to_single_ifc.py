@@ -11,6 +11,7 @@ import ifcopenshell.api.geometry
 import ifcopenshell.api.spatial
 import ifcopenshell.api.pset
 import ifcopenshell.util.element
+import ifcopenshell.api.project
 
 # Script to extract objects from the S&T objects ifc file and write them to individual ifc files
 
@@ -31,6 +32,16 @@ def should_add_object_wsp(object, unique_families_and_types: set[str]) -> bool:
 
     unique_families_and_types.add(family_and_type)
     return True
+
+def copy_units(source_file, target_file, target_project):
+    source_project = source_file.by_type("IfcProject")[0]
+    if source_project and source_project.UnitsInContext:
+        copied_units = ifcopenshell.util.element.copy_deep(
+            target_file,
+            source_project.UnitsInContext
+        )
+        target_project.UnitsInContext = copied_units
+
 
 
 def get_quantities(obj):
@@ -91,7 +102,9 @@ def write_objects_to_single_ifc(ifc_file_path, objects_dir, object_type="IfcBeam
         site = ifcopenshell.api.root.create_entity(ifc_file_copy, "IfcSite")
 
         project = ifcopenshell.api.root.create_entity(ifc_file_copy, "IfcProject")
+        copy_units(ifc_file, ifc_file_copy, project)
         ifcopenshell.api.aggregate.assign_object(ifc_file_copy, relating_object=project, products=[site])
+
 
         new_building = ifcopenshell.api.root.create_entity(ifc_file_copy, "IfcBuilding")
         ifcopenshell.api.aggregate.assign_object(ifc_file_copy, relating_object=site, products=[new_building])
@@ -135,7 +148,7 @@ def keep_ifc_column(ifc_column, unique_columns):
 
 def main():
     IFC_FILE_PATH = r"C:\Users\hugop\Downloads\ChCh_IFC\ChCh_IFC\CHCH-WSP-00-ALL-M3D-001_detached.ifc"
-    OBJECTS_DIR = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\objects\wsp-building"
+    OBJECTS_DIR = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\objects"
 
     write_objects_to_single_ifc(IFC_FILE_PATH, OBJECTS_DIR, object_type="IfcBeam")
 
