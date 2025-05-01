@@ -1,0 +1,148 @@
+import os
+import re
+
+from tqdm import trange
+
+import ifcopenshell.api.spatial
+import ifcopenshell.file
+import ifcopenshell.api.root
+import ifcopenshell.api.aggregate
+import ifcopenshell.api.geometry
+import ifcopenshell.api.spatial
+import ifcopenshell.api.pset
+import ifcopenshell.util.element
+
+# Script to extract objects from the S&T objects ifc file and write them to individual ifc files
+
+__all__ = ["main"]
+
+
+def should_add_object_wsp(object, unique_families_and_types: set[str]) -> bool:
+    """
+    Simple script to check if an object should be added from the ChCh WSP IFC file
+
+    :param object: object to be checked
+    :return: bool as to whether the object should be added
+    """
+    family_and_type = ifcopenshell.util.element.get_psets(object).get("Other")["Family and Type"]
+
+    if family_and_type in unique_families_and_types:
+        return False
+
+    unique_families_and_types.add(family_and_type)
+    return True
+
+
+def get_quantities(obj):
+    quantities = {}
+    for rel in getattr(obj, "IsDefinedBy", []):
+        if rel.is_a("IfcRelDefinesByProperties") and rel.RelatingPropertyDefinition.is_a("IfcElementQuantity"):
+            qset = rel.RelatingPropertyDefinition
+            for q in qset.Quantities:
+                val = getattr(q, "LengthValue", None) or getattr(q, "AreaValue", None) or getattr(q, "VolumeValue", None)
+                if val is not None:
+                    quantities.setdefault(qset.Name, {})[q.Name] = val
+    return quantities
+
+def copy_ifc_object(source_obj, ifc_file):
+    # 1. Deep copy the object without placement
+    obj_copy = ifcopenshell.util.element.copy_deep(
+        ifc_file,
+        element=source_obj,
+        exclude_callback=lambda x: x.is_a("IfcObjectPlacement")
+    )
+
+    # 2. Copy property sets
+    psets = ifcopenshell.util.element.get_psets(source_obj)
+    for pset_name, props in psets.items():
+        new_pset = ifcopenshell.api.pset.add_pset(ifc_file, product=obj_copy, name=pset_name)
+        ifcopenshell.api.pset.edit_pset(ifc_file, pset=new_pset, properties={k: v for k, v in props.items() if v is not None})
+
+    # 3. Copy quantities manually
+    qtos = get_quantities(source_obj)
+    for qto_name, props in qtos.items():
+        new_qto = ifcopenshell.api.pset.add_pset(ifc_file, product=obj_copy, name=qto_name)
+        ifcopenshell.api.pset.edit_pset(ifc_file, pset=new_qto, properties={k: v for k, v in props.items() if v is not None})
+
+    return obj_copy
+
+
+def write_objects_to_single_ifc(ifc_file_path, objects_dir, object_type="IfcBeam"):
+    ifc_file = ifcopenshell.open(ifc_file_path)
+
+    objects = ifc_file.by_type(object_type)
+
+    num_objects = len(objects)
+
+    unique_families_and_types = set()
+
+    for i in trange(num_objects):
+
+        # if not keep_ifc_column(objects[i], unique_objects):
+        #     continue
+
+        if not should_add_object_wsp(objects[i], unique_families_and_types):
+            continue
+
+        ifc_file_copy = ifcopenshell.file(schema=ifc_file.schema)
+
+        object_copy = copy_ifc_object(objects[i], ifc_file_copy)
+
+        site = ifcopenshell.api.root.create_entity(ifc_file_copy, "IfcSite")
+
+        project = ifcopenshell.api.root.create_entity(ifc_file_copy, "IfcProject")
+        ifcopenshell.api.aggregate.assign_object(ifc_file_copy, relating_object=project, products=[site])
+
+        new_building = ifcopenshell.api.root.create_entity(ifc_file_copy, "IfcBuilding")
+        ifcopenshell.api.aggregate.assign_object(ifc_file_copy, relating_object=site, products=[new_building])
+
+        new_storey = ifcopenshell.api.root.create_entity(ifc_file_copy, "IfcBuildingStorey")
+        ifcopenshell.api.aggregate.assign_object(ifc_file_copy, relating_object=new_building, products=[new_storey])
+
+        # ifcopenshell.api.geometry.edit_object_placement(ifc_file_copy, object_copy)
+
+        origin = ifc_file_copy.create_entity("IfcCartesianPoint", Coordinates=(0.0, 0.0, 0.0))
+        placement3d = ifc_file_copy.create_entity("IfcAxis2Placement3D", Location=origin)
+        local_placement = ifc_file_copy.create_entity("IfcLocalPlacement", RelativePlacement=placement3d)
+        object_copy.ObjectPlacement = local_placement
+
+        ifcopenshell.api.spatial.assign_container(ifc_file_copy, relating_structure=new_storey, products=[object_copy])
+
+        object_dir = os.path.join(objects_dir, "ifc")
+
+        os.makedirs(object_dir, exist_ok=True)
+
+        curr_id = object_copy.GlobalId
+
+        ifc_file_copy.write(os.path.join(object_dir, f"{curr_id}.ifc"))
+
+
+def keep_ifc_column(ifc_column, unique_columns):
+    pattern = r"^Structural Columns [1-5]:Structural Columns [1-5]$"
+
+    if "steel" in ifc_column.Name.lower() or "column" in ifc_column.Name.lower():
+        name_parsed = ":".join(ifc_column.Name.split(":")[:2])
+
+        if re.match(pattern, name_parsed):
+            return False
+
+        if name_parsed not in unique_columns.keys():
+            unique_columns[name_parsed] = ifc_column
+            return True
+
+    return False
+
+
+def main():
+    IFC_FILE_PATH = r"C:\Users\hugop\Downloads\ChCh_IFC\ChCh_IFC\CHCH-WSP-00-ALL-M3D-001_detached.ifc"
+    OBJECTS_DIR = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\objects\wsp-building"
+
+    write_objects_to_single_ifc(IFC_FILE_PATH, OBJECTS_DIR, object_type="IfcBeam")
+
+
+if __name__ == "__main__":
+    # For objects
+    # IFC_FILE_PATH = r"C:\Users\hugop\Documents\Work\SteelProductLibrary\data\ifc\Steel-UB Universal Beam-Steel & Tube-300.ifc"
+    # OBJECTS_DIR = r"C:\Users\hugop\Documents\Work\SteelProductLibrary\data\objects"
+
+    main()
