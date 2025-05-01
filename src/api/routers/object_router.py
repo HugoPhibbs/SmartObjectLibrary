@@ -214,3 +214,9 @@ def add_inspection_record(object_id: str):
         engine.add_inspection_record(file, object_id, date)
         return "Inspection record added"
     return "No file provided", 400
+
+
+@object_bp.route("/<object_id>/inspection-record-dates", methods=["GET"])
+def get_inspection_record_dates(object_id: str):
+    dates = engine.get_inspection_record_dates(object_id)
+    return jsonify(dates)

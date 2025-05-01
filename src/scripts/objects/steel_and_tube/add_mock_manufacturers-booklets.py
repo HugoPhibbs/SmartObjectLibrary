@@ -1,8 +1,8 @@
 import os
 import shutil
 
-ifc_dir = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\objects\ifc"
-booklet_dir = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\objects\manufacturers-booklet"
+ifc_dir = r"/objects/ifc"
+booklet_dir = r"/objects/manufacturers-booklet"
 
 pdf_path = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\S&T_Steel_Product_Guide_Feb2017-01_0.pdf"
 

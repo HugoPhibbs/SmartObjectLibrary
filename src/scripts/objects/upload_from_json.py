@@ -8,11 +8,11 @@ from scripts.utils import convert_schema
 
 # Script to upload all beam objects to OpenSearch
 
-BEAMS_DIR = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\objects\json"
+JSON_DIR = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\objects\json"
 SCHEMA_PATH = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\schema\beams_schema.json"
 
 
-def add_file(file_path):
+def add_json_file(file_path):
     object_id = os.path.basename(file_path).split(".")[0]
 
     with open(file_path, "r") as json_file:
@@ -23,10 +23,10 @@ def add_file(file_path):
 
 
 def add_all_files():
-    for file in os.listdir(BEAMS_DIR):
-        file_path = os.path.join(BEAMS_DIR, file)
+    for file in os.listdir(JSON_DIR):
+        file_path = os.path.join(JSON_DIR, file)
         if os.path.isfile(file_path) and file.endswith(".json"):
-            add_file(file_path)
+            add_json_file(file_path)
 
 
 def create_index(schema, delete_if_exists=True):

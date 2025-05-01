@@ -3,7 +3,7 @@ import random
 import os
 import ifcopenshell.api
 
-# Script to add mock property sets to all beams in the ifc directory
+# Script to add mock property sets to all objects in the ifc directory
 # For testing and demo purposes
 
 property_sets = {
@@ -124,16 +124,20 @@ def change_ifc_schema(file_path):
         file.writelines(lines)
 
 
-if __name__ == "__main__":
-    ifc_dir = r"/objects/ifc"
+def main(ifc_object_type="IfcBeam"):
+    ifc_dir = r"../../../data/objects/ifc"
 
     for file in os.listdir(ifc_dir):
         if file.endswith(".ifc"):
             file_path = os.path.join(ifc_dir, file)
             change_ifc_schema(file_path)
             ifc_file = ifcopenshell.open(file_path)
-            beam = ifc_file.by_type("IfcBeam")[0]
+            object = ifc_file.by_type(ifc_object_type)[0]
 
             random_property_sets = generate_random_property_sets(property_sets)
-            add_all_property_sets(ifc_file, random_property_sets, beam)
+            add_all_property_sets(ifc_file, random_property_sets, object)
             ifc_file.write(file_path)
+
+
+if __name__ == "__main__":
+    main()

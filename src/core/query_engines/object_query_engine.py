@@ -119,3 +119,7 @@ def get_inspection_record(object_id: str, date: str):
 def add_inspection_record(file: FileStorage, object_id: str, date: str):
     inspection_record_store.add_inspection_record(object_id, file, date)
     return "File added"
+
+
+def get_inspection_record_dates(object_id: str):
+    return inspection_record_store.get_inspection_record_dates(object_id)

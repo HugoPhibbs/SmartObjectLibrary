@@ -1,8 +1,8 @@
 import os
 import shutil
 
-ifc_dir = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\objects\ifc"
-records_dir = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\objects\inspection-record"
+ifc_dir = r"/objects/ifc"
+records_dir = r"/objects/inspection-record"
 
 pdf_path = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\Steeldoc-checklists-final-March-22.pdf"
 

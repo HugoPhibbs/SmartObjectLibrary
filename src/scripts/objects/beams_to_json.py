@@ -7,7 +7,7 @@ from random import random
 import ifcopenshell.file
 from src.core.LibraryObject import LibraryObject
 
-# Script to convert all IFC files in the single beams directory to JSON files
+# Script to convert all IFC files in the single objects directory to JSON files
 
 OBJECTS_DIR = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\objects"
 
@@ -20,10 +20,12 @@ def correct_mass_per_metre(object_dict):
 
     return object_dict
 
+
 def add_recycle_information(object_dict):
     is_recycled = random() > 0.7
     object_dict["is_recycled"] = is_recycled
     return object_dict
+
 
 def add_section_type(object_dict):
     model = object_dict["property_sets"]["Identity Data"]["Model"]["value"]
@@ -44,15 +46,15 @@ def add_manufacturer_link(object_dict, link="https://www.steelandtube.co.nz"):
 
 
 def main():
-    single_beams_ifc_dir = os.path.join(OBJECTS_DIR, "ifc")
+    object_ifc_dir = os.path.join(OBJECTS_DIR, "ifc")
 
     json_dir = os.path.join(OBJECTS_DIR, "json")
 
     if not os.path.exists(json_dir):
         os.makedirs(json_dir)
 
-    for i, file in enumerate(os.listdir(single_beams_ifc_dir)):
-        file_path = os.path.join(single_beams_ifc_dir, file)
+    for i, file in enumerate(os.listdir(object_ifc_dir)):
+        file_path = os.path.join(object_ifc_dir, file)
         ifc_file = ifcopenshell.open(file_path)
         object, _ = LibraryObject.from_ifc_file(ifc_file)
 

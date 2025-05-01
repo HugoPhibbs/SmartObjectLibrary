@@ -1,8 +1,8 @@
 import os
 import shutil
 
-ifc_dir = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\objects\ifc"
-environment_dir = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\objects\environment"
+ifc_dir = r"/objects/ifc"
+environment_dir = r"/objects/environment"
 
 pdf_path = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\Steel & Tube 2024 Climate-related Disclosure.pdf"
 
