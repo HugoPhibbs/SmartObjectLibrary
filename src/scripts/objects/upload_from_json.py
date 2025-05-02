@@ -18,7 +18,12 @@ def add_json_file(file_path):
     with open(file_path, "r") as json_file:
         object_data = json.load(json_file)
 
-    response = client.index(index="objects", body=object_data, id=object_id)
+    try:
+        response = client.index(index="objects", body=object_data, id=object_id)
+    except Exception as e:
+        print(f"Error uploading {file_path}: {e}")
+        return None
+
     return response
 
 
@@ -29,7 +34,7 @@ def add_all_files():
             add_json_file(file_path)
 
 
-def create_index(schema, delete_if_exists=True):
+def create_index(schema=None, delete_if_exists=True):
     index_exists = client.indices.exists(index="objects")
 
     if delete_if_exists and index_exists:
@@ -39,11 +44,16 @@ def create_index(schema, delete_if_exists=True):
     elif index_exists:
         return
 
-    client.indices.create(index="objects", body={
-        "mappings": {
-            "properties": schema
+    if schema is None:
+        body = None
+    else:
+        body = {
+            "mappings": {
+                "properties": schema
+            }
         }
-    })
+
+    client.indices.create(index="objects", body=body)
 
 
 def write_schema():
@@ -68,8 +78,8 @@ def write_schema():
 
 
 def main():
-    schema = write_schema()
-    create_index(schema)
+    # schema = write_schema()
+    create_index(schema=None)
     add_all_files()
 
 
