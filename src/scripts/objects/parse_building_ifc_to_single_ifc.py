@@ -18,6 +18,19 @@ import ifcopenshell.api.project
 __all__ = ["main"]
 
 
+def get_family_and_type(ifc_object):
+    for rel in ifc_object.IsDefinedBy:
+        if not rel.is_a("IfcRelDefinesByProperties"):
+            continue
+        pset = rel.RelatingPropertyDefinition
+        if not pset.is_a("IfcPropertySet") or pset.Name != "Other":
+            continue
+        for prop in pset.HasProperties:
+            if prop.Name == "Family and Type" and hasattr(prop, "NominalValue"):
+                val = prop.NominalValue
+                return val.wrappedValue if hasattr(val, "wrappedValue") else str(val)
+    return None
+
 def should_add_object_wsp(object, unique_families_and_types: set[str]) -> bool:
     """
     Simple script to check if an object should be added from the ChCh WSP IFC file
@@ -25,13 +38,14 @@ def should_add_object_wsp(object, unique_families_and_types: set[str]) -> bool:
     :param object: object to be checked
     :return: bool as to whether the object should be added
     """
-    family_and_type = ifcopenshell.util.element.get_psets(object).get("Other")["Family and Type"]
+    family_and_type = get_family_and_type(object)
 
     if family_and_type in unique_families_and_types:
         return False
 
     unique_families_and_types.add(family_and_type)
     return True
+
 
 def copy_units(source_file, target_file, target_project):
     source_project = source_file.by_type("IfcProject")[0]
@@ -43,17 +57,18 @@ def copy_units(source_file, target_file, target_project):
         target_project.UnitsInContext = copied_units
 
 
-
 def get_quantities(obj):
     quantities = {}
     for rel in getattr(obj, "IsDefinedBy", []):
         if rel.is_a("IfcRelDefinesByProperties") and rel.RelatingPropertyDefinition.is_a("IfcElementQuantity"):
             qset = rel.RelatingPropertyDefinition
             for q in qset.Quantities:
-                val = getattr(q, "LengthValue", None) or getattr(q, "AreaValue", None) or getattr(q, "VolumeValue", None)
+                val = getattr(q, "LengthValue", None) or getattr(q, "AreaValue", None) or getattr(q, "VolumeValue",
+                                                                                                  None)
                 if val is not None:
                     quantities.setdefault(qset.Name, {})[q.Name] = val
     return quantities
+
 
 def copy_ifc_object(source_obj, ifc_file):
     # 1. Deep copy the object without placement
@@ -67,13 +82,18 @@ def copy_ifc_object(source_obj, ifc_file):
     psets = ifcopenshell.util.element.get_psets(source_obj)
     for pset_name, props in psets.items():
         new_pset = ifcopenshell.api.pset.add_pset(ifc_file, product=obj_copy, name=pset_name)
-        ifcopenshell.api.pset.edit_pset(ifc_file, pset=new_pset, properties={k: v for k, v in props.items() if v is not None})
+        ifcopenshell.api.pset.edit_pset(ifc_file, pset=new_pset,
+                                        properties={k: v for k, v in props.items() if v is not None})
 
     # 3. Copy quantities manually
     qtos = get_quantities(source_obj)
     for qto_name, props in qtos.items():
         new_qto = ifcopenshell.api.pset.add_pset(ifc_file, product=obj_copy, name=qto_name)
-        ifcopenshell.api.pset.edit_pset(ifc_file, pset=new_qto, properties={k: v for k, v in props.items() if v is not None})
+        ifcopenshell.api.pset.edit_pset(ifc_file, pset=new_qto,
+                                        properties={k: v for k, v in props.items() if v is not None})
+
+    # 4. Copy global ID
+    obj_copy.GlobalId = source_obj.GlobalId
 
     return obj_copy
 
@@ -89,9 +109,6 @@ def write_objects_to_single_ifc(ifc_file_path, objects_dir, object_type="IfcBeam
 
     for i in trange(num_objects):
 
-        # if not keep_ifc_column(objects[i], unique_objects):
-        #     continue
-
         if not should_add_object_wsp(objects[i], unique_families_and_types):
             continue
 
@@ -104,7 +121,6 @@ def write_objects_to_single_ifc(ifc_file_path, objects_dir, object_type="IfcBeam
         project = ifcopenshell.api.root.create_entity(ifc_file_copy, "IfcProject")
         copy_units(ifc_file, ifc_file_copy, project)
         ifcopenshell.api.aggregate.assign_object(ifc_file_copy, relating_object=project, products=[site])
-
 
         new_building = ifcopenshell.api.root.create_entity(ifc_file_copy, "IfcBuilding")
         ifcopenshell.api.aggregate.assign_object(ifc_file_copy, relating_object=site, products=[new_building])
