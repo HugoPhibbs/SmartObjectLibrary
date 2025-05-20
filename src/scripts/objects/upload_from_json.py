@@ -1,5 +1,6 @@
 import json
 import os
+from pprint import pprint
 
 import genson
 
@@ -22,6 +23,7 @@ def add_json_file(file_path):
         response = client.index(index="objects", body=object_data, id=object_id)
     except Exception as e:
         print(f"Error uploading {file_path}: {e}")
+        pprint(object_data)
         return None
 
     return response
