@@ -22,7 +22,7 @@ inspection_record_store = InspectionRecordStore()
 def get_file_by_object_id(object_id: str, file_type="ifc") -> dict | str:
     if file_type == "json":
         response = client.get(index="objects", id=object_id)
-        return LibraryObject.from_opensearch_hit(response).to_dict()
+        return response["_source"]
 
     elif file_type == "ifc":
         return file_store.object_file_path(object_id, "ifc")
@@ -35,7 +35,7 @@ def get_file_by_object_id(object_id: str, file_type="ifc") -> dict | str:
 
 def get_all_objects(format="ifc") -> List[LibraryObject] | str:
     if format == "json":
-        response = client.search(index="objects", body={"query": {"match_all": {}}})
+        response = client.search(index="objects", body={"query": {"match_all": {}}, "size": 10000})
         results = opensearch_hits_to_dicts(response["hits"]["hits"])
         return results
 
