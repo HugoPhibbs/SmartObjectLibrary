@@ -61,8 +61,8 @@ dimension_name_map = {
 }
 
 
-def clean(object: LibraryObjectV2):
-    dimensions = object.property_sets["Dimensions"]
+def clean(obj: LibraryObjectV2):
+    dimensions = obj.property_sets["Dimensions"]
 
     new_dimensions = {}
 
@@ -72,11 +72,16 @@ def clean(object: LibraryObjectV2):
                 new_key = dimension_name_map[key]
                 new_dimensions[new_key] = value
 
-    object.property_sets["Dimensions"] = new_dimensions
+    obj.property_sets["Dimensions"] = new_dimensions
 
-    if "Materials and Finishes" in object.property_sets:
-        object.material.name = object.property_sets["Materials and Finishes"]["Structural Material"]["value"]
-        del object.property_sets["Materials and Finishes"]
+    if "Materials and Finishes" in obj.property_sets:
+        obj.material.name = obj.property_sets["Materials and Finishes"]["Structural Material"]["value"]
+        del obj.property_sets["Materials and Finishes"]
+
+    name = obj.identity_data.primary_info.name
+    name_clean = ":".join(name.split(":")[:-1]) # Remove ID
+    obj.identity_data.primary_info.name = name_clean
+
 
 
 if __name__ == "__main__":
