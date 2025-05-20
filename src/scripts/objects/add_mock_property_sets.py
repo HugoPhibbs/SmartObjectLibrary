@@ -123,21 +123,24 @@ def change_ifc_schema(file_path):
         file.seek(0)
         file.writelines(lines)
 
+def add_mock_property_sets(file_path, ifc_object_type="IfcBeam"):
+    change_ifc_schema(file_path)
+    ifc_file = ifcopenshell.open(file_path)
+    object = ifc_file.by_type(ifc_object_type)[0]
 
-def main(ifc_object_type="IfcBeam"):
+    random_property_sets = generate_random_property_sets(property_sets)
+    add_all_property_sets(ifc_file, random_property_sets, object)
+    ifc_file.write(file_path)
+
+
+def add_to_all_files(ifc_object_type="IfcBeam"):
     ifc_dir = r"../../../data/objects/ifc"
 
     for file in os.listdir(ifc_dir):
         if file.endswith(".ifc"):
             file_path = os.path.join(ifc_dir, file)
-            change_ifc_schema(file_path)
-            ifc_file = ifcopenshell.open(file_path)
-            object = ifc_file.by_type(ifc_object_type)[0]
-
-            random_property_sets = generate_random_property_sets(property_sets)
-            add_all_property_sets(ifc_file, random_property_sets, object)
-            ifc_file.write(file_path)
-
+            print(f"Processing {file_path}")
+            add_mock_property_sets(file_path, ifc_object_type)
 
 if __name__ == "__main__":
-    main()
+    add_to_all_files()
