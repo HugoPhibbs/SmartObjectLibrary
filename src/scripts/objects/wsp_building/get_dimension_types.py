@@ -29,7 +29,7 @@ if __name__ == "__main__":
         name_parsed = ":".join(this_object.identity_data.primary_info.name.split(":")[:-1]) # Remove ID
 
         if this_dimensions_keys not in unique_dim_dicts:
-            unique_dim_dicts[this_dimensions_keys] = name_parsed
+            unique_dim_dicts[this_dimensions_keys] = (name_parsed, file_name)
 
     unique_dim_dicts_list = [(k, v) for k, v in unique_dim_dicts.items()]
 
