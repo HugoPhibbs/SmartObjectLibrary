@@ -3,6 +3,7 @@ from src.scripts.objects.add_mock_property_sets import add_mock_property_sets
 import ifcopenshell
 import os
 import json
+import pydash
 
 dimension_name_map = {
     # Universal
@@ -13,10 +14,10 @@ dimension_name_map = {
 
     # Generic section geometry
     "b": "width",
-    "d": "height", # Chosen as height to simplify things
+    "d": "height",  # Chosen as height to simplify things
     "h": "height",
     "Ht": "height",
-    "D": "height", # Chosen as height to simplify things
+    "D": "height",  # Chosen as height to simplify things
     "r": "radius",
     "t": "wall_thickness",
     "tr": "corner_radius",
@@ -60,28 +61,117 @@ dimension_name_map = {
     "Change Of Size": "size_change"
 }
 
+unit_to_ifc_unit = {
+    "length": "LENGTHUNIT",
+    "area": "AREAUNIT",
+    "volume": "VOLUMEUNIT",
+}
 
-def clean(obj: LibraryObjectV2):
-    dimensions = obj.property_sets["Dimensions"]
+
+def remove_psets(object_dict):
+    psets_to_remove = [
+        "Geometric Position",
+        "Construction",
+        "Constraints",
+        "Identity Data",
+        "Pset_EnvironmentalImpactIndicators",
+        "Pset_ReinforcementBarPitchOfBeam"
+    ]
+
+    for pset in psets_to_remove:
+        if pset in object_dict["property_sets"]:
+            del object_dict["property_sets"][pset]
+
+
+def remove_pset_ids(object_dict):
+    for pset_name in object_dict["property_sets"]:
+        if "id" in object_dict["property_sets"][pset_name]:
+            del object_dict["property_sets"][pset_name]["id"]
+
+
+def add_dimensions(object_dict):
+    new_attribute_dimensions = {
+        "Dimensions.Length": unit_to_ifc_unit["length"],
+        "Dimensions.Breath": unit_to_ifc_unit["length"],
+        "Dimensions.Depth": unit_to_ifc_unit["length"],
+        "Dimensions.Volume": unit_to_ifc_unit["volume"],
+        "Structural.Cut Length": unit_to_ifc_unit["length"],
+        "Pset_BeamCommon.Span": unit_to_ifc_unit["length"],
+    }
+
+    psets = object_dict["property_sets"]
+
+    for attribute, unit in new_attribute_dimensions.items():
+        if pydash.has(psets, attribute):
+            pydash.set_(psets, f"{attribute}.unit", unit)
+
+
+def remove_pset_attributes(object_dict):
+    attributes_to_remove = [
+        "Dimensions.Elevation at Bottom",
+        "Dimensions.Elevation at Top",
+        "Structural.Stick Symbol Location",
+        "Structural.Structural Usage",
+        "Structural.Angle",
+        "Other.Family",
+    ]
+
+    for attribute in attributes_to_remove:
+        pydash.unset(object_dict["property_sets"], attribute)
+
+
+def rename_psets(object_dict):
+    pset_renames = {
+        "Other": "Identity Data"
+    }
+
+    for old_name, new_name in pset_renames.items():
+        if old_name in object_dict["property_sets"]:
+            object_dict["property_sets"][new_name] = object_dict["property_sets"][old_name]
+            del object_dict["property_sets"][old_name]
+
+
+def rename_dimensions(object_dict):
+    dimensions = object_dict["property_sets"]["Dimensions"]
 
     new_dimensions = {}
 
     for (key, value) in dimensions.items():
         if key in dimension_name_map:
-            if key in dimension_name_map:
-                new_key = dimension_name_map[key]
-                new_dimensions[new_key] = value
+            new_key = dimension_name_map[key]
+            new_dimensions[new_key] = value
 
-    obj.property_sets["Dimensions"] = new_dimensions
+    object_dict["property_sets"]["Dimensions"] = new_dimensions
 
-    if "Materials and Finishes" in obj.property_sets:
-        obj.material.name = obj.property_sets["Materials and Finishes"]["Structural Material"]["value"]
-        del obj.property_sets["Materials and Finishes"]
 
-    name = obj.identity_data.primary_info.name
-    name_clean = ":".join(name.split(":")[:-1]) # Remove ID
-    obj.identity_data.primary_info.name = name_clean
+def remove_id_from_name(object_dict):
+    name = object_dict["identity_data"]["primary_info"]["name"]
+    name_clean = ":".join(name.split(":")[:-1])  # Remove ID
+    object_dict["identity_data"]["primary_info"]["name"] = name_clean
 
+
+def add_material_name(object_dict):
+    if "Materials and Finishes" in object_dict["property_sets"]:
+        object_dict["material"]["name"] = object_dict["property_sets"]["Materials and Finishes"]["Structural Material"][
+            "value"]
+        del object_dict["property_sets"]["Materials and Finishes"]
+
+
+def clean_wsp_json(object_dict):
+    """
+    Clean the WSP JSON object by removing unnecessary attributes and renaming property sets.
+    """
+    remove_psets(object_dict)
+    remove_pset_ids(object_dict)
+    remove_pset_attributes(object_dict)
+    rename_psets(object_dict)
+    rename_dimensions(object_dict)
+    add_dimensions(object_dict)
+    remove_id_from_name(object_dict)
+    add_material_name(object_dict)
+    add_mock_property_sets(object_dict)
+
+    return object_dict
 
 
 if __name__ == "__main__":
@@ -89,21 +179,17 @@ if __name__ == "__main__":
     json_dir = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\objects\json"
 
     for file_name in os.listdir(ifc_dir):
-
         file_path = os.path.join(ifc_dir, file_name)
-
-        add_mock_property_sets(file_path)
 
         file = ifcopenshell.open(file_path)
 
         obj, _ = LibraryObjectV2.from_ifc_file(file)
 
-        # Clean the object
-        clean(obj)
+        object_dict = obj.to_dict()
 
-        obj_dict = obj.to_dict()
+        # Clean the object
+        clean_wsp_json(object_dict)
 
         file_path_json = os.path.join(json_dir, file_name.replace(".ifc", ".json"))
         with open(file_path_json, "w") as f:
-            json.dump(obj_dict, f, indent=4)
-
+            json.dump(object_dict, f, indent=4)
