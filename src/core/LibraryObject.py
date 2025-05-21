@@ -162,10 +162,11 @@ class LibraryObject:
                         property_set_dict[pset.Name] = {}
 
                     for prop in pset.HasProperties:
+                        value = prop.NominalValue.wrappedValue if hasattr(prop.NominalValue,
+                                                                          'wrappedValue') else str(prop.NominalValue)
+                        value = LibraryObject.round_if_float(value)
                         property_set_dict[pset.Name][prop.Name] = {
-                            "value": prop.NominalValue.wrappedValue if hasattr(prop.NominalValue,
-                                                                               'wrappedValue') else str(
-                                prop.NominalValue),
+                            "value": value,
                             "unit": LibraryObject.__unit_for_property(prop)
                         }
 
@@ -254,8 +255,8 @@ class LibraryObject:
                     for prop in getattr(definition, "Properties", []):
                         val = getattr(prop.NominalValue, "wrappedValue", str(prop.NominalValue))
                         material_properties[prop.Name] = {
-                            "value": val,
-                            "unit": None  # Extend if unit extraction needed
+                            "value": LibraryObject.round_if_float(val),
+                            "unit": None
                         }
 
         return Material(
@@ -299,7 +300,7 @@ class LibraryObject:
                 if pset.is_a("IfcPropertySet") and pset.Name == "Pset_ProfileMechanical":
                     for prop in pset.HasProperties:
                         val = getattr(prop.NominalValue, "wrappedValue", str(prop.NominalValue))
-                        pset_mechanical[prop.Name] = {"value": val, "unit": None}
+                        pset_mechanical[prop.Name] = {"value": LibraryObject.round_if_float(val), "unit": None}
 
         return Profile(
             ifc_mechanics=pset_mechanical,
@@ -342,7 +343,7 @@ class LibraryObject:
         props = {}
         for name, value in quantities[base_qset_name].items():
             props[name] = {
-                "value": value,  # Already native Python type
+                "value": LibraryObject.round_if_float(value),  # Already native Python type
                 "unit": None  # IFC doesn't always associate units explicitly here
             }
 
@@ -350,6 +351,10 @@ class LibraryObject:
             ifc_quantity_type=base_qset_name,
             properties=props
         )
+
+    @staticmethod
+    def round_if_float(x, decimals=2):
+        return round(x, decimals) if isinstance(x, float) else x
 
 
 if __name__ == "__main__":
