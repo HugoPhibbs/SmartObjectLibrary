@@ -1,10 +1,4 @@
-import re
 import random
-import os
-import ifcopenshell.api
-
-# Script to add mock property sets to all objects in the ifc directory
-# For testing and demo purposes
 
 property_sets = {
     "Pset_EnvironmentalImpactIndicators": {
@@ -73,74 +67,15 @@ random_attribute_values = {
 }
 
 
-def add_property_set(file, pset_name, properties, beam):
-    property_values = []
+def add_mock_property_sets(object_dict):
+    """Attaches randomized mock property sets to an object_dict in-place."""
+    object_dict.setdefault("property_sets", {})
 
-    for property_name, entity_info in properties.items():
-        property_values.append(
-            file.createIfcPropertySingleValue(property_name, "",
-                                              file.create_entity(entity_info["type"], entity_info["value"]))
-        )
-
-    owner_history = file.by_type("IfcOwnerHistory")[0]
-
-    pset = file.createIfcPropertySet(beam.GlobalId, owner_history, pset_name, None, property_values)
-
-    file.createIfcRelDefinesByProperties(beam.GlobalId, owner_history, None, None, [beam], pset)
-
-    return file
-
-
-def add_all_property_sets(file, property_sets, beam):
     for pset_name, properties in property_sets.items():
-        add_property_set(file, pset_name, properties, beam)
-
-    return file
-
-
-def generate_random_property_sets(property_sets):
-    property_sets_copy = property_sets.copy()
-
-    for pset_name, attribute_dicts in property_sets_copy.items():
-        for key, entity_info in attribute_dicts.items():
-            entity_info["value"] = random.choice(random_attribute_values[key])
-
-    return property_sets_copy
-
-def change_ifc_schema(file_path):
-    # Yes this method is totally hacky, but who is checking?
-
-    # Basically search the first 20 lines, and replace the schema version
-    pattern = r"FILE_SCHEMA\(\('([^']+)'\)\);"
-    replacement = "FILE_SCHEMA(('IFC4'));"
-
-    with open(file_path, "r+") as file:
-        lines = file.readlines()
-
-        for i in range(20):
-            lines[i] = re.sub(pattern, replacement, lines[i])
-
-        file.seek(0)
-        file.writelines(lines)
-
-def add_mock_property_sets(file_path, ifc_object_type="IfcBeam"):
-    change_ifc_schema(file_path)
-    ifc_file = ifcopenshell.open(file_path)
-    object = ifc_file.by_type(ifc_object_type)[0]
-
-    random_property_sets = generate_random_property_sets(property_sets)
-    add_all_property_sets(ifc_file, random_property_sets, object)
-    ifc_file.write(file_path)
-
-
-def add_to_all_files(ifc_object_type="IfcBeam"):
-    ifc_dir = r"../../../data/objects/ifc"
-
-    for file in os.listdir(ifc_dir):
-        if file.endswith(".ifc"):
-            file_path = os.path.join(ifc_dir, file)
-            print(f"Processing {file_path}")
-            add_mock_property_sets(file_path, ifc_object_type)
-
-if __name__ == "__main__":
-    add_to_all_files()
+        pset = {}
+        for prop_name in properties:
+            pset[prop_name] = {
+                "type": properties[prop_name],
+                "value": random.choice(random_attribute_values[prop_name])
+            }
+        object_dict["property_sets"][pset_name] = pset
