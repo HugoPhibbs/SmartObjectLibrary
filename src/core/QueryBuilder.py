@@ -157,19 +157,8 @@ class OpenSearchQueryBuilder:
         :param field: field name
         :return: the object path
         """
-        # This method is pretty hacky, and hardcodes the object structure, but it works for now
-
-        if self.object_type == "object":
-            if field in ["ifc_file_path", "ifc_type", "material", "name", "object_placement", "object_type",
-                         "is_recycled"]:
-                return field
-
-            return f"property_sets.{field}.value"
-
-        elif self.object_type == "connection":
-            if field in ["moment", "shear", "mass_per_length", "section_type"]:
-                return field
-            raise NotImplementedError(f"Field {field} not supported yet for object type {self.object_type}")
+        if field.startswith("property_sets."):
+            field += ".value"
 
         return field
 
