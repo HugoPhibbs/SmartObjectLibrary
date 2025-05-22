@@ -64,7 +64,7 @@ class OpenSearchQueryBuilder:
         :param range_string: range string
         :return: dictionary with min and max values
         """
-        match = re.match(r'^(?P<min>-?\d+)?to(?P<max>-?\d+)?$', range_string)
+        match = re.match(r'^(?P<min>-?\d+(?:\.\d+)?)?to(?P<max>-?\d+(?:\.\d+)?)?$', range_string)
         if match:
             return {k: float(v) if v is not None else None for k, v in match.groupdict().items()}
         return None
@@ -83,7 +83,8 @@ class OpenSearchQueryBuilder:
             if value == "NaN" or value == "" or not value:
                 continue
 
-            if key.startswith("range_"):
+            elif key.startswith("range_"):
+                print(f"value {value}")
                 min_max = OpenSearchQueryBuilder.__parse_range_string(value)
                 print("min_max ", min_max)
                 if min_max is not None:
@@ -95,7 +96,7 @@ class OpenSearchQueryBuilder:
                     if min_max["max"] is not None:
                         parsed_params["range"][field_path]["lte"] = min_max["max"]
 
-            if key.startswith("bool_"):
+            elif key.startswith("bool_"):
                 field = key.replace("bool_", "")
                 field_path = self.fieldToObjectPath(field)
                 if value.isdigit(): value = int(value)
