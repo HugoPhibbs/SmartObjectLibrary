@@ -52,8 +52,9 @@ class Manufacturer:
 
 @dataclass
 class RecycleInfo:
-    is_recycled: bool
-
+    salvage_method: Optional[str] = None
+    previous_connection: Optional[str] = None
+    is_recycled: bool = False
 
 @dataclass
 class BaseQuantities:
@@ -188,7 +189,7 @@ class LibraryObject:
             contact_email=_.get(property_set_dict, "Identity Data.Manufacturer Contact Email.value", "NO_EMAIL")
         )
 
-        recycle_info = RecycleInfo(is_recycled=random.random() > 0.7)
+        recycle_info = RecycleInfo()
 
         base_quantities = LibraryObject.__extract_base_quantities(ifc_object)
 
@@ -358,12 +359,7 @@ class LibraryObject:
 
 
 if __name__ == "__main__":
-    schema = LibraryObject.json_schema()
-    pprint(schema)
-
-
-    with open("schema.json", "w") as f:
-        json.dump(schema, f, indent=4)
+    pass
 
     # ifc_file_path = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\objects\ifc\3SNP$Wt$z1zRVDzWDPAZ9I.ifc"
     #

@@ -68,6 +68,34 @@ unit_to_ifc_unit = {
     "volume": "VOLUMEUNIT",
 }
 
+SALVAGE_METHODS = [
+    "Demolition",
+    "Manual Disassembly",
+    "Mechanical Disassembly",
+]
+
+
+def add_mock_recycle_info(object_dict):
+    name = object_dict["identity_data"]["primary_info"]["name"]
+
+    is_recycled = random.random() > 0.3
+
+    recycle_dict = {"is_recycled": is_recycled}
+
+    if is_recycled:
+        if "timber" in name:
+            connection_types = ["Bolted", "Bracketed", "Nailed/Screwed"]
+        elif "damper" in name:
+            connection_types = ["Bolted", "Welded"]
+        else:
+            # Assume steel
+            connection_types = ["Bolted", "Welded", "Nailed/Screwed", "Riveted", "Bracketed"]
+
+        recycle_dict["previous_connection_type"] = random.choice(connection_types)
+        recycle_dict["salvage_method"] = random.choice(SALVAGE_METHODS)
+
+    object_dict["identity_data"]["recycle_info"] = recycle_dict
+
 
 def remove_psets(object_dict):
     psets_to_remove = [
@@ -202,6 +230,7 @@ def clean_wsp_json(object_dict):
     add_material_name(object_dict)
     add_mock_property_sets(object_dict)
     add_mock_manufacturing_data(object_dict)
+    add_mock_recycle_info(object_dict)
 
     return object_dict
 
