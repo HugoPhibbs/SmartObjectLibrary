@@ -4,6 +4,7 @@ import ifcopenshell
 import os
 import json
 import pydash
+import random
 
 dimension_name_map = {
     # Universal
@@ -75,7 +76,8 @@ def remove_psets(object_dict):
         "Constraints",
         "Identity Data",
         "Pset_EnvironmentalImpactIndicators",
-        "Pset_ReinforcementBarPitchOfBeam"
+        "Pset_ReinforcementBarPitchOfBeam",
+        "Phasing"
     ]
 
     for pset in psets_to_remove:
@@ -156,6 +158,35 @@ def add_material_name(object_dict):
             "value"]
         del object_dict["property_sets"]["Materials and Finishes"]
 
+def add_mock_manufacturing_data(object_dict):
+    mock_manufacturer_data = [
+        {
+            "name": "ForgePoint Group",
+            "address": "1450 Innovation Crescent, Hamilton 3204, New Zealand",
+            "contact_email": "hello@forgepoint.nz",
+            "link": "https://www.forgepoint.nz"
+        },
+        {
+            "name": "Pacific Works Ltd",
+            "address": "27 Enterprise Parade, Auckland 0626, New Zealand",
+            "contact_email": "contact@pacificworks.co.nz",
+            "link": "https://www.pacificworks.co.nz"
+        },
+        {
+            "name": "Atlas Manufacturing Co.",
+            "address": "9 Precision Way, Christchurch 8011, New Zealand",
+            "contact_email": "info@atlasmfg.com",
+            "link": "https://www.atlasmfg.com"
+        },
+        {
+            "name": "Southern Cross Fabrication",
+            "address": "201 Industry Loop, Dunedin 9016, New Zealand",
+            "contact_email": "support@scfabrication.nz",
+            "link": "https://www.scfabrication.nz"
+        }
+    ]
+    object_dict["identity_data"]["manufacturer"] = random.choice(mock_manufacturer_data)
+
 
 def clean_wsp_json(object_dict):
     """
@@ -170,6 +201,7 @@ def clean_wsp_json(object_dict):
     remove_id_from_name(object_dict)
     add_material_name(object_dict)
     add_mock_property_sets(object_dict)
+    add_mock_manufacturing_data(object_dict)
 
     return object_dict
 
