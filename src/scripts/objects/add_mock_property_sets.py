@@ -18,8 +18,6 @@ property_sets = {
     },
     "Pset_Condition": {
         "AssessmentDate": {"type": "IfcDate"},
-        "AssessmentCondition": {"type": "IfcLabel"},
-        "AssessmentDescription": {"type": "IfcText"},
         "AssessmentType": {"type": "IfcLabel"},
         "AssessmentMethod": {"type": "IfcDocumentReference"},
         "LastAssessmentReport": {"type": "IfcLabel"},
@@ -31,6 +29,14 @@ property_sets = {
         "MeanTimeBetweenFailure": {"type": "IfcDuration"}  # 5 years
     }
 }
+
+condition_pairs = [
+    ("Excellent", "Like new condition"),
+    ("Good", "Minor wear, no functional issues"),
+    ("Fair", "Moderate wear, needs observation"),
+    ("Poor", "Severe wear, maintenance required"),
+    ("Critical", "Critical damage, shouldn't be used"),
+]
 
 random_attribute_values = {
     "ExpectedServiceLife": [10, 15, 20, 25, 30],
@@ -47,14 +53,6 @@ random_attribute_values = {
     "ManufacturingDate": ["2024-01-15", "2023-05-20", "2022-12-10", "2021-08-05", "2020-04-30"],
 
     "AssessmentDate": ["2024-02-12", "2023-07-18", "2022-11-05", "2021-06-23", "2025-01-30"],
-    "AssessmentCondition": ["Good", "Fair", "Poor", "Excellent", "Critical"],
-    "AssessmentDescription": [
-        "Minor wear, no functional issues",
-        "Moderate wear, needs observation",
-        "Severe wear, maintenance required",
-        "Like new condition",
-        "Critical damage, replacement needed"
-    ],
     "AssessmentType": ["Routine Inspection", "Emergency Inspection", "Scheduled Maintenance", "Post-Repair Check",
                        "End-of-Life Evaluation"],
     "AssessmentMethod": ["DOC-12345", "DOC-67890", "DOC-45678", "DOC-98765", "DOC-54321"],
@@ -78,4 +76,9 @@ def add_mock_property_sets(object_dict):
                 "type": properties[prop_name],
                 "value": random.choice(random_attribute_values[prop_name])
             }
+        if pset_name == "Pset_Condition":
+            condition = random.choice(condition_pairs)
+            pset["AssessmentCondition"] = {"type": "IfcLabel", "value": condition[0]}
+            pset["AssessmentDescription"] = {"type": "IfcText", "value": condition[1]}
+
         object_dict["property_sets"][pset_name] = pset
