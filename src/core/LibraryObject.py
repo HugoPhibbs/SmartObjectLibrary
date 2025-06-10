@@ -121,6 +121,20 @@ class LibraryObject:
         }
 
     @staticmethod
+    def get_opensearch_schema():
+        """
+        Returns the OpenSearch schema for the LibraryObject
+
+        Only does this for a subset of the object attributes, i.e. to set these as keywords, other the attribute types are to
+        be inferred by OpenSearch.
+
+        :return: dict
+        """
+        return {
+            "object_id": {"type": "keyword"}
+        }
+
+    @staticmethod
     def __unit_for_property(prop):
         """Finds unit for an ifcopenshell property"""
         if hasattr(prop, 'Unit') and prop.Unit is not None:

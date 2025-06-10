@@ -4,6 +4,7 @@ from pprint import pprint
 
 import genson
 
+from core.LibraryObject import LibraryObject
 from src.core.opensearch_client import client
 from scripts.utils import convert_schema
 
@@ -80,8 +81,8 @@ def write_schema():
 
 
 def main():
-    # schema = write_schema()
-    create_index(schema=None)
+    schema = LibraryObject.get_opensearch_schema()
+    create_index(schema=schema)
     add_all_files()
 
 
