@@ -123,9 +123,10 @@ class OpenSearchQueryBuilder:
 
     @staticmethod
     def __parse_term_value(value):
-        if value.isdigit():
+        try:
             return float(value)
-        return value
+        except ValueError:
+            return value
 
     def __add_filters(self, query_params_dict, bool_operator="term"):
         for field_path, value in query_params_dict["term"].items():
