@@ -1,9 +1,16 @@
 from __future__ import annotations
 
+from pprint import pprint
+from dataclasses import dataclass, asdict
+import ifcopenshell.util.element
 from enum import Enum
-from typing import List
+from typing import List, Optional
+import pydash as _
+import random
+import json
 
 import ifcopenshell
+
 
 class IfcMeasureToUnit:
     """
@@ -13,6 +20,7 @@ class IfcMeasureToUnit:
     def __init__(self, measures_list: List[str], unit):
         self.measures_list = measures_list
         self.unit = unit
+
 
 class IfcMeasureToUnitEnum(Enum):
     """
@@ -26,53 +34,90 @@ class IfcMeasureToUnitEnum(Enum):
     PRESSURE = IfcMeasureToUnit(["IfcPressureMeasure"], "PRESSUREUNIT")
 
 
+@dataclass
+class PrimaryInfo:
+    name: str
+    model: str
+    standard: str
+    ifc_type: str
+
+
+@dataclass
+class Manufacturer:
+    name: str
+    link: str
+    address: str
+    contact_email: str
+
+
+@dataclass
+class RecycleInfo:
+    salvage_method: Optional[str] = None
+    previous_connection: Optional[str] = None
+    is_recycled: bool = False
+
+@dataclass
+class BaseQuantities:
+    ifc_quantity_type: str
+    properties: dict
+
+
+@dataclass
+class IdentityData:
+    primary_info: PrimaryInfo
+    manufacturer: Manufacturer
+    recycle_info: RecycleInfo
+    base_quantities: BaseQuantities
+
+
+@dataclass
+class Profile:
+    ifc_mechanics: dict
+    ifc_profile_type: str
+    ifc_profile_attributes: dict
+
+
+@dataclass
+class Material:
+    name: str
+    ifc_material_type: str
+    ifc_material_properties: dict
+
+
+@dataclass
+class Unit:
+    name: str
+    prefix: str | None
+
+
+@dataclass
 class LibraryObject:
     """
     Wrapper for a library object
 
     Represents what is stored in cloud storage
+
+    Stores data in a raw format, without any cleaning/adjustment of the data that it contains - this needs to be done
+    on a case-by-case basis - depending on what input ifc data is used.
     """
 
-    id: str
-    name: str
-    object_type: str
-    material: str
-    object_placement: str
-    ifc_type: str
-    ifc_file_path: str
-    units: dict
+    object_id: str
+    identity_data: IdentityData
+    supporting_documents: dict[str, str]
     property_sets: dict
-    manufacturer_link: str
-
-    def __init__(self, name, object_type, material, object_placement, ifc_type, ifc_file_path, units, property_sets,
-                 manufacturer_link=None,
-                 id=None,
-                 is_recycled=False):
-        self.name = name
-        self.object_type = object_type
-        self.material = material
-        self.object_placement = object_placement
-        self.ifc_type = ifc_type
-        self.ifc_file_path = ifc_file_path
-        self.units = units
-        self.property_sets = property_sets
-        self.manufacturer_link = manufacturer_link
-        self.id = id
-        self.is_recycled = is_recycled
+    material: Material
+    profile: Profile | None
+    units: dict[str, Unit]
 
     def to_dict(self):
         return {
-            "id": self.id,
-            "name": self.name,
-            "object_type": self.object_type,
-            "material": self.material,
-            "object_placement": self.object_placement,
-            "ifc_type": self.ifc_type,
-            "manufacturer_link": self.manufacturer_link,
-            "ifc_file_path": self.ifc_file_path,
-            "is_recycled": self.is_recycled,
-            "units": self.units,
-            "property_sets": self.property_sets
+            "object_id": self.object_id,
+            "identity_data": asdict(self.identity_data),
+            "supporting_documents": self.supporting_documents,
+            "property_sets": self.property_sets,
+            "material": asdict(self.material),
+            "profile": asdict(self.profile) if self.profile else None,
+            "units": {unit_type: asdict(unit) for unit_type, unit in self.units.items()}
         }
 
     @staticmethod
@@ -103,80 +148,227 @@ class LibraryObject:
         return None, None
 
     @staticmethod
-    def from_opensearch_hit(hit: dict) -> LibraryObject:
-        return LibraryObject(
-            name=hit["_source"]["name"],
-            object_type=hit["_source"]["object_type"],
-            material=hit["_source"]["material"],
-            object_placement=hit["_source"]["object_placement"],
-            ifc_type=hit["_source"]["ifc_type"],
-            manufacturer_link=hit["_source"]["manufacturer_link"],
-            ifc_file_path=hit["_source"]["ifc_file_path"],
-            units=hit["_source"]["units"],
-            property_sets=hit["_source"]["property_sets"],
-            id=hit["_id"],
-            is_recycled=hit["_source"]["is_recycled"]
-        )
-
-    @staticmethod
     def __from_ifc_object(ifc_file: ifcopenshell.file, ifc_object: ifcopenshell.entity_instance,
                           ifc_file_path: str) -> LibraryObject:
-        # Prepare a dictionary to hold the object data
-        object = LibraryObject(
-            name=ifc_object.Name,
-            object_type=ifc_object.ObjectType,
-            material=None,  # To store material data
-            object_placement=str(ifc_object.ObjectPlacement),  # Example: Placement data
-            ifc_type="IfcBeam",
-            ifc_file_path=ifc_file_path,
-            units={},
-            property_sets={},
-            id=ifc_object.GlobalId
-        )
-
-        LibraryObject.__add_material(ifc_object, object)
-
-        LibraryObject.__add_units(object, ifc_file)
-
         # Add property sets to object
         property_sets = ifc_file.get_inverse(ifc_object, True)
+
+        property_set_dict = {}
+
         for rel in property_sets:
             if rel.is_a("IfcRelDefinesByProperties"):
                 pset = rel.RelatingPropertyDefinition
                 if pset.is_a("IfcPropertySet"):
-                    if pset.Name not in object.property_sets:
-                        object.property_sets[pset.Name] = {}
+                    if pset.Name not in property_set_dict:
+                        property_set_dict[pset.Name] = {}
 
                     for prop in pset.HasProperties:
-                        object.property_sets[pset.Name][prop.Name] = {
-                            "value": prop.NominalValue.wrappedValue if hasattr(prop.NominalValue,
-                                                                               'wrappedValue') else str(
-                                prop.NominalValue),
+                        value = prop.NominalValue.wrappedValue if hasattr(prop.NominalValue,
+                                                                          'wrappedValue') else str(prop.NominalValue)
+                        value = LibraryObject.round_if_float(value)
+                        property_set_dict[pset.Name][prop.Name] = {
+                            "value": value,
                             "unit": LibraryObject.__unit_for_property(prop)
                         }
 
-        return object
+        # Getting primary info
+
+        # Assume standard is found same place as S&T data
+        primary_info = PrimaryInfo(
+            name=ifc_object.Name,
+            standard=_.get(property_set_dict, "Identity Data.Design Standard.value", "NO_STANDARD"),
+            ifc_type=ifc_object.ObjectType,
+            model=_.get(property_set_dict, "Identity Data.Model.value", "NO_MODEL")
+        )
+
+        # Manufacturer
+        manufacturer = Manufacturer(
+            name=_.get(property_set_dict, "Identity Data.Manufacturer.value", "NO_MANUFACTURER"),
+            link=_.get(property_set_dict, "Identity Data.Manufacturer Link.value", "NO_LINK"),
+            address=_.get(property_set_dict, "Identity Data.Manufacturer Address.value", "NO_ADDRESS"),
+            contact_email=_.get(property_set_dict, "Identity Data.Manufacturer Contact Email.value", "NO_EMAIL")
+        )
+
+        recycle_info = RecycleInfo()
+
+        base_quantities = LibraryObject.__extract_base_quantities(ifc_object)
+
+        identity_data = IdentityData(
+            primary_info=primary_info,
+            manufacturer=manufacturer,
+            recycle_info=recycle_info,
+            base_quantities=base_quantities
+        )
+
+        profile = LibraryObject.__extract_profile(ifc_object)
+
+        material = LibraryObject.__extract_material(ifc_object)
+
+        units = LibraryObject.__extract_units(ifc_file)
+
+        new_object = LibraryObject(
+            object_id=ifc_object.GlobalId,
+            identity_data=identity_data,
+            supporting_documents={},
+            property_sets=property_set_dict,
+            units=units,
+            material=material,
+            profile=profile,
+        )
+
+        return new_object
 
     @staticmethod
-    def __add_material(ifc_object: ifcopenshell.entity_instance, object: LibraryObject):
-        if ifc_object.HasAssociations:
-            for association in ifc_object.HasAssociations:
-                if association.is_a("IfcRelAssociatesMaterial"):
-                    material = association.RelatingMaterial
-                    if material:
-                        object.material = material.Name if hasattr(material, 'Name') else str(material)
+    def __extract_material(ifc_object) -> Material:
+        """
+        Extracts:
+        - name: the label of the material
+        - ifc_material_type: the name of the material property set (if any)
+        - ifc_material_properties: key-value pairs from that property set
+        """
+        material_name = "Unknown"
+        material_pset_name = "Unknown"
+        material_properties = {}
+        material_entity = None
+
+        for rel in getattr(ifc_object, "HasAssociations", []):
+            if rel.is_a("IfcRelAssociatesMaterial"):
+                mat = rel.RelatingMaterial
+
+                if mat.is_a("IfcMaterial"):
+                    material_entity = mat
+                    material_name = mat.Name
+
+                elif mat.is_a("IfcMaterialProfileSetUsage"):
+                    profiles = mat.ForProfileSet.MaterialProfiles
+                    if profiles:
+                        profile_material = profiles[0].Material
+                        if profile_material:
+                            material_entity = profile_material
+                            material_name = profile_material.Name
+
+                break  # Assume only one material association is relevant
+
+        if material_entity:
+            for definition in getattr(material_entity, "HasProperties", []):
+                if definition.is_a("IfcMaterialProperties") or definition.is_a("IfcGeneralMaterialProperties"):
+                    material_pset_name = definition.Name or definition.is_a()
+                    for prop in getattr(definition, "Properties", []):
+                        val = getattr(prop.NominalValue, "wrappedValue", str(prop.NominalValue))
+                        material_properties[prop.Name] = {
+                            "value": LibraryObject.round_if_float(val),
+                            "unit": None
+                        }
+
+        return Material(
+            name=material_name,
+            ifc_material_type=material_pset_name,
+            ifc_material_properties=material_properties
+        )
 
     @staticmethod
-    def __add_units(object: LibraryObject, ifc_file: ifcopenshell.file):
+    def __extract_profile(ifc_object) -> Optional[Profile]:
+        """
+        Extracts the IfcProfileDef from a beam/column via material profile usage,
+        and returns profile type, attributes, and Pset_ProfileMechanical.
+        """
+        profile_def = None
+
+        for rel in getattr(ifc_object, "HasAssociations", []):
+            if rel.is_a("IfcRelAssociatesMaterial"):
+                usage = rel.RelatingMaterial
+                if usage.is_a("IfcMaterialProfileSetUsage"):
+                    mps = usage.ForProfileSet
+                    if mps and mps.MaterialProfiles:
+                        profile_def = mps.MaterialProfiles[0].Profile
+                        break
+
+        if not profile_def:
+            return None
+
+        # Extract attributes from IfcProfileDef
+        profile_attrs = {
+                            attr: getattr(profile_def, attr)
+                            for attr in dir(profile_def)
+                            if not attr.startswith("_") and not callable(getattr(profile_def, attr))
+                        } or None
+
+        # Extract Pset_ProfileMechanical
+        pset_mechanical = {}
+        for rel in getattr(ifc_object, "IsDefinedBy", []):
+            if rel.is_a("IfcRelDefinesByProperties"):
+                pset = rel.RelatingPropertyDefinition
+                if pset.is_a("IfcPropertySet") and pset.Name == "Pset_ProfileMechanical":
+                    for prop in pset.HasProperties:
+                        val = getattr(prop.NominalValue, "wrappedValue", str(prop.NominalValue))
+                        pset_mechanical[prop.Name] = {"value": LibraryObject.round_if_float(val), "unit": None}
+
+        return Profile(
+            ifc_mechanics=pset_mechanical,
+            ifc_profile_type=profile_def.is_a(),
+            ifc_profile_attributes=profile_attrs
+        )
+
+    @staticmethod
+    def __extract_units(ifc_file: ifcopenshell.file):
         unit_assignments = ifc_file.by_type("IfcUnitAssignment")[0]
 
+        unit_maps = {}
+
         for unit in unit_assignments.Units:
-            unit_map = {}
+            this_unit = Unit("", None)
 
             if unit.is_a("IfcSIUnit") or unit.is_a("IfcConversionBasedUnit"):
-                unit_map["Name"] = unit.Name
+                this_unit.name = unit.Name
 
             if unit.is_a("IfcSIUnit"):
-                unit_map["Prefix"] = unit.Prefix if unit.Prefix is not None else "NO-PREFIX"
+                this_unit.prefix = unit.Prefix if unit.Prefix is not None else "NO-PREFIX"
 
-            object.units[unit.UnitType] = (unit_map)
+            unit_maps[unit.UnitType] = this_unit
+
+        return unit_maps
+
+    @staticmethod
+    def __extract_base_quantities(ifc_object: ifcopenshell.entity_instance) -> BaseQuantities:
+        """
+        Extracts Qto_*BaseQuantities from the IFC object.
+        Assumes there's only one quantity set of interest.
+        """
+
+        quantities = ifcopenshell.util.element.get_quantities([ifc_object])
+        base_qset_name = next(iter(quantities), None)
+
+        if not base_qset_name:
+            return BaseQuantities(ifc_quantity_type="Unknown", properties={})
+
+        props = {}
+        for name, value in quantities[base_qset_name].items():
+            props[name] = {
+                "value": LibraryObject.round_if_float(value),  # Already native Python type
+                "unit": None  # IFC doesn't always associate units explicitly here
+            }
+
+        return BaseQuantities(
+            ifc_quantity_type=base_qset_name,
+            properties=props
+        )
+
+    @staticmethod
+    def round_if_float(x, decimals=2):
+        return round(x, decimals) if isinstance(x, float) else x
+
+
+if __name__ == "__main__":
+    pass
+
+    # ifc_file_path = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\objects\ifc\3SNP$Wt$z1zRVDzWDPAZ9I.ifc"
+    #
+    # ifc_file = ifcopenshell.open(ifc_file_path)
+    #
+    # object, file_name = LibraryObject.from_ifc_file(ifc_file)
+    #
+    # object_dict = object.to_dict()
+    #
+    # import json
+    #
+    # print(json.dumps(object_dict, indent=4))
