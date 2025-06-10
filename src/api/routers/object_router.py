@@ -220,3 +220,8 @@ def add_inspection_record(object_id: str):
 def get_inspection_record_dates(object_id: str):
     dates = engine.get_inspection_record_dates(object_id)
     return jsonify(dates)
+
+@object_bp.route("/manufacturer", methods=["GET"])
+def get_all_manufacturers():
+    manufacturers = engine.get_manufacturers()
+    return jsonify(manufacturers)

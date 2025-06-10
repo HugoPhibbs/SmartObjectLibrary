@@ -123,3 +123,29 @@ def add_inspection_record(file: FileStorage, object_id: str, date: str):
 
 def get_inspection_record_dates(object_id: str):
     return inspection_record_store.get_inspection_record_dates(object_id)
+
+def get_manufacturers():
+    response = client.search(
+        index="objects",
+        body={
+            "size": 0,
+            "aggs": {
+                "manufacturers": {
+                    "terms": {
+                        "field": "identity_data.manufacturer.name.keyword",
+                        "size": 1000
+                    }
+                }
+            }
+        }
+    )
+
+    unique_vals = [bucket["key"] for bucket in response["aggregations"]["manufacturers"]["buckets"]]
+
+    return unique_vals
+
+if __name__ == "__main__":
+    manufacturer = get_manufacturers()
+
+    mapping = client.indices.get_mapping(index="objects")
+    print(mapping)
