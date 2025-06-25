@@ -1,4 +1,8 @@
-from src.core.LibraryObject import LibraryObject as LibraryObjectV2
+from dataclasses import asdict, is_dataclass
+from enum import Enum
+
+from src.core.LibraryObject import LibraryObject as LibraryObjectV2, CostMetric, Currency
+from src.core.LibraryObject import Cost
 from src.scripts.objects.add_mock_property_sets import add_mock_property_sets
 import ifcopenshell
 import os
@@ -73,6 +77,32 @@ SALVAGE_METHODS = [
     "Manual Disassembly",
     "Mechanical Disassembly",
 ]
+
+import random
+
+
+def add_mock_material_mechanical_properties(object_dict):
+    options = {
+        "dynamic_viscosity": [0.001, 0.01, 0.1, 1.0, 10.0],  # Pa·s (typically left in Pa·s)
+        "young_modulus": [1, 7, 30, 70, 210],  # GPa
+        "shear_modulus": [0.5, 2.5, 10, 30, 80],  # GPa
+        "poisson_ratio": [0.15, 0.25, 0.30, 0.35, 0.49],  # Unitless
+        "thermal_expansion_coefficient": [5, 10, 12, 15, 24],  # µm/m·K (i.e., microstrain per Kelvin)
+    }
+    units = {
+        "dynamic_viscosity": "DYNAMICVISCOSITYUNIT",
+        "young_modulus": "PRESSUREUNIT",
+        "shear_modulus": "PRESSUREUNIT",
+        "poisson_ratio": "NO-UNIT",
+        "thermal_expansion_coefficient": "THERMALEXPANSIONCOEFFICIENTUNIT"
+    }
+
+    properties = {
+        key: {"value": random.choice(values), "unit": units[key]}
+        for key, values in options.items()
+    }
+
+    object_dict["property_sets"]["Pset_MaterialMechanical"] = properties
 
 
 def add_mock_recycle_info(object_dict):
@@ -186,6 +216,7 @@ def add_material_name(object_dict):
             "value"]
         del object_dict["property_sets"]["Materials and Finishes"]
 
+
 def add_mock_manufacturing_data(object_dict):
     mock_manufacturer_data = [
         {
@@ -216,6 +247,38 @@ def add_mock_manufacturing_data(object_dict):
     object_dict["identity_data"]["manufacturer"] = random.choice(mock_manufacturer_data)
 
 
+def asdict_enum(obj):
+    """Does asdict on an dataclass, but converts Enums to their values."""
+    if isinstance(obj, Enum):
+        return obj.value
+    elif is_dataclass(obj):
+        return {k: asdict_enum(v) for k, v in asdict(obj).items()}
+    elif isinstance(obj, (list, tuple)):
+        return type(obj)(asdict_enum(v) for v in obj)
+    elif isinstance(obj, dict):
+        return {asdict_enum(k): asdict_enum(v) for k, v in obj.items()}
+    else:
+        return obj
+
+
+def add_mock_cost_data(object_dict):
+    name = object_dict["identity_data"]["primary_info"]["name"].lower()
+
+    name_filters = ['damper', 'purlin', 'custom']
+
+    price = random.choice([1000, 1500, 3000])
+
+    if any(filter in name for filter in name_filters):
+        metric = CostMetric.COST_PER_UNIT
+    elif 'timber' in name:
+        metric = CostMetric.COST_PER_METER
+    else:
+        metric = CostMetric.COST_PER_TONNE
+
+    cost = Cost(price=price, metric=metric, currency=Currency.NZD)
+
+    object_dict["cost"] = asdict_enum(cost)
+
 def clean_wsp_json(object_dict):
     """
     Clean the WSP JSON object by removing unnecessary attributes and renaming property sets.
@@ -231,9 +294,10 @@ def clean_wsp_json(object_dict):
     add_mock_property_sets(object_dict)
     add_mock_manufacturing_data(object_dict)
     add_mock_recycle_info(object_dict)
+    add_mock_material_mechanical_properties(object_dict)
+    add_mock_cost_data(object_dict)
 
     return object_dict
-
 
 if __name__ == "__main__":
     ifc_dir = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\objects\ifc"
@@ -244,11 +308,11 @@ if __name__ == "__main__":
 
         file = ifcopenshell.open(file_path)
 
-        obj, _ = LibraryObjectV2.from_ifc_file(file)
+        obj, _ = LibraryObjectV2.from_ifc_file(file, object_types=["IfcBeam", "IfcColumn"])
 
         object_dict = obj.to_dict()
 
-        # Clean the object
+        # Clean and add mock data to the object
         clean_wsp_json(object_dict)
 
         file_path_json = os.path.join(json_dir, file_name.replace(".ifc", ".json"))

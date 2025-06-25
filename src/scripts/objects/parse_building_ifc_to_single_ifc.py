@@ -166,7 +166,7 @@ def main():
     IFC_FILE_PATH = r"C:\Users\hugop\Downloads\ChCh_IFC\ChCh_IFC\CHCH-WSP-00-ALL-M3D-001_detached.ifc"
     OBJECTS_DIR = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\objects"
 
-    write_objects_to_single_ifc(IFC_FILE_PATH, OBJECTS_DIR, object_type="IfcBeam")
+    write_objects_to_single_ifc(IFC_FILE_PATH, OBJECTS_DIR, object_type="IfcColumn")
 
 
 if __name__ == "__main__":

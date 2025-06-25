@@ -1,5 +1,30 @@
 import random
 
+units_map = {
+    "ExpectedServiceLife": "TIMEUNIT",
+    "WaterConsumptionPerUnit": "VOLUMEUNIT",
+    "ClimateChangePerUnit": "MASSUNIT",
+    "RenewableEnergyConsumptionPerUnit": "ENERGYUNIT",
+    "NonRenewableEnergyConsumptionPerUnit": "ENERGYUNIT",
+
+    "AcquisitionDate": "DATEUNIT",
+    "BarCode": "IDENTIFIERUNIT",
+    "SerialNumber": "IDENTIFIERUNIT",
+    "BatchReference": "IDENTIFIERUNIT",
+    "AssemblyPlace": "TEXTUNIT",
+    "ManufacturingDate": "DATEUNIT",
+
+    "AssessmentDate": "DATEUNIT",
+    "AssessmentType": "TEXTUNIT",
+    "AssessmentMethod": "DOCUMENTUNIT",
+    "LastAssessmentReport": "TEXTUNIT",
+    "NextAssessmentDate": "DATEUNIT",
+    "AssessmentFrequency": "TIMEUNIT",
+
+    "ServiceLifeDuration": "DURATIONUNIT",
+    "MeanTimeBetweenFailure": "DURATIONUNIT",
+}
+
 property_sets = {
     "Pset_EnvironmentalImpactIndicators": {
         "ExpectedServiceLife": {"type": "IfcTimeMeasure"},
@@ -66,19 +91,20 @@ random_attribute_values = {
 
 
 def add_mock_property_sets(object_dict):
-    """Attaches randomized mock property sets to an object_dict in-place."""
+    """Attaches randomized mock property sets to an object_dict in-place, with 'value' and 'unit'."""
     object_dict.setdefault("property_sets", {})
 
     for pset_name, properties in property_sets.items():
         pset = {}
         for prop_name in properties:
             pset[prop_name] = {
-                "type": properties[prop_name],
-                "value": random.choice(random_attribute_values[prop_name])
+                "value": random.choice(random_attribute_values[prop_name]),
+                "unit": units_map.get(prop_name, "NO-UNIT")
             }
+
         if pset_name == "Pset_Condition":
             condition = random.choice(condition_pairs)
-            pset["AssessmentCondition"] = {"type": "IfcLabel", "value": condition[0]}
-            pset["AssessmentDescription"] = {"type": "IfcText", "value": condition[1]}
+            pset["AssessmentCondition"] = {"value": condition[0], "unit": "TEXTUNIT"}
+            pset["AssessmentDescription"] = {"value": condition[1], "unit": "TEXTUNIT"}
 
         object_dict["property_sets"][pset_name] = pset

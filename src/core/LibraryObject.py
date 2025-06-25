@@ -42,6 +42,26 @@ class PrimaryInfo:
     ifc_type: str
 
 
+class Currency(Enum):
+    USD = "USD"
+    EUR = "EUR"
+    NZD = "NZD"
+
+
+class CostMetric(Enum):
+    COST_PER_UNIT = "COST_PER_UNIT"
+    COST_PER_TONNE = "COST_PER_TONNE"
+    COST_PER_METER = "COST_PER_METER"
+    COST_PER_M3 = "COST_PER_M3"
+    COST_PER_M2 = "COST_PER_M2"
+
+
+@dataclass
+class Cost:
+    price: float
+    currency: Currency
+    metric: CostMetric
+
 @dataclass
 class Manufacturer:
     name: str
@@ -55,6 +75,7 @@ class RecycleInfo:
     salvage_method: Optional[str] = None
     previous_connection: Optional[str] = None
     is_recycled: bool = False
+
 
 @dataclass
 class BaseQuantities:
@@ -108,6 +129,7 @@ class LibraryObject:
     material: Material
     profile: Profile | None
     units: dict[str, Unit]
+    cost: Cost | None = None
 
     def to_dict(self):
         return {
@@ -115,6 +137,7 @@ class LibraryObject:
             "identity_data": asdict(self.identity_data),
             "supporting_documents": self.supporting_documents,
             "property_sets": self.property_sets,
+            "cost": asdict(self.cost) if self.cost else None,
             "material": asdict(self.material),
             "profile": asdict(self.profile) if self.profile else None,
             "units": {unit_type: asdict(unit) for unit_type, unit in self.units.items()}
@@ -148,9 +171,19 @@ class LibraryObject:
         return "NO-UNIT"
 
     @staticmethod
-    def from_ifc_file(ifc_file: ifcopenshell.file, object_type="IfcBeam", customID: str = None) \
+    def from_ifc_file(ifc_file: ifcopenshell.file, object_types=["IfcBeam"], customID: str = None) \
             -> tuple[LibraryObject, str] | tuple[None, None]:
-        ifc_object = ifc_file.by_type(object_type)[0]
+        ifc_object = None
+        for obj_type in object_types:
+            try:
+                ifc_object = ifc_file.by_type(obj_type)[0]
+                break
+            except IndexError:
+                continue
+
+        if not ifc_object:
+            print(f"No object of types {object_types} found in the IFC file.")
+            return None, None
 
         if customID:
             ifc_object.GlobalId = customID
