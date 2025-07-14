@@ -1,13 +1,10 @@
 from __future__ import annotations
 
-from pprint import pprint
 from dataclasses import dataclass, asdict
 import ifcopenshell.util.element
 from enum import Enum
 from typing import List, Optional
 import pydash as _
-import random
-import json
 
 import ifcopenshell
 
