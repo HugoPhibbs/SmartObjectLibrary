@@ -8,7 +8,8 @@ __all__ = ["client"]
 
 load_dotenv()
 
-HOST = os.getenv("OPENSEARCH_HOST")
+# HOST = os.getenv("OPENSEARCH_HOST")
+HOST = "host.docker.internal"
 PORT = os.getenv("OPENSEARCH_PORT")
 
 auth = ("admin", os.getenv("OPENSEARCH_INITIAL_ADMIN_PASSWORD"))
