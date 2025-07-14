@@ -38,3 +38,16 @@ conda activate SmartObjectLibrary
 ```bash
 python main.py
 ```
+
+## Using the Docker container
+* Build the Docker image with:
+
+```bash
+docker build -t smart-object-library .
+```
+
+* Run the Docker container with:
+
+```bash
+docker run -p 8000:8000 smart-object-library
+```
