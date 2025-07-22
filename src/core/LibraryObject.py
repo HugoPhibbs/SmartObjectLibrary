@@ -1,13 +1,11 @@
 from __future__ import annotations
 
-from pprint import pprint
 from dataclasses import dataclass, asdict
 import ifcopenshell.util.element
 from enum import Enum
 from typing import List, Optional
 import pydash as _
-import random
-import json
+from ifcopenshell.util.element import get_psets
 
 import ifcopenshell
 
@@ -163,6 +161,9 @@ class LibraryObject:
         if hasattr(prop, 'Unit') and prop.Unit is not None:
             return prop.Unit
 
+        if not isinstance(prop, dict) or "NominalValue" not in prop:
+            return "NO-UNIT"
+
         for unit_name in IfcMeasureToUnitEnum:
             for measure in unit_name.value.measures_list:
                 if prop.NominalValue.is_a(measure):
@@ -190,35 +191,36 @@ class LibraryObject:
 
         if ifc_object:
             file_name = f"{ifc_object.GlobalId}.ifc"
-            return LibraryObject.__from_ifc_object(ifc_file, ifc_object, file_name), file_name
+            return LibraryObject.from_ifc_object(ifc_file, ifc_object), file_name
 
         return None, None
 
     @staticmethod
-    def __from_ifc_object(ifc_file: ifcopenshell.file, ifc_object: ifcopenshell.entity_instance,
-                          ifc_file_path: str) -> LibraryObject:
-        # Add property sets to object
-        property_sets = ifc_file.get_inverse(ifc_object, True)
+    def from_ifc_object(ifc_file: ifcopenshell.file, ifc_object: ifcopenshell.entity_instance) -> LibraryObject:
+        # Note, I have bootstrapped this to work to extract S&T data for the WSP building, it probably won't work for other ifc files etc
 
+        # Add property sets to object
+        raw_psets = get_psets(ifc_object)
         property_set_dict = {}
 
-        for rel in property_sets:
-            if rel.is_a("IfcRelDefinesByProperties"):
-                pset = rel.RelatingPropertyDefinition
-                if pset.is_a("IfcPropertySet"):
-                    if pset.Name not in property_set_dict:
-                        property_set_dict[pset.Name] = {}
+        for pset_name, props in raw_psets.items():
+            property_set_dict[pset_name] = {}
+            for prop_name, prop_value in props.items():
+                # prop_value might be a dict (from get_psets) or a raw value (e.g., bool, str)
+                if isinstance(prop_value, dict) and "NominalValue" in prop_value:
+                    value = prop_value["NominalValue"]
+                else:
+                    value = prop_value
 
-                    for prop in pset.HasProperties:
-                        value = prop.NominalValue.wrappedValue if hasattr(prop.NominalValue,
-                                                                          'wrappedValue') else str(prop.NominalValue)
-                        value = LibraryObject.round_if_float(value)
-                        property_set_dict[pset.Name][prop.Name] = {
-                            "value": value,
-                            "unit": LibraryObject.__unit_for_property(prop)
-                        }
+                if hasattr(value, 'wrappedValue'):
+                    value = value.wrappedValue
 
-        # Getting primary info
+                value = LibraryObject.round_if_float(value)
+
+                property_set_dict[pset_name][prop_name] = {
+                    "value": value,
+                    "unit": LibraryObject.__unit_for_property(prop_value)
+                }
 
         # Assume standard is found same place as S&T data
         primary_info = PrimaryInfo(
@@ -401,7 +403,7 @@ class LibraryObject:
         )
 
     @staticmethod
-    def round_if_float(x, decimals=2):
+    def round_if_float(x, decimals=3):
         return round(x, decimals) if isinstance(x, float) else x
 
 
