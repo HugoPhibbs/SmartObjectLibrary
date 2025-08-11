@@ -31,6 +31,7 @@ def get_family_and_type(ifc_object):
                 return val.wrappedValue if hasattr(val, "wrappedValue") else str(val)
     return None
 
+
 def should_add_object_wsp(object, unique_families_and_types: set[str]) -> bool:
     """
     Simple script to check if an object should be added from the ChCh WSP IFC file
@@ -98,6 +99,46 @@ def copy_ifc_object(source_obj, ifc_file):
     return obj_copy
 
 
+def write_object_to_single_ifc(ifc_file: ifcopenshell.file, object,
+                               objects_dir=r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\objects"):
+    ifc_file_copy = ifcopenshell.file(schema=ifc_file.schema)
+
+    object_copy = copy_ifc_object(object, ifc_file_copy)
+
+    site = ifcopenshell.api.root.create_entity(ifc_file_copy, "IfcSite")
+
+    project = ifcopenshell.api.root.create_entity(ifc_file_copy, "IfcProject")
+    copy_units(ifc_file, ifc_file_copy, project)
+    ifcopenshell.api.aggregate.assign_object(ifc_file_copy, relating_object=project, products=[site])
+
+    new_building = ifcopenshell.api.root.create_entity(ifc_file_copy, "IfcBuilding")
+    ifcopenshell.api.aggregate.assign_object(ifc_file_copy, relating_object=site, products=[new_building])
+
+    new_storey = ifcopenshell.api.root.create_entity(ifc_file_copy, "IfcBuildingStorey")
+    ifcopenshell.api.aggregate.assign_object(ifc_file_copy, relating_object=new_building, products=[new_storey])
+
+    # ifcopenshell.api.geometry.edit_object_placement(ifc_file_copy, object_copy)
+
+    origin = ifc_file_copy.create_entity("IfcCartesianPoint", Coordinates=(0.0, 0.0, 0.0))
+    placement3d = ifc_file_copy.create_entity("IfcAxis2Placement3D", Location=origin)
+    local_placement = ifc_file_copy.create_entity("IfcLocalPlacement", RelativePlacement=placement3d)
+    object_copy.ObjectPlacement = local_placement
+
+    ifcopenshell.api.spatial.assign_container(ifc_file_copy, relating_structure=new_storey, products=[object_copy])
+
+    object_dir = os.path.join(objects_dir, "ifc")
+
+    os.makedirs(object_dir, exist_ok=True)
+
+    curr_id = object_copy.GlobalId
+
+    file_name = f"{curr_id}.ifc"
+
+    ifc_file_copy.write(os.path.join(object_dir, file_name))
+
+    return file_name
+
+
 def write_objects_to_single_ifc(ifc_file_path, objects_dir, object_type="IfcBeam"):
     ifc_file = ifcopenshell.open(ifc_file_path)
 
@@ -112,38 +153,7 @@ def write_objects_to_single_ifc(ifc_file_path, objects_dir, object_type="IfcBeam
         if not should_add_object_wsp(objects[i], unique_families_and_types):
             continue
 
-        ifc_file_copy = ifcopenshell.file(schema=ifc_file.schema)
-
-        object_copy = copy_ifc_object(objects[i], ifc_file_copy)
-
-        site = ifcopenshell.api.root.create_entity(ifc_file_copy, "IfcSite")
-
-        project = ifcopenshell.api.root.create_entity(ifc_file_copy, "IfcProject")
-        copy_units(ifc_file, ifc_file_copy, project)
-        ifcopenshell.api.aggregate.assign_object(ifc_file_copy, relating_object=project, products=[site])
-
-        new_building = ifcopenshell.api.root.create_entity(ifc_file_copy, "IfcBuilding")
-        ifcopenshell.api.aggregate.assign_object(ifc_file_copy, relating_object=site, products=[new_building])
-
-        new_storey = ifcopenshell.api.root.create_entity(ifc_file_copy, "IfcBuildingStorey")
-        ifcopenshell.api.aggregate.assign_object(ifc_file_copy, relating_object=new_building, products=[new_storey])
-
-        # ifcopenshell.api.geometry.edit_object_placement(ifc_file_copy, object_copy)
-
-        origin = ifc_file_copy.create_entity("IfcCartesianPoint", Coordinates=(0.0, 0.0, 0.0))
-        placement3d = ifc_file_copy.create_entity("IfcAxis2Placement3D", Location=origin)
-        local_placement = ifc_file_copy.create_entity("IfcLocalPlacement", RelativePlacement=placement3d)
-        object_copy.ObjectPlacement = local_placement
-
-        ifcopenshell.api.spatial.assign_container(ifc_file_copy, relating_structure=new_storey, products=[object_copy])
-
-        object_dir = os.path.join(objects_dir, "ifc")
-
-        os.makedirs(object_dir, exist_ok=True)
-
-        curr_id = object_copy.GlobalId
-
-        ifc_file_copy.write(os.path.join(object_dir, f"{curr_id}.ifc"))
+        write_object_to_single_ifc(ifc_file, objects[i], objects_dir)
 
 
 def keep_ifc_column(ifc_column, unique_columns):
