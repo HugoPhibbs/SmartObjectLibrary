@@ -1,13 +1,14 @@
 FROM python:3.12-slim
 LABEL authors="hugop"
 
+RUN pip install pipreqs
+
+RUN pip install opensearch-py
+
 COPY . /opt/app
 
 WORKDIR /opt/app
 
-RUN pip install pipreqs
-
-RUN pip install opensearch-py
 RUN pipreqs src/site/ --force --savepath ./site_requirements.txt
 
 RUN pip install -r site_requirements.txt
