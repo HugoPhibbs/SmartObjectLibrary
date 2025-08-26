@@ -9,9 +9,9 @@ COPY . /opt/app
 
 WORKDIR /opt/app
 
-RUN pipreqs src/site/ --force --savepath ./site_requirements.txt
+RUN pipreqs src --force --savepath ./requirements.txt
 
-RUN pip install -r site_requirements.txt
+RUN pip install -r requirements.txt
 
-CMD ["python", "-m", "src.site.api.main_api", "--host", "0.0.0.0", "--port", "5000"]
+CMD ["python", "main.py", "--host", "0.0.0.0", "--port", "5000", "--fill-opensearch"]
 #CMD ["/bin/bash"]
