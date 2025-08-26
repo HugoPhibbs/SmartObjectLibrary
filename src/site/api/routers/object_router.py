@@ -9,8 +9,8 @@ from PIL import Image
 from flask import request, jsonify, send_file
 from werkzeug.datastructures import FileStorage
 
-import src.core.query_engines.object_query_engine as engine
-from src.core.LibraryObject import LibraryObject
+import src.site.core.query_engines.object_query_engine as engine
+from src.site.core.LibraryObject import LibraryObject
 
 from flask import Blueprint
 

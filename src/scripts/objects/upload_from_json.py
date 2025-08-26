@@ -4,8 +4,8 @@ from pprint import pprint
 
 import genson
 
-from core.LibraryObject import LibraryObject
-from src.core.opensearch_client import client
+from src.site.core import LibraryObject
+from src.site.core.opensearch_client import client
 from scripts.utils import convert_schema
 
 # Script to upload all beam objects to OpenSearch

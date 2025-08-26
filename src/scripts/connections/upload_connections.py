@@ -1,4 +1,4 @@
-from src.core.opensearch_client import client
+from src.site.core.opensearch_client import client
 
 import pandas as pd
 import genson
