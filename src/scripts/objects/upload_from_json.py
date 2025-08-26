@@ -4,14 +4,14 @@ from pprint import pprint
 
 import genson
 
-from src.site.core import LibraryObject
+from src.site.core.LibraryObject import LibraryObject
 from src.site.core.opensearch_client import client
-from scripts.utils import convert_schema
+from src.scripts.utils import convert_schema
 
 # Script to upload all beam objects to OpenSearch
 
-JSON_DIR = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\objects\json"
-SCHEMA_PATH = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\schema\beams_schema.json"
+JSON_DIR = r"data\objects\json"
+SCHEMA_PATH = r"data\schema\beams_schema.json"
 
 
 def add_json_file(file_path):

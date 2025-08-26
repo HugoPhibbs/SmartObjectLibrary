@@ -1,6 +1,6 @@
 import json
 
-from scripts.objects.wsp_building.wsp_objects_to_json import clean_wsp_json
+from src.scripts.objects.wsp_building.wsp_objects_to_json import clean_wsp_json
 from src.site.core import LibraryObject
 
 import os
