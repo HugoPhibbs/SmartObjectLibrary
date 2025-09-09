@@ -2,12 +2,12 @@ from typing import List
 
 import ifcopenshell
 
-from core.InspectionRecordStore import InspectionRecordStore
-from src.core.QueryBuilder import OpenSearchQueryBuilder
-from src.core.opensearch_client import client
-from src.core.utils import opensearch_hits_to_dicts
-from src.core.FileStore import FileStore
-from src.core.LibraryObject import LibraryObject
+from src.site.core.InspectionRecordStore import InspectionRecordStore
+from src.site.core.QueryBuilder import OpenSearchQueryBuilder
+from src.site.core.opensearch_client import client
+from src.site.core.utils import opensearch_hits_to_dicts
+from src.site.core.FileStore import FileStore
+from src.site.core.LibraryObject import LibraryObject
 
 from werkzeug.datastructures import FileStorage
 

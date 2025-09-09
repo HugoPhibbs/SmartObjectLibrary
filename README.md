@@ -4,37 +4,18 @@
 
 * This repo essentially contains the backend API and data engine for smart object library frontends
 
-### Dependencies
-
-* You will need to have the following installed:
-    * Docker
-    * Conda (with Python 3.12+) 
-
-
-## Installation
+## Running the API
 * Clone the repo and navigate to the root directory
-* _Ensure_ that Docker is installed and running
+* Ensure you have Docker installed and running on your machine
 
-* If Conda isn't already initialized on your machine, enter (then restart your terminal):
-
+* Build the image:
 ```bash
-conda init
+docker build -t pl-api .
 ```
 
-* Create a conda env with:
-
-```bash
-conda env create -f environment.yml # Don't forget to add 'env'
+* Then run the container:
+```bash 
+docker run -d -p 5000:5000 pl-api
 ```
 
-* Activate the environment with:
-
-```bash
-conda activate SmartObjectLibrary
-```
-
-* Then run:
-
-```bash
-python main.py
-```
+* The API should now be accessible at `http://localhost:5000`

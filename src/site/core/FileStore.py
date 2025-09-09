@@ -21,7 +21,7 @@ class FileStore:
     Way to abstract this functionality away, so can easily switch to cloud storage in the future
     """
 
-    def __init__(self, objects_dir=os.getenv("OBJECTS_DIR_DEFAULT")):
+    def __init__(self, objects_dir=os.getenv("OBJECTS_DIR_DEFAULT", os.path.join(os.getcwd(), "data", "objects"))):
         self.objects_dir = objects_dir
         self.json_dir = os.path.join(objects_dir, "json")
         self.ifc_dir = os.path.join(objects_dir, "ifc")

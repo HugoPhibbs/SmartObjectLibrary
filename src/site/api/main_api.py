@@ -1,6 +1,6 @@
 from flask import Flask
-from src.api.routers.object_router import object_bp
-from src.api.routers.connection_router import connection_bp
+from src.site.api.routers.object_router import object_bp
+from src.site.api.routers.connection_router import connection_bp
 
 from flask_cors import CORS
 

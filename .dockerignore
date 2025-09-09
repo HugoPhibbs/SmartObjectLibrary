@@ -1,0 +1,6 @@
+data
+!data/objects
+docs
+.venv
+
+.env

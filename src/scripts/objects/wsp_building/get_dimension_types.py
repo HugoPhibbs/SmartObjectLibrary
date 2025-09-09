@@ -1,5 +1,5 @@
 import os
-from src.core.LibraryObject import LibraryObject as LibraryObjectV2
+from src.site.core import LibraryObject as LibraryObjectV2
 import ifcopenshell
 
 

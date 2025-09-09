@@ -7,7 +7,7 @@ import os
 
 class InspectionRecordStore:
 
-    def __init__(self, objects_dir=os.getenv("OBJECTS_DIR_DEFAULT")):
+    def __init__(self, objects_dir=os.getenv("OBJECTS_DIR_DEFAULT", os.path.join(os.getcwd(), "data", "objects"))):
         self.objects_dir = objects_dir
         self.inspection_record_dir = os.path.join(objects_dir, "inspection-record")
 

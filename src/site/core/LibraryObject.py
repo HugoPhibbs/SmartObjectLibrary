@@ -190,13 +190,12 @@ class LibraryObject:
 
         if ifc_object:
             file_name = f"{ifc_object.GlobalId}.ifc"
-            return LibraryObject.__from_ifc_object(ifc_file, ifc_object, file_name), file_name
+            return LibraryObject.from_ifc_object(ifc_file, ifc_object), file_name
 
         return None, None
 
     @staticmethod
-    def __from_ifc_object(ifc_file: ifcopenshell.file, ifc_object: ifcopenshell.entity_instance,
-                          ifc_file_path: str) -> LibraryObject:
+    def from_ifc_object(ifc_file: ifcopenshell.file, ifc_object: ifcopenshell.entity_instance) -> LibraryObject:
         # Add property sets to object
         property_sets = ifc_file.get_inverse(ifc_object, True)
 

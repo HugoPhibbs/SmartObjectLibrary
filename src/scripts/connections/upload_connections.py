@@ -1,9 +1,9 @@
-from src.core.opensearch_client import client
+from src.site.core.opensearch_client import client
 
 import pandas as pd
 import genson
 
-from scripts.utils import convert_schema
+from src.scripts.utils import convert_schema
 
 df = pd.read_csv(r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\connections\csv\all_connections.csv")
 

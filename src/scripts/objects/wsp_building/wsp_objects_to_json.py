@@ -1,14 +1,13 @@
 from dataclasses import asdict, is_dataclass
 from enum import Enum
 
-from src.core.LibraryObject import LibraryObject as LibraryObjectV2, CostMetric, Currency
-from src.core.LibraryObject import Cost
+from src.site.core import LibraryObject as LibraryObjectV2, CostMetric, Currency
+from src.site.core import Cost
 from src.scripts.objects.add_mock_property_sets import add_mock_property_sets
 import ifcopenshell
 import os
 import json
 import pydash
-import random
 
 dimension_name_map = {
     # Universal
@@ -16,6 +15,10 @@ dimension_name_map = {
     "Elevation at Top": "elevation_top",
     "Length": "length",
     "Volume": "volume",
+    "Height": "height",
+    "Width": "width",
+    "Area": "area",
+
 
     # Generic section geometry
     "b": "width",
@@ -200,6 +203,8 @@ def rename_dimensions(object_dict):
         if key in dimension_name_map:
             new_key = dimension_name_map[key]
             new_dimensions[new_key] = value
+        else:
+            new_dimensions[key] = value
 
     object_dict["property_sets"]["Dimensions"] = new_dimensions
 
@@ -211,7 +216,7 @@ def remove_id_from_name(object_dict):
 
 
 def add_material_name(object_dict):
-    if "Materials and Finishes" in object_dict["property_sets"]:
+    if "Materials and Finishes" in object_dict["property_sets"] and "Structural Material" in object_dict["property_sets"]["Materials and Finishes"]:
         object_dict["material"]["name"] = object_dict["property_sets"]["Materials and Finishes"]["Structural Material"][
             "value"]
         del object_dict["property_sets"]["Materials and Finishes"]
@@ -279,6 +284,7 @@ def add_mock_cost_data(object_dict):
 
     object_dict["cost"] = asdict_enum(cost)
 
+
 def clean_wsp_json(object_dict):
     """
     Clean the WSP JSON object by removing unnecessary attributes and renaming property sets.
@@ -298,6 +304,7 @@ def clean_wsp_json(object_dict):
     add_mock_cost_data(object_dict)
 
     return object_dict
+
 
 if __name__ == "__main__":
     ifc_dir = r"C:\Users\hugop\Documents\Work\SmartObjectLibrary\data\objects\ifc"
