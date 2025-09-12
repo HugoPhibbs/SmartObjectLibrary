@@ -75,7 +75,6 @@ def get_all_objects():
     else:
         pass
 
-
 @object_bp.route('/<object_id>', methods=['GET'])
 def get_object(object_id: str):
     response_format = request.args.get("format", default="json", type=str)
