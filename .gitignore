@@ -7,3 +7,5 @@
 data/ifc/
 
 data/wsp_new/*
+
+__pycache__
