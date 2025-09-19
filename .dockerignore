@@ -4,3 +4,4 @@ docs
 .venv
 
 .env
+Dockerfile
