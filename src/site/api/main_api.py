@@ -17,6 +17,7 @@ app.register_blueprint(connection_bp, url_prefix='/connection')
 
 auth = HTTPTokenAuth(scheme="Bearer")
 
+
 @auth.verify_token
 def verify_token(token):
     # Implement your token verification logic here
@@ -28,6 +29,7 @@ def verify_token(token):
 def before_request():
     if not auth.current_user():
         return 401, 'Unauthorized'
+
 
 if __name__ == '__main__':
     app.run(debug=True)
