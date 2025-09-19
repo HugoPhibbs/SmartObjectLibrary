@@ -8,8 +8,8 @@ __all__ = ["client"]
 
 load_dotenv()
 
-HOST = os.getenv("OPENSEARCH_HOST")
-PORT = os.getenv("OPENSEARCH_PORT")
+HOST = os.getenv("OPENSEARCH_HOST", "http://localhost")
+PORT = os.getenv("OPENSEARCH_PORT", 9200)
 
 auth = ("admin", os.getenv("OPENSEARCH_INITIAL_ADMIN_PASSWORD"))
 
