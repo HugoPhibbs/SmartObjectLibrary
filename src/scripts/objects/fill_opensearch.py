@@ -1,12 +1,14 @@
 import json
 import os
 from pprint import pprint
+import argparse
 
 import genson
 
 from src.site.core.LibraryObject import LibraryObject
-from src.site.core.opensearch_client import client
 from src.scripts.utils import convert_schema
+
+from src.site.core.opensearch_client import get_client
 
 # Script to upload all beam objects to OpenSearch
 
@@ -14,14 +16,14 @@ JSON_DIR = r"data\objects\json"
 SCHEMA_PATH = r"data\schema\beams_schema.json"
 
 
-def add_json_file(file_path):
+def add_json_file(os_client, file_path):
     object_id = os.path.basename(file_path).split(".")[0]
 
     with open(file_path, "r") as json_file:
         object_data = json.load(json_file)
 
     try:
-        response = client.index(index="objects", body=object_data, id=object_id)
+        response = os_client.index(index="objects", body=object_data, id=object_id)
     except Exception as e:
         print(f"Error uploading {file_path}: {e}")
         pprint(object_data)
@@ -30,19 +32,19 @@ def add_json_file(file_path):
     return response
 
 
-def add_all_files():
+def add_all_files(os_client):
     for file in os.listdir(JSON_DIR):
         file_path = os.path.join(JSON_DIR, file)
         if os.path.isfile(file_path) and file.endswith(".json"):
-            add_json_file(file_path)
+            add_json_file(os_client, file_path)
 
 
-def create_index(schema=None, delete_if_exists=True):
-    index_exists = client.indices.exists(index="objects")
+def create_index(os_client, schema=None, delete_if_exists=True):
+    index_exists = os_client.indices.exists(index="objects")
 
     if delete_if_exists and index_exists:
-        if client.indices.exists(index="objects"):
-            client.indices.delete(index="objects")
+        if os_client.indices.exists(index="objects"):
+            os_client.indices.delete(index="objects")
 
     elif index_exists:
         return
@@ -56,7 +58,7 @@ def create_index(schema=None, delete_if_exists=True):
             }
         }
 
-    client.indices.create(index="objects", body=body)
+    os_client.indices.create(index="objects", body=body)
 
 
 def write_schema():
@@ -80,11 +82,22 @@ def write_schema():
     return schema
 
 
-def main():
+def main(stage):
     schema = LibraryObject.get_opensearch_schema()
-    create_index(schema=schema)
-    add_all_files()
+    os_client = get_client(stage)
+
+    delete_index_if_exits = stage != "prod"
+
+    create_index(os_client, schema=schema, delete_if_exists=delete_index_if_exits)
+    add_all_files(os_client)
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Fill the OpenSearch index with objects")
+    parser.add_argument("--prod", action="store_true",
+                        help="Fill the production OS domain, instead of the default dev domain")
+    args = parser.parse_args()
+
+    stage = "prod" if args.prod else "dev"
+
+    main(stage)
