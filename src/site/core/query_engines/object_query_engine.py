@@ -4,10 +4,13 @@ import ifcopenshell
 
 from src.site.core.InspectionRecordStore import InspectionRecordStore
 from src.site.core.QueryBuilder import OpenSearchQueryBuilder
-from src.site.core.opensearch_client import client
 from src.site.core.utils import opensearch_hits_to_dicts
 from src.site.core.FileStore import FileStore
 from src.site.core.LibraryObject import LibraryObject
+
+from src.site.core.opensearch_client import get_client
+
+client = get_client()
 
 from werkzeug.datastructures import FileStorage
 
@@ -37,6 +40,7 @@ def get_all_objects(format="ifc") -> List[LibraryObject] | str:
     if format == "json":
         response = client.search(index="objects", body={"query": {"match_all": {}}, "size": 10000})
         results = opensearch_hits_to_dicts(response["hits"]["hits"])
+        print(results[0] if len(results) > 0 else "No results found")
         return results
 
     elif format == "ifc":

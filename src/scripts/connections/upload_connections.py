@@ -1,4 +1,6 @@
-from src.site.core.opensearch_client import client
+from src.site.core.opensearch_client import get_client
+
+client = get_client()
 
 import pandas as pd
 import genson

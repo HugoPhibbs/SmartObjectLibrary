@@ -2,7 +2,9 @@ import re
 
 from src.site.core.QueryBuilder import OpenSearchQueryBuilder
 from src.site.core.utils import opensearch_hits_to_dicts
-from src.site.core.opensearch_client import client
+from src.site.core.opensearch_client import get_client
+
+client = get_client()
 
 from src.site.core.query_engines.object_query_engine import get_file_by_object_id
 
