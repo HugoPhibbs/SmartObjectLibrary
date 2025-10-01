@@ -32,6 +32,12 @@ def create_temp_ifc_file(request_file: FileStorage) -> ifcopenshell.file:
         return ifcopenshell.open(temp_file_path)
 
 
+@object_bp.before_request
+def _protect_object():
+    if request.method == "OPTIONS":
+        return "", 200
+
+
 @object_bp.route('/', methods=['POST'])
 def create_object_from_ifc():
     file = request.files['file']
@@ -73,19 +79,22 @@ def get_all_objects():
     elif response_format == "zip":
         return send_objects_as_zip(query_response)
     else:
-        pass
+        return f"Format: {response_format} not supported", 400
+
 
 @object_bp.route('/<object_id>', methods=['GET'])
 def get_object(object_id: str):
     response_format = request.args.get("format", default="json", type=str)
     query_response = engine.get_file_by_object_id(object_id, response_format)
 
+    print(f"Getting object {object_id}")
+
     if response_format == "json":
         return jsonify(query_response)
     elif response_format == "ifc":
         return send_file(query_response, as_attachment=True)
     else:
-        pass  # TODO handle this
+        return f"Format: {response_format} not supported", 400
 
 
 @object_bp.route("/<object_id>/photo", methods=['GET'])
@@ -219,6 +228,7 @@ def add_inspection_record(object_id: str):
 def get_inspection_record_dates(object_id: str):
     dates = engine.get_inspection_record_dates(object_id)
     return jsonify(dates)
+
 
 @object_bp.route("/manufacturer", methods=["GET"])
 def get_all_manufacturers():

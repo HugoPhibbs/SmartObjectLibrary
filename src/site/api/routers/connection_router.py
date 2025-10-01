@@ -4,6 +4,10 @@ import src.site.core.query_engines.connection_query_engine as query_engine
 
 connection_bp = Blueprint('connection', __name__)
 
+@connection_bp.before_request
+def _protect_connection():
+    if request.method == "OPTIONS":
+        return "", 200
 
 @connection_bp.route('/<connection_id>', methods=['GET'])
 def get_connection(connection_id: str):
