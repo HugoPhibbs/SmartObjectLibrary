@@ -7,10 +7,13 @@ COPY --from=public.ecr.aws/awsguru/aws-lambda-adapter:0.9.1 /lambda-adapter /opt
 
 # 8080 is default port for lambda-adapter, but set it here anyhow
 ENV PORT=8080
+ENV PYTHONUNBUFFERED=1
 
 RUN pip install pipreqs
 
 RUN pip install opensearch-py
+
+RUN pip install gunicorn
 
 COPY . /opt/app
 
