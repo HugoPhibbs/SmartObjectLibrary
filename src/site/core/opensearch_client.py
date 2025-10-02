@@ -34,7 +34,7 @@ def get_aws_creds(use_default, region):
 
 def get_client(stage=None, auth_type=None):
     if stage is None:
-        stage = os.getenv("STAGE", "dev")
+        stage = os.getenv("OPENSEARCH_STAGE", "dev")
 
     if stage == "dev":
         host = os.getenv("OPENSEARCH_HOST", "http://localhost")
@@ -60,7 +60,7 @@ def get_client(stage=None, auth_type=None):
         verify_certs = True
         use_ssl = True
     else:
-        raise ValueError(f"Unknown STAGE: {stage}")
+        raise ValueError(f"Unknown OPENSEARCH_STAGE: {stage}")
 
     print(f"Connecting to OpenSearch at {host}:{port}..., stage={stage}")
 
