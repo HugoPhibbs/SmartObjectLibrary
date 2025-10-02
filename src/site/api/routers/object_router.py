@@ -139,9 +139,11 @@ def send_objects_as_zip(objects: List[LibraryObject]):
 
 
 @object_bp.route("/filter", methods=['GET'])
-def get_object_by_filter():
+def get_objects_by_filter():
     response_format = request.args.get("format", default="json", type=str)
     query_params_dict = request.args.to_dict()
+    if "format" in query_params_dict:
+        del query_params_dict["format"]
 
     found_objects = engine.get_by_filter(query_params_dict)
 
