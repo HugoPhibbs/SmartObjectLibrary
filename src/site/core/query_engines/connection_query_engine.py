@@ -1,6 +1,6 @@
 import re
 
-from src.site.core.QueryBuilder import OpenSearchQueryBuilder
+from src.site.core.QueryBuilder import QueryBuilder
 from src.site.core.utils import opensearch_hits_to_dicts
 from src.site.core.opensearch_client import get_client
 
@@ -24,7 +24,7 @@ def get_all_connections():
 
 
 def get_connections_by_filter(query_params):
-    connections_filter = OpenSearchQueryBuilder("connection").from_query_params_dict(query_params).build()
+    connections_filter = QueryBuilder().from_query_params_dict(query_params).build()
 
     response = client.search(index="connections", body=connections_filter)
 

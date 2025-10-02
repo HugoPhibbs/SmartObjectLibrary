@@ -3,7 +3,7 @@ from typing import List
 import ifcopenshell
 
 from src.site.core.InspectionRecordStore import InspectionRecordStore
-from src.site.core.QueryBuilder import OpenSearchQueryBuilder
+from src.site.core.QueryBuilder import QueryBuilder
 from src.site.core.utils import opensearch_hits_to_dicts
 from src.site.core.FileStore import FileStore
 from src.site.core.LibraryObject import LibraryObject
@@ -54,7 +54,11 @@ def get_all_objects(format="ifc") -> List[LibraryObject] | str:
 
 
 def get_by_filter(query_params: dict) -> List[LibraryObject]:
-    query_filter = OpenSearchQueryBuilder("object").from_query_params_dict(query_params).build()
+    print(query_params)
+
+    query_filter = QueryBuilder().from_query_params_dict(query_params).build()
+
+    print(query_filter)
 
     response = client.search(index="objects", body=query_filter)
     results = opensearch_hits_to_dicts(response["hits"]["hits"])

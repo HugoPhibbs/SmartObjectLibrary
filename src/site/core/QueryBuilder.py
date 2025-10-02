@@ -1,7 +1,7 @@
 import re
 
 
-class OpenSearchQueryBuilder:
+class QueryBuilder:
     """
     Class to build an OpenSearch query from query parameters
 
@@ -20,7 +20,7 @@ class OpenSearchQueryBuilder:
     print(query)
     """
 
-    def __init__(self, object_type: str):
+    def __init__(self):
         self.query = {
             "query": {
                 "bool": {
@@ -30,7 +30,6 @@ class OpenSearchQueryBuilder:
                 }
             }
         }
-        self.object_type = object_type
 
     def from_query_params_dict(self, query_params_dict: dict):
         """
@@ -85,7 +84,7 @@ class OpenSearchQueryBuilder:
 
             elif key.startswith("range_"):
                 print(f"value {value}")
-                min_max = OpenSearchQueryBuilder.__parse_range_string(value)
+                min_max = QueryBuilder.__parse_range_string(value)
                 print("min_max ", min_max)
                 if min_max is not None:
                     field = key.replace("range_", "")
@@ -103,7 +102,7 @@ class OpenSearchQueryBuilder:
                 parsed_params["term"][field_path] = True if value == 1 else False
                 print(value)
 
-            elif key.startswith("match_"): # Assume match by itself is "should"
+            elif key.startswith("match_"):  # Assume match by itself is "should"
                 field = key.replace("match_", "")
                 field_path = self.fieldToObjectPath(field)
                 parsed_params["should_match"][field_path] = value
@@ -113,9 +112,20 @@ class OpenSearchQueryBuilder:
                 field_path = self.fieldToObjectPath(field)
                 parsed_params["must_match"][field_path] = value
 
+            elif key.startswith("list_"):
+                # Assume a term match for all values in a comma-separated list
+                field = key.replace("list_", "")
+                field_path = self.fieldToObjectPath(field)
+
+                values = value.split(',')
+                values = [v for v in values if v]
+
+                for val in values:
+                    parsed_params["term"][field_path] = QueryBuilder.__parse_term_value(val)
+
             else:
                 field_path = self.fieldToObjectPath(key)
-                parsed_params["term"][field_path] = OpenSearchQueryBuilder.__parse_term_value(value)
+                parsed_params["term"][field_path] = QueryBuilder.__parse_term_value(value)
 
         print("parsed_params ", parsed_params)
 
@@ -167,7 +177,7 @@ class OpenSearchQueryBuilder:
 
 if __name__ == "__main__":
     # Example usage:
-    query_builder = OpenSearchQueryBuilder("object")
+    query_builder = QueryBuilder()
 
     query = (query_builder
              .from_query_params_dict(
