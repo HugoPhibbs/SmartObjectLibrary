@@ -40,6 +40,7 @@ class PrimaryInfo:
     model: str
     standard: str
     ifc_type: str
+    categories: list[str]
 
 
 class Currency(Enum):
