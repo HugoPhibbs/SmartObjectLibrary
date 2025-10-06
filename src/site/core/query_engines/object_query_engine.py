@@ -1,6 +1,7 @@
 from typing import List
 
 import ifcopenshell
+from opensearchpy import NotFoundError
 
 from src.site.core.InspectionRecordStore import InspectionRecordStore
 from src.site.core.QueryBuilder import QueryBuilder
@@ -22,10 +23,15 @@ file_store = FileStore()
 inspection_record_store = InspectionRecordStore()
 
 
-def get_file_by_object_id(object_id: str, file_type="ifc") -> dict | str:
+def get_file_by_object_id(object_id: str, file_type="ifc") -> dict | str | None:
     if file_type == "json":
-        response = client.get(index="objects", id=object_id)
-        return response["_source"]
+        try:
+            response = client.get(index="objects", id=object_id)
+            return response["_source"]
+        except NotFoundError as nfe:
+            print(f"Object with ID {object_id} not found: {nfe}")
+            return None
+
 
     elif file_type == "ifc":
         return file_store.object_file_path(object_id, "ifc")
@@ -132,6 +138,7 @@ def add_inspection_record(file: FileStorage, object_id: str, date: str):
 def get_inspection_record_dates(object_id: str):
     return inspection_record_store.get_inspection_record_dates(object_id)
 
+
 def get_manufacturers():
     response = client.search(
         index="objects",
@@ -151,6 +158,7 @@ def get_manufacturers():
     unique_vals = [bucket["key"] for bucket in response["aggregations"]["manufacturers"]["buckets"]]
 
     return unique_vals
+
 
 if __name__ == "__main__":
     manufacturer = get_manufacturers()

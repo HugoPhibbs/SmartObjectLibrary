@@ -87,6 +87,9 @@ def get_object(object_id: str):
     response_format = request.args.get("format", default="json", type=str)
     query_response = engine.get_file_by_object_id(object_id, response_format)
 
+    if query_response is None:
+        return "Object not found", 404
+
     print(f"Getting object {object_id}")
 
     if response_format == "json":
