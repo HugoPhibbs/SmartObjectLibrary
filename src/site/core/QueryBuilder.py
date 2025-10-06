@@ -1,5 +1,11 @@
 import re
 
+FIELD_ALIASES = {
+    "category": "identity_data.primary_info.categories",
+    "categories": "identity_data.primary_info.categories",
+    "id": "object_id"
+}
+
 
 class QueryBuilder:
     """
@@ -88,35 +94,34 @@ class QueryBuilder:
                 print("min_max ", min_max)
                 if min_max is not None:
                     field = key.replace("range_", "")
-                    field_path = self.fieldToObjectPath(field)
-                    parsed_params["range"][field_path] = {}
+                    field_path = self.field_to_object_path(field)
                     range_obj = {}
                     if min_max["min"] is not None:
                         range_obj["gte"] = min_max["min"]
                     if min_max["max"] is not None:
                         range_obj["lte"] = min_max["max"]
-                    parsed_params["range"].append(range_obj)
+                    parsed_params["range"].append({field_path: range_obj})
 
             elif key.startswith("bool_"):
                 field = key.replace("bool_", "")
-                field_path = self.fieldToObjectPath(field)
+                field_path = self.field_to_object_path(field)
                 if value.isdigit(): value = int(value)
                 parsed_params["term"].append({field_path: True if value == 1 else False})
 
             elif key.startswith("match_"):  # Assume match by itself is "should"
                 field = key.replace("match_", "")
-                field_path = self.fieldToObjectPath(field)
+                field_path = self.field_to_object_path(field)
                 parsed_params["should_match"].append({field_path: value})
 
             elif key.startswith("must_match_"):
                 field = key.replace("must_match_", "")
-                field_path = self.fieldToObjectPath(field)
+                field_path = self.field_to_object_path(field)
                 parsed_params["must_match"].append({field_path: value})
 
             elif key.startswith("list_"):
                 # Assume a term match for all values in a comma-separated list
                 field = key.replace("list_", "")
-                field_path = self.fieldToObjectPath(field)
+                field_path = self.field_to_object_path(field)
 
                 values = value.split(',')
                 values = [v for v in values if v]
@@ -125,7 +130,7 @@ class QueryBuilder:
                     parsed_params["term"].append({field_path: QueryBuilder.__parse_term_value(val)})
 
             else:
-                field_path = self.fieldToObjectPath(key)
+                field_path = self.field_to_object_path(key)
                 parsed_params["term"].append({field_path: QueryBuilder.__parse_term_value(value)})
 
         print("parsed_params ", parsed_params)
@@ -163,13 +168,16 @@ class QueryBuilder:
 
         return self
 
-    def fieldToObjectPath(self, field):
+    def field_to_object_path(self, field):
         """
         Maps a field to the object path in a OpenSearch index
 
         :param field: field name
         :return: the object path
         """
+        if field in FIELD_ALIASES:
+            field = FIELD_ALIASES[field]
+
         if field.startswith("property_sets."):
             field += ".value"
 
