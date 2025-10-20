@@ -3,10 +3,10 @@ from flask_login import login_user, current_user, logout_user
 from werkzeug.exceptions import UnsupportedMediaType
 from src.site.user_store import verify_user, User
 
-auth_bp = Blueprint('auth', __name__)
+session_bp = Blueprint('auth', __name__)
 
 
-@auth_bp.post('/login')
+@session_bp.post('/login')
 def login():
     try:
         data = request.get_json() or {}
@@ -25,13 +25,13 @@ def login():
     return {"message": "Login successful"}, 200
 
 
-@auth_bp.post("/logout")
+@session_bp.post("/logout")
 def logout():
     logout_user()
     return {"message": "Logout successful"}, 200
 
 
-@auth_bp.get("/session-status")
+@session_bp.get("/status")
 def session_status():
     print(current_user)
     if current_user.is_authenticated:
