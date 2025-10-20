@@ -10,3 +10,5 @@ data/wsp_new/*
 
 __pycache__
 /data/object_categories.csv
+
+/flask_session
