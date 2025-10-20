@@ -3,7 +3,8 @@ import re
 FIELD_ALIASES = {
     "category": "identity_data.primary_info.categories",
     "categories": "identity_data.primary_info.categories",
-    "id": "object_id"
+    "id": "object_id",
+    "name": "identity_data.primary_info.name",
 }
 
 
@@ -53,7 +54,7 @@ class QueryBuilder:
 
     def build(self):
         """
-        Builds the query
+        Builds the query into an OpenSearch query DSL dictionary
 
         :return: query as a dictionary
         """
@@ -82,7 +83,7 @@ class QueryBuilder:
         :return: dictionary of query parameters
         """
 
-        parsed_params = {"term": [], "range": [], "should_match": [], "must_match": []}
+        parsed_params = {"term": [], "range": [], "should_match": [], "must_match": [], "should_term": []}
 
         for key, value in query_params_dict.items():
             if value == "NaN" or value == "" or not value:
@@ -121,13 +122,20 @@ class QueryBuilder:
             elif key.startswith("list_"):
                 # Assume a term match for all values in a comma-separated list
                 field = key.replace("list_", "")
+
+                is_and_equality = True # Whether to use AND or OR equality across the list items
+
+                if field.startswith("should_"):
+                    field = field.replace("should_", "")
+                    is_and_equality = False
+
                 field_path = self.field_to_object_path(field)
 
                 values = value.split(',')
                 values = [v for v in values if v]
 
                 for val in values:
-                    parsed_params["term"].append({field_path: QueryBuilder.__parse_term_value(val)})
+                    parsed_params["term" if is_and_equality else "should_term"].append({field_path: QueryBuilder.__parse_term_value(val)})
 
             else:
                 field_path = self.field_to_object_path(key)
@@ -144,9 +152,10 @@ class QueryBuilder:
         except ValueError:
             return value
 
-    def __add_filters(self, query_params_dict, bool_operator="term"):
+    def __add_filters(self, query_params_dict):
+        # See https://docs.opensearch.org/latest/query-dsl/compound/bool/
         for obj in query_params_dict["term"]:
-            self.query["query"]["bool"]["filter"].append({bool_operator: obj})
+            self.query["query"]["bool"]["filter"].append({"term": obj})
 
         for obj in query_params_dict["range"]:
             self.query["query"]["bool"]["filter"].append({"range": obj})
@@ -162,6 +171,11 @@ class QueryBuilder:
 
         for obj in query_params_dict["should_match"]:
             self.query["query"]["bool"]["should"].append(create_match_query(obj))
+            self.query["query"]["bool"]["minimum_should_match"] = 1
+
+        for obj in query_params_dict["should_term"]:
+            self.query["query"]["bool"]["should"].append({"term": obj})
+            self.query["query"]["bool"]["minimum_should_match"] = 1
 
         for obj in query_params_dict["must_match"]:
             self.query["query"]["bool"]["must"].append(create_match_query(obj))

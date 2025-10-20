@@ -11,6 +11,7 @@ from werkzeug.datastructures import FileStorage
 
 import src.site.core.query_engines.object_query_engine as engine
 from src.site.core.LibraryObject import LibraryObject
+from flask_login import current_user
 
 from flask import Blueprint
 
@@ -34,13 +35,17 @@ def create_temp_ifc_file(request_file: FileStorage) -> ifcopenshell.file:
 
 @object_bp.before_request
 def _protect_object():
-    if request.method == "OPTIONS":
-        return "", 200
+    if not current_user.is_authenticated:
+        return "Unauthorized", 401
 
 
 @object_bp.route('/', methods=['POST'])
 def create_object_from_ifc():
-    file = request.files['file']
+    try:
+        file = request.files['file']
+    except KeyError:
+        return "No file provided", 400
+
     form_key_values = request.form.to_dict()
 
     if file:
@@ -141,14 +146,14 @@ def send_objects_as_zip(objects: List[LibraryObject]):
     return send_file(zip_buffer, as_attachment=True, download_name="files.zip", mimetype="application/zip")
 
 
-@object_bp.route("/filter", methods=['GET'])
+@object_bp.route("/query", methods=['GET'])
 def get_objects_by_filter():
     response_format = request.args.get("format", default="json", type=str)
     query_params_dict = request.args.to_dict()
     if "format" in query_params_dict:
         del query_params_dict["format"]
 
-    found_objects = engine.get_by_filter(query_params_dict)
+    found_objects = engine.get_by_query(query_params_dict)
 
     if response_format == "json":
         return jsonify(found_objects)
@@ -156,6 +161,17 @@ def get_objects_by_filter():
         send_objects_as_zip(found_objects)
     else:
         pass  # TODO handle this
+
+
+@object_bp.route("/os-query", methods=['GET'])
+def get_object_by_os_query():
+    os_query_params = request.get_json()  # Should be in OpenSearch Query DSL format
+
+    os_query = {"query": os_query_params}
+
+    found_objects = engine.get_by_os_query(os_query)
+
+    return jsonify(found_objects)
 
 
 @object_bp.route("/nlp", methods=['GET'])

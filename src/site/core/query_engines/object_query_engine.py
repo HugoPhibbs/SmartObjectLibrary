@@ -59,14 +59,18 @@ def get_all_objects(format="ifc") -> List[LibraryObject] | str:
         return objects
 
 
-def get_by_filter(query_params: dict) -> List[LibraryObject]:
+def get_by_query(query_params: dict) -> List[LibraryObject]:
     print(query_params)
 
-    query_filter = QueryBuilder().from_query_params_dict(query_params).build()
+    os_query_params = QueryBuilder().from_query_params_dict(query_params).build()
 
-    print(query_filter)
+    return get_by_os_query(os_query_params)
 
-    response = client.search(index="objects", body=query_filter)
+
+def get_by_os_query(os_query_params: dict) -> List[LibraryObject]:
+    print("Parsed query params: ", os_query_params)
+
+    response = client.search(index="objects", body=os_query_params)
     results = opensearch_hits_to_dicts(response["hits"]["hits"])
 
     return results
