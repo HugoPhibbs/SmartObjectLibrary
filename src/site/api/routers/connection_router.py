@@ -1,13 +1,16 @@
 from flask import Blueprint, request
 
 import src.site.core.query_engines.connection_query_engine as query_engine
+from flask_login import current_user
 
 connection_bp = Blueprint('connection', __name__)
 
+
 @connection_bp.before_request
 def _protect_connection():
-    if request.method == "OPTIONS":
-        return "", 200
+    if not current_user.is_authenticated:
+        return "Unauthorized", 401
+
 
 @connection_bp.route('/<connection_id>', methods=['GET'])
 def get_connection(connection_id: str):
@@ -16,7 +19,7 @@ def get_connection(connection_id: str):
     return connection, 200 if connection else None, 404
 
 
-@connection_bp.route("/filter", methods=["GET"])
+@connection_bp.route("/query", methods=["GET"])
 def get_connections_by_filter():
     query_params = request.args.to_dict()
 
