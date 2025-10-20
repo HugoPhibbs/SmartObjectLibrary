@@ -1,15 +1,14 @@
 from flask import Blueprint, request
 
 import src.site.core.query_engines.connection_query_engine as query_engine
-from flask_login import current_user
+from src.site.api.auth import check_auth
 
 connection_bp = Blueprint('connection', __name__)
 
 
 @connection_bp.before_request
 def _protect_connection():
-    if not current_user.is_authenticated:
-        return "Unauthorized", 401
+    return check_auth()
 
 
 @connection_bp.route('/<connection_id>', methods=['GET'])

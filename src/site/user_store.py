@@ -10,7 +10,8 @@ class User(UserMixin):
         self.id = id
         self.username = username
 
-def get_username(user_id:str):
+
+def get_username(user_id: str):
     user_info = users.get(user_id)
     if user_info:
         return user_info['username']

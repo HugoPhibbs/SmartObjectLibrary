@@ -10,8 +10,8 @@ from flask import request, jsonify, send_file
 from werkzeug.datastructures import FileStorage
 
 import src.site.core.query_engines.object_query_engine as engine
+from src.site.api.auth import check_auth
 from src.site.core.LibraryObject import LibraryObject
-from flask_login import current_user
 
 from flask import Blueprint
 
@@ -22,8 +22,7 @@ def create_temp_ifc_file(request_file: FileStorage) -> ifcopenshell.file:
     """
     Creates a temporary IFC file from an HTTP request so it can be handled
 
-    :param requ
-    est_file: file from the request
+    :param request_file: file from the request
     :return: ifc file
     """
     content = request_file.read().decode("utf-8")
@@ -35,8 +34,7 @@ def create_temp_ifc_file(request_file: FileStorage) -> ifcopenshell.file:
 
 @object_bp.before_request
 def _protect_object():
-    if not current_user.is_authenticated:
-        return "Unauthorized", 401
+    return check_auth()
 
 
 @object_bp.route('/', methods=['POST'])
