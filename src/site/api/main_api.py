@@ -14,7 +14,7 @@ load_dotenv()
 app = Flask(__name__)
 app.secret_key = os.getenv("SESSION_SECRET_KEY")
 
-CORS(app, supports_credentials=True, origins=[os.getenv("FRONT_END_DOMAIN")])
+CORS(app, supports_credentials=True, origins=[os.getenv("FRONT_END_DOMAIN"), "http://localhost:3000"])
 
 add_login_auth(app)
 
