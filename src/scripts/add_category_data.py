@@ -1,4 +1,4 @@
-from src.site.core.opensearch_client import get_client
+from src.site.core.cloud.opensearch import get_os_client
 import os
 from openai import OpenAI
 from dotenv import load_dotenv
@@ -9,7 +9,7 @@ load_dotenv()
 api_key = os.getenv("OPENAPI_KEY")
 ai_client = OpenAI(api_key=api_key)
 
-os_client = get_client("prod")
+os_client = get_os_client("prod")
 
 base_dir = os.getenv("PROJECT_BASE_DIR", ".")
 

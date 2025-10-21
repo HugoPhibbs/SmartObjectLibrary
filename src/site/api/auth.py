@@ -20,14 +20,14 @@ def add_login_auth(app):
 
     app.config.update(
         SESSION_COOKIE_SAMESITE="None",  # allow cross-site
-        SESSION_COOKIE_SECURE=True,  # must be HTTPS in prod
+        SESSION_COOKIE_SECURE=True,
         SESSION_COOKIE_HTTPONLY=True,
         PERMANENT_SESSION_LIFETIME=timedelta(days=3),
         SESSION_REFRESH_EACH_REQUEST=True
     )
 
     @login_manager.user_loader
-    def load_user(user_id: id):
+    def load_user(user_id: str):
         print(f"id: {user_id}")
         username = get_username(str(user_id))
         if username:

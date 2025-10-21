@@ -8,7 +8,7 @@ import genson
 from src.site.core.LibraryObject import LibraryObject
 from src.scripts.utils import convert_schema
 
-from src.site.core.opensearch_client import get_client
+from src.site.core.cloud.opensearch import get_os_client
 
 # Script to upload all beam objects to OpenSearch
 
@@ -84,7 +84,7 @@ def write_schema():
 
 def main(stage):
     schema = LibraryObject.get_opensearch_schema()
-    os_client = get_client(stage)
+    os_client = get_os_client(stage)
 
     delete_index_if_exits = stage != "prod"
 

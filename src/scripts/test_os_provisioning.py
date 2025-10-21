@@ -1,6 +1,6 @@
-from src.site.core.opensearch_client import get_client
+from src.site.core.cloud.opensearch import get_os_client
 
-client = get_client("prod")
+client = get_os_client("prod")
 
 response = client.search(
     index="objects",
