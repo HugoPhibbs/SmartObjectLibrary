@@ -63,6 +63,7 @@ class Cost:
     currency: Currency
     metric: CostMetric
 
+
 @dataclass
 class Manufacturer:
     name: str
@@ -172,8 +173,15 @@ class LibraryObject:
         return "NO-UNIT"
 
     @staticmethod
+    def ifc_file_to_dict(ifc_file: ifcopenshell.file, object_types=["IfcBeam"], customID: str = None) -> tuple:
+        object, _ = LibraryObject.from_ifc_file(ifc_file, object_types, customID)
+        object_dict = object.to_dict()
+        return object_dict, object["object_id"]
+
+    @staticmethod
     def from_ifc_file(ifc_file: ifcopenshell.file, object_types=["IfcBeam"], customID: str = None) \
             -> tuple[LibraryObject, str] | tuple[None, None]:
+        # TODO fix this mess here, somehow have a better way to find object_type
         ifc_object = None
         for obj_type in object_types:
             try:
