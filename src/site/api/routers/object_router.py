@@ -9,13 +9,26 @@ from PIL import Image
 from flask import request, jsonify, send_file
 from werkzeug.datastructures import FileStorage
 
-import src.site.core.query_engines.object_query_engine as engine
+from scripts.add_category_data import os_client
+from site.core.QueryBuilder import QueryBuilder
+from site.core.cloud.ObjectLibraryBucket import ObjectLibraryBucket
+from site.core.cloud.ObjectOSIndex import ObjectsOSIndex
 from src.site.api.auth import check_auth
 from src.site.core.LibraryObject import LibraryObject
 
 from flask import Blueprint
 
 object_bp = Blueprint('object', __name__)
+
+s3_bucket = ObjectLibraryBucket("object-library-files")
+os_index = ObjectsOSIndex()
+
+
+def filestorage_to_buffer(file_storage):
+    buf = io.BytesIO()
+    file_storage.save(buf)
+    buf.seek(0)
+    return buf
 
 
 def create_temp_ifc_file(request_file: FileStorage) -> ifcopenshell.file:
@@ -49,14 +62,18 @@ def create_object_from_ifc():
     if file:
         ifc_file = create_temp_ifc_file(file)
         customID = form_key_values["customID"] if "customID" in form_key_values else None
+        object_dict, object_id = LibraryObject.ifc_file_to_dict(ifc_file, customID=customID)
 
-        response = engine.create_object(ifc_file, customID=customID)
-        result = response["result"]
+        os_response = os_client.put_object(object_id=object_id, object_data=object_dict)
+        buffer = filestorage_to_buffer(file)
+        s3_bucket.put_object_ifc(object_id, buffer)
+
+        result = os_response["result"]
 
         if result == "created":
-            return jsonify({"message": "Object Created", "object_id": response["_id"]}), 201
+            return jsonify({"message": "Object Created", "object_id": os_response["_id"]}), 201
         elif result == "updated":
-            return jsonify({"message": "Object Updated", "object_id": response["_id"]}), 200
+            return jsonify({"message": "Object Updated", "object_id": os_response["_id"]}), 200
 
     return "No file provided", 400
 
@@ -67,49 +84,46 @@ def update_object_from_ifc(object_id: str):
 
     if file:
         ifc_file = create_temp_ifc_file(file)
-        engine.update_by_id(object_id, ifc_file)
+        object_dict, _ = LibraryObject.ifc_file_to_dict(ifc_file)
+
+        os_index.put_object(object_id=object_id, object_data=object_dict)
+        buffer = filestorage_to_buffer(file)
+        s3_bucket.put_object_ifc(object_id, buffer, overwrite_existing=True)
+
         return "Object updated"
     return "Object updated"
 
 
 @object_bp.route("/")
 def get_all_objects():
-    response_format = request.args.get("format", default="json", type=str)
-    query_response = engine.get_all_objects(response_format)
-
-    if response_format == "json":
-        return jsonify(query_response)
-    elif response_format == "zip":
-        return send_objects_as_zip(query_response)
-    else:
-        return f"Format: {response_format} not supported", 400
+    return os_index.get_all_objects()
 
 
 @object_bp.route('/<object_id>', methods=['GET'])
 def get_object(object_id: str):
     response_format = request.args.get("format", default="json", type=str)
-    query_response = engine.get_file_by_object_id(object_id, response_format)
+
+    if response_format == "json":
+        query_response = os_index.get_object(object_id=object_id)
+    elif response_format == "ifc":
+        query_response = s3_bucket.get_object_ifc(object_id)
+    else:
+        return f"Format: {response_format} not supported", 400
 
     if query_response is None:
         return "Object not found", 404
 
-    print(f"Getting object {object_id}")
-
-    if response_format == "json":
-        return jsonify(query_response)
-    elif response_format == "ifc":
-        return send_file(query_response, as_attachment=True)
-    else:
-        return f"Format: {response_format} not supported", 400
+    return query_response
 
 
 @object_bp.route("/<object_id>/photo", methods=['GET'])
 def get_object_photo(object_id: str):
-    path = engine.get_file_by_object_id(object_id, "png")
-    try:
-        return send_file(path, as_attachment=True)
-    except FileNotFoundError:
+    image_buffer = s3_bucket.get_object_photo(object_id)
+
+    if image_buffer is None:
         return "Photo not found", 404
+
+    return send_file(image_buffer, as_attachment=False, download_name=f"{object_id}.png", mimetype='image/png')
 
 
 @object_bp.route("/<object_id>/photo", methods=['POST'])
@@ -117,16 +131,17 @@ def add_object_photo(object_id: str):
     file = request.files['file']
 
     if file:
-        image = Image.open(file.stream)
-        engine.add_object_photo(object_id, image)
+        buffer = filestorage_to_buffer(file)
+        s3_bucket.put_object_photo(object_id, buffer, True)
         return "Photo added"
     return "No file provided"
 
 
 @object_bp.route("/<object_id>", methods=['DELETE'])
 def delete_object(object_id: str):
-    engine.delete_by_id(object_id)
-    return "Object deleted"
+    os_index.delete_object(object_id)
+    s3_bucket.delete_objects_files(object_id)
+    return "Object deleted", 200
 
 
 def send_objects_as_zip(objects: List[LibraryObject]):
@@ -151,7 +166,9 @@ def get_objects_by_filter():
     if "format" in query_params_dict:
         del query_params_dict["format"]
 
-    found_objects = engine.get_by_query(query_params_dict)
+    os_query = QueryBuilder().from_query_params_dict(query_params_dict).build()
+
+    found_objects = os_index.get_objects_by_query(os_query)
 
     if response_format == "json":
         return jsonify(found_objects)
@@ -167,7 +184,7 @@ def get_object_by_os_query():
 
     os_query = {"query": os_query_params}
 
-    found_objects = engine.get_by_os_query(os_query)
+    found_objects = os_index.get_objects_by_query(os_query)
 
     return jsonify(found_objects)
 
@@ -185,11 +202,12 @@ def get_object_by_nlp():
 
 @object_bp.route("/<object_id>/environmental-impact", methods=["GET"])
 def get_environmental_impact_assessment(object_id: str):
-    path = engine.get_environment_impact_assessment(object_id)
-    try:
-        return send_file(path, as_attachment=True)
-    except FileNotFoundError:
-        return "Environmental impact assessment not found", 404
+    buffer = s3_bucket.get_environmental_impact_assessment(object_id)
+
+    if buffer is not None:
+        return send_file(buffer, as_attachment=True)
+    else:
+        return "Environmental Impact Assessment not found", 404
 
 
 @object_bp.route("/<object_id>/environmental-impact", methods=["POST"])
@@ -197,17 +215,19 @@ def add_environmental_impact_assessment(object_id: str):
     file = request.files['file']
 
     if file:
-        engine.add_environmental_impact_assessment(file, object_id)
+        buffer = filestorage_to_buffer(file)
+        s3_bucket.put_environmental_impact_assessment(object_id, buffer, overwrite_existing=True)
         return "Environmental impact assessment added"
     return "No file provided", 400
 
 
 @object_bp.route("/<object_id>/manufacturers-booklet", methods=["GET"])
 def get_manufacturers_booklet(object_id: str):
-    path = engine.get_manufacturers_booklet(object_id)
-    try:
-        return send_file(path, as_attachment=True)
-    except FileNotFoundError:
+    buffer = s3_bucket.get_manufacturers_booklet(object_id)
+
+    if buffer is not None:
+        return send_file(buffer, as_attachment=True)
+    else:
         return "Manufacturers booklet not found", 404
 
 
@@ -216,7 +236,8 @@ def add_manufacturers_booklet(object_id: str):
     file = request.files['file']
 
     if file:
-        engine.add_manufacturers_booklet(file, object_id)
+        buffer = filestorage_to_buffer(file)
+        s3_bucket.put_manufacturers_booklet(object_id, buffer, overwrite_existing=True)
         return "Manufacturers booklet added"
     return "No file provided", 400
 
@@ -224,11 +245,11 @@ def add_manufacturers_booklet(object_id: str):
 @object_bp.route("/<object_id>/inspection-record", methods=["GET"])
 def get_inspection_record(object_id: str):
     date = request.args.get("date", default=None, type=str)
-    path = engine.get_inspection_record(object_id, date)
+    buffer = s3_bucket.get_inspection_record(object_id, date)
 
-    try:
-        return send_file(path, as_attachment=True)
-    except FileNotFoundError:
+    if buffer is not None:
+        return send_file(buffer, as_attachment=True)
+    else:
         return "Inspection record not found", 404
 
 
@@ -238,7 +259,8 @@ def add_inspection_record(object_id: str):
     date = request.form.get("date", default=None, type=str)
 
     if file:
-        engine.add_inspection_record(file, object_id, date)
+        buffer = filestorage_to_buffer(file)
+        s3_bucket.put_inspection_record(object_id, date, buffer, overwrite_existing=True)
         return "Inspection record added"
     return "No file provided", 400
 
