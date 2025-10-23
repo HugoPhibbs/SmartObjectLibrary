@@ -6,8 +6,9 @@ from src.site.core.cloud.opensearch import get_os_client
 
 client = get_os_client()
 
-from src.site.core.query_engines.object_query_engine import get_file_by_object_id
+from src.site.core.cloud.ObjectsOSIndex import ObjectsOSIndex
 
+os_index = ObjectsOSIndex()
 
 # Query engine for connections
 
@@ -32,6 +33,7 @@ def get_connections_by_filter(query_params):
 
     return results
 
+
 def get_unique_values(field):
     response = client.search(index="connections",
                              body={"size": 0, "aggs": {"unique_values": {"terms": {"field": field}}}})
@@ -39,8 +41,9 @@ def get_unique_values(field):
 
     return unique_values
 
+
 def match_connection(connection_type, beam_id, moment, shear):
-    object = get_file_by_object_id(beam_id, "json")
+    object = os_index.get_object(beam_id)
 
     # First get the model
     model = object["property_sets"]["Identity Data"]["Model"]["value"]

@@ -4,7 +4,7 @@ from io import BytesIO
 import ifcopenshell
 from PIL import Image
 
-from site.core.cloud.aws import get_s3_client
+from src.site.core.cloud.aws import get_s3_client
 
 
 class ObjectLibraryBucket:

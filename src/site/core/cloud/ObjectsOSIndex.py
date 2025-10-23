@@ -1,6 +1,6 @@
 from opensearchpy import NotFoundError
 
-from site.core.cloud.opensearch import get_os_client
+from src.site.core.cloud.opensearch import get_os_client
 
 
 class ObjectsOSIndex:

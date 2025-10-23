@@ -5,14 +5,13 @@ import zipfile
 from typing import List
 
 import ifcopenshell
-from PIL import Image
 from flask import request, jsonify, send_file
 from werkzeug.datastructures import FileStorage
 
-from scripts.add_category_data import os_client
-from site.core.QueryBuilder import QueryBuilder
-from site.core.cloud.ObjectLibraryBucket import ObjectLibraryBucket
-from site.core.cloud.ObjectOSIndex import ObjectsOSIndex
+from src.site.core.cloud.opensearch import get_os_client
+from src.site.core.QueryBuilder import QueryBuilder
+from src.site.core.cloud.ObjectLibraryBucket import ObjectLibraryBucket
+from src.site.core.cloud.ObjectsOSIndex import ObjectsOSIndex
 from src.site.api.auth import check_auth
 from src.site.core.LibraryObject import LibraryObject
 
@@ -22,6 +21,8 @@ object_bp = Blueprint('object', __name__)
 
 s3_bucket = ObjectLibraryBucket("object-library-files")
 os_index = ObjectsOSIndex()
+
+os_client = get_os_client()
 
 
 def filestorage_to_buffer(file_storage):
@@ -168,6 +169,8 @@ def get_objects_by_filter():
 
     os_query = QueryBuilder().from_query_params_dict(query_params_dict).build()
 
+    print(os_query)
+
     found_objects = os_index.get_objects_by_query(os_query)
 
     if response_format == "json":
@@ -275,3 +278,8 @@ def get_inspection_record_dates(object_id: str):
 def get_all_manufacturers():
     manufacturers = engine.get_manufacturers()
     return jsonify(manufacturers)
+
+
+@object_bp.get("/wall-substitution")
+def get_wall_substitution():
+    pass

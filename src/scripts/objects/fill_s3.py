@@ -2,7 +2,7 @@ from io import BytesIO
 
 from PIL import Image
 
-from site.core.cloud.ObjectLibraryBucket import ObjectLibraryBucket
+from src.site.core.cloud.ObjectLibraryBucket import ObjectLibraryBucket
 import os
 from dotenv import load_dotenv
 load_dotenv()
