@@ -156,7 +156,28 @@ class LibraryObject:
         :return: dict
         """
         return {
-            "object_id": {"type": "keyword"}
+            "mappings": {
+                "properties": {
+                    "object_id": {
+                        "type": "keyword"
+                    },
+                    "units": {  # Disable indexing for units
+                        "type": "object",
+                        "enabled": False
+                    }
+                },
+                "dynamic_templates": [
+                    {
+                        "ignore_property_set_values": {
+                            "match": "property_sets\\..*\\..*\\.unit",
+                            "match_pattern": "regex",
+                            "mapping": {
+                                "enabled": False
+                            }
+                        }
+                    }
+                ]
+            }
         }
 
     @staticmethod
