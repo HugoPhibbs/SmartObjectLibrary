@@ -12,3 +12,5 @@ __pycache__
 /data/object_categories.csv
 
 /flask_session
+
+/data/wall-nse_top20_unique_all.xlsx
