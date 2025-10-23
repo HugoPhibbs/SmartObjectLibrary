@@ -1,9 +1,12 @@
 import json
 import os
+import time
 from pprint import pprint
 import argparse
+from dotenv import load_dotenv
 
 import genson
+from tqdm import tqdm
 
 from src.site.core.LibraryObject import LibraryObject
 from src.scripts.utils import convert_schema
@@ -12,8 +15,11 @@ from src.site.core.cloud.opensearch import get_os_client
 
 # Script to upload all beam objects to OpenSearch
 
-JSON_DIR = r"data\objects\json"
-SCHEMA_PATH = r"data\schema\beams_schema.json"
+load_dotenv()
+BASE_DIR = os.getenv("PROJECT_BASE_DIR")
+
+JSON_DIR = os.path.join(BASE_DIR, r"data\objects\json")
+SCHEMA_PATH = os.path.join(BASE_DIR, r"data\schema\beams_schema.json")
 
 
 def add_json_file(os_client, file_path):
@@ -26,39 +32,45 @@ def add_json_file(os_client, file_path):
         response = os_client.index(index="objects", body=object_data, id=object_id)
     except Exception as e:
         print(f"Error uploading {file_path}: {e}")
-        pprint(object_data)
+        # pprint(object_data)
         return None
 
     return response
 
 
-def add_all_files(os_client):
-    for file in os.listdir(JSON_DIR):
-        file_path = os.path.join(JSON_DIR, file)
+def add_all_files(os_client, json_dir=JSON_DIR, sleep_interval=0):
+    print("Adding files...")
+    for file in tqdm(os.listdir(json_dir)):
+        file_path = os.path.join(json_dir, file)
         if os.path.isfile(file_path) and file.endswith(".json"):
             add_json_file(os_client, file_path)
+            time.sleep(sleep_interval)
 
 
 def create_index(os_client, schema=None, delete_if_exists=True):
     index_exists = os_client.indices.exists(index="objects")
 
     if delete_if_exists and index_exists:
-        if os_client.indices.exists(index="objects"):
-            os_client.indices.delete(index="objects")
+        print("Deleting existing index 'objects'")
+        os_client.indices.delete(index="objects")
 
     elif index_exists:
         return
 
-    if schema is None:
-        body = None
-    else:
-        body = {
-            "mappings": {
-                "properties": schema
-            }
-        }
+    print("Creating index 'objects'")
 
-    os_client.indices.create(index="objects", body=body)
+    settings = {
+        "settings": {
+            "index": {
+                "mapping": {
+                    "total_fields": { "limit": 1500 }
+                }
+            }
+        },
+    }
+
+    body = settings | schema # merge into one dict
+    os_client.indices.create(index="objects", body=body) # if schema is None, creates with no schema
 
 
 def write_schema():
@@ -82,14 +94,15 @@ def write_schema():
     return schema
 
 
-def main(stage):
+def upload_json_to_os(stage, json_dir=JSON_DIR, sleep_interval=0, delete_index_if_exists=None):
     schema = LibraryObject.get_opensearch_schema()
     os_client = get_os_client(stage)
 
-    delete_index_if_exits = stage != "prod"
+    if delete_index_if_exists is None:
+        delete_index_if_exists = stage != "prod"
 
-    create_index(os_client, schema=schema, delete_if_exists=delete_index_if_exits)
-    add_all_files(os_client)
+    create_index(os_client, schema=schema, delete_if_exists=delete_index_if_exists)
+    add_all_files(os_client, json_dir=json_dir, sleep_interval=sleep_interval)
 
 
 if __name__ == "__main__":
@@ -100,4 +113,4 @@ if __name__ == "__main__":
 
     stage = "prod" if args.prod else "dev"
 
-    main(stage)
+    upload_json_to_os(stage, delete_index_if_exists=False)
