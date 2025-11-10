@@ -10,7 +10,7 @@ from tqdm import tqdm
 
 from src.site.core.LibraryObject import LibraryObject
 from src.scripts.utils import convert_schema
-
+import src.scripts.add_category_data as add_category_data
 from src.site.core.cloud.opensearch import get_os_client
 
 # Script to upload all beam objects to OpenSearch
@@ -113,4 +113,5 @@ if __name__ == "__main__":
 
     stage = "prod" if args.prod else "dev"
 
-    upload_json_to_os(stage, delete_index_if_exists=False)
+    upload_json_to_os(stage, delete_index_if_exists=True)
+    add_category_data.main()
