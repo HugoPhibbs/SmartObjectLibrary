@@ -101,15 +101,19 @@ def upload_categories(object_categories, os_client):
             id=object_id,
             body={
                 "doc": {
-                    "identity_data" : {"primary_info": {"categories": categories}}  # directly overwrites or creates
+                    "identity_data": {"primary_info": {"categories": categories}}  # directly overwrites or creates
                 },
                 "doc_as_upsert": True  # creates the field if missing
             }
         )
-        print(f"Updated {object_id} with categories {categories}: {response['result']}")
+        # print(f"Updated {object_id} with categories {categories}: {response['result']}")
 
 
-if __name__ == "__main__":
+def main():
     objects = get_objects(os_client)
     object_categories = get_object_categories(objects, load_csv=True)
     upload_categories(object_categories, os_client)
+
+
+if __name__ == "__main__":
+    main()
