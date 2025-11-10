@@ -164,6 +164,17 @@ class LibraryObject:
                     "units": {  # Disable indexing for units
                         "type": "object",
                         "enabled": False
+                    },
+                    "identity_data": {
+                        "properties": {
+                            "primary_info": {
+                                "properties": {
+                                    "categories": {
+                                        "type": "keyword"
+                                    }
+                                }
+                            }
+                        }
                     }
                 },
                 "dynamic_templates": [
