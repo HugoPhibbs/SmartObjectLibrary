@@ -14,3 +14,7 @@ __pycache__
 /flask_session
 
 /data/wall-nse_top20_unique_all.xlsx
+
+*.xlsx
+
+wall_entry_counts.json
