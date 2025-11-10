@@ -8,7 +8,8 @@ import base64
 import re
 from src.scripts.objects import fill_opensearch
 
-XLSX_PATH = r"C:\Users\hugop\Documents\Work\object-library\SmartObjectLibrary\data\wall-nse_top20_unique_all.xlsx"
+# XLSX_PATH = r"C:\Users\hugop\Documents\Work\object-library\SmartObjectLibrary\data\wall-nse_top20_unique_all.xlsx"
+XLSX_PATH = r"C:\Users\hugop\Documents\Work\object-library\SmartObjectLibrary\data\wall-nse-with-duration.xlsx"
 OUTPUT_JSON_DIR = r"C:\Users\hugop\Documents\Work\object-library\SmartObjectLibrary\data\objects\wall_json"
 
 PSB = "property_sets.wall_layer_basic"
@@ -52,9 +53,8 @@ for attribute, pset in pset_mappings.items():
     attribute_mappings[attribute] = f"{pset}.{attribute}"
 
 
-def create_wall_id(material_name, wall_type) -> str:
+def create_wall_id(s) -> str:
     # generate an ID based on hash, deterministic so this script can be re-run with same json filenames
-    s = material_name + wall_type
     h = hashlib.sha256(s.encode()).digest()
     b64 = base64.urlsafe_b64encode(h).decode()
     return re.sub(r'[^A-Za-z0-9]', '', b64)[:22]
@@ -68,7 +68,10 @@ def set_nested(d, key_path, value):
 
 
 def wall_material_to_object_json(row):
-    id = create_wall_id(row["Material: Name"], row["Type"])
+    id = create_wall_id(row["Material: Name"] + row["Type"] + row["Family"])
+
+    branz_description = row["Material: BRANZ Description"]
+    parsed_material_name = branz_description if isinstance(branz_description, str) else "Unknown Material"
 
     obj = {
         "object_id": id,
@@ -98,13 +101,25 @@ def wall_material_to_object_json(row):
         "property_sets": {
             "wall_layer_basic": {},
             "wall_layer_material": {},
-            "wall_layer_construction": {}
+            "wall_layer_construction": {},
+            "Pset_EnvironmentalImpactIndicators": {
+                "ClimateChangePerUnit": {
+                    "value": row["Material: Embodied carbon (kg CO2/qty)"],
+                    "unit": "MASSUNIT"
+                }
+            }
         },
         "cost": {
             "price": -1,
             "currency": "NZD",
             "metric": "COST_PER_M3"
         },
+        # TODO add material dict here
+        "material": {
+            "name": parsed_material_name,
+            "ifc_material_type": "Unknown",
+            "ifc_material_properties": {}
+        }
     }
 
     for attribute, value in row.items():
@@ -134,20 +149,45 @@ def wall_material_to_object_json(row):
     return obj
 
 
+def get_entry_counts(wall_df):
+    entry_counts = {}
+
+    for i in range(len(wall_df)):
+        row = wall_df.iloc[i]
+        id = create_wall_id(row["Material: Name"] + row["Type"])
+        entry_counts[id] = entry_counts.get(id, 0) + 1
+    return entry_counts
+
+
 def write_all_wall_materials_to_json(wall_df):
+    seen_ids = set()
     for i in range(len(wall_df)):
         row = wall_df.iloc[i]
         obj_json = wall_material_to_object_json(row)
 
         id = obj_json["object_id"]
 
+        if id in seen_ids:
+            print(f"Duplicate ID found: {id}, skipping...")
+            continue
+
+        seen_ids.add(id)
+
         with open(os.path.join(OUTPUT_JSON_DIR, f"{id}.json"), "w") as f:
             json.dump(obj_json, f, indent=4)
 
 
 if __name__ == "__main__":
-    wall_df = pd.read_excel(XLSX_PATH, sheet_name="Unique_Data")
+    # wall_df = pd.read_excel(XLSX_PATH, sheet_name="Unique_Data")
+    wall_df = pd.read_excel(XLSX_PATH)
+
+    # print(wall_df.drop_duplicates().shape[0])
 
     write_all_wall_materials_to_json(wall_df)
 
-    fill_opensearch.upload_json_to_os("prod", json_dir=OUTPUT_JSON_DIR, sleep_interval=0.2)
+    # entry_dict = get_entry_counts(wall_df)
+    #
+    # with open("wall_entry_counts.json", "w") as f:
+    #     json.dump(entry_dict, f, indent=4)
+
+    # fill_opensearch.upload_json_to_os("prod", json_dir=OUTPUT_JSON_DIR, sleep_interval=0.2)
