@@ -36,5 +36,5 @@ class ObjectsOSIndex:
         return self.get_objects_by_query({"query": {"match_all": {}}, "size": size}, size=size)
 
     def get_objects_by_query(self, os_query: dict, size=10000):
-        response = self.client.search(index=self.index_name, body=os_query)
+        response = self.client.search(index=self.index_name, body=os_query, size=size)
         return self.opensearch_hits_to_results(response["hits"]["hits"])
