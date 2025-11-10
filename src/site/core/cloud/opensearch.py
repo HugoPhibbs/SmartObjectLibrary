@@ -12,7 +12,10 @@ __all__ = ["get_os_client"]
 
 def get_os_client(stage=None, auth_type=None):
     if stage is None:
-        stage = os.getenv("OPENSEARCH_STAGE", "dev")
+        stage = os.getenv("OPENSEARCH_STAGE")
+        if stage is None:
+            print("OPENSEARCH_STAGE environment variable not set")
+            stage = "dev"
 
     if stage == "dev":
         host = os.getenv("OPENSEARCH_HOST", "http://localhost")
