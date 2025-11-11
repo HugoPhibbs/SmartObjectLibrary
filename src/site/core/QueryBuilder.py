@@ -162,8 +162,8 @@ class QueryBuilder:
 
         create_match_query = lambda obj: {
             "match": {
-                obj.keys()[0]: {
-                    "query": obj.values()[0],
+                list(obj.keys())[0]: {
+                    "query": list(obj.values())[0],
                     "fuzziness": "AUTO"
                 }
             }
