@@ -1,10 +1,10 @@
 from dataclasses import asdict, is_dataclass
 from enum import Enum
 
-from src.site.core import LibraryObject as LibraryObjectV2, CostMetric, Currency
-from src.site.core import Cost
+from src.site.core.LibraryObject import LibraryObject, CostMetric, Currency, Cost
 from src.scripts.objects.add_mock_property_sets import add_mock_property_sets
 import ifcopenshell
+import random
 import os
 import json
 import pydash
@@ -18,7 +18,6 @@ dimension_name_map = {
     "Height": "height",
     "Width": "width",
     "Area": "area",
-
 
     # Generic section geometry
     "b": "width",
@@ -81,7 +80,32 @@ SALVAGE_METHODS = [
     "Mechanical Disassembly",
 ]
 
-import random
+MOCK_MANUFACTURER_DATA = [
+    {
+        "name": "ForgePoint Group",
+        "address": "1450 Innovation Crescent, Hamilton 3204, New Zealand",
+        "contact_email": "hello@forgepoint.nz",
+        "link": "https://www.forgepoint.nz"
+    },
+    {
+        "name": "Pacific Works Ltd",
+        "address": "27 Enterprise Parade, Auckland 0626, New Zealand",
+        "contact_email": "contact@pacificworks.co.nz",
+        "link": "https://www.pacificworks.co.nz"
+    },
+    {
+        "name": "Atlas Manufacturing Co.",
+        "address": "9 Precision Way, Christchurch 8011, New Zealand",
+        "contact_email": "info@atlasmfg.com",
+        "link": "https://www.atlasmfg.com"
+    },
+    {
+        "name": "Southern Cross Fabrication",
+        "address": "201 Industry Loop, Dunedin 9016, New Zealand",
+        "contact_email": "support@scfabrication.nz",
+        "link": "https://www.scfabrication.nz"
+    }
+]
 
 
 def add_mock_material_mechanical_properties(object_dict):
@@ -216,40 +240,19 @@ def remove_id_from_name(object_dict):
 
 
 def add_material_name(object_dict):
-    if "Materials and Finishes" in object_dict["property_sets"] and "Structural Material" in object_dict["property_sets"]["Materials and Finishes"]:
+    if "Materials and Finishes" in object_dict["property_sets"] and "Structural Material" in \
+            object_dict["property_sets"]["Materials and Finishes"]:
         object_dict["material"]["name"] = object_dict["property_sets"]["Materials and Finishes"]["Structural Material"][
             "value"]
         del object_dict["property_sets"]["Materials and Finishes"]
 
 
+def get_mock_manufacturers_names():
+    return [manufacturer["name"] for manufacturer in MOCK_MANUFACTURER_DATA]
+
+
 def add_mock_manufacturing_data(object_dict):
-    mock_manufacturer_data = [
-        {
-            "name": "ForgePoint Group",
-            "address": "1450 Innovation Crescent, Hamilton 3204, New Zealand",
-            "contact_email": "hello@forgepoint.nz",
-            "link": "https://www.forgepoint.nz"
-        },
-        {
-            "name": "Pacific Works Ltd",
-            "address": "27 Enterprise Parade, Auckland 0626, New Zealand",
-            "contact_email": "contact@pacificworks.co.nz",
-            "link": "https://www.pacificworks.co.nz"
-        },
-        {
-            "name": "Atlas Manufacturing Co.",
-            "address": "9 Precision Way, Christchurch 8011, New Zealand",
-            "contact_email": "info@atlasmfg.com",
-            "link": "https://www.atlasmfg.com"
-        },
-        {
-            "name": "Southern Cross Fabrication",
-            "address": "201 Industry Loop, Dunedin 9016, New Zealand",
-            "contact_email": "support@scfabrication.nz",
-            "link": "https://www.scfabrication.nz"
-        }
-    ]
-    object_dict["identity_data"]["manufacturer"] = random.choice(mock_manufacturer_data)
+    object_dict["identity_data"]["manufacturer"] = random.choice(MOCK_MANUFACTURER_DATA)
 
 
 def asdict_enum(obj):
@@ -315,7 +318,7 @@ if __name__ == "__main__":
 
         file = ifcopenshell.open(file_path)
 
-        obj, _ = LibraryObjectV2.from_ifc_file(file, object_types=["IfcBeam", "IfcColumn"])
+        obj, _ = LibraryObject.from_ifc_file(file, object_types=["IfcBeam", "IfcColumn"])
 
         object_dict = obj.to_dict()
 
