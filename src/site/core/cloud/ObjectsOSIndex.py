@@ -20,6 +20,9 @@ class ObjectsOSIndex:
     def delete_object(self, object_id: str):
         return self.client.delete(index=self.index_name, id=object_id)
 
+    def delete_objects_by_query(self, os_query: dict):
+        return self.client.delete_by_query(index=self.index_name, body=os_query)
+
     def put_object(self, object_id: str, object_data: dict):
         return self.client.index(index=self.index_name, id=object_id, body=object_data)
 
