@@ -8,6 +8,7 @@ import ifcopenshell
 from flask import request, jsonify, send_file
 from werkzeug.datastructures import FileStorage
 
+from scripts.objects.wsp_building.wsp_objects_to_json import get_mock_manufacturers_names
 from src.site.core.cloud.opensearch import get_os_client
 from src.site.core.QueryBuilder import QueryBuilder
 from src.site.core.cloud.ObjectLibraryBucket import ObjectLibraryBucket
@@ -145,6 +146,17 @@ def delete_object(object_id: str):
     return "Object deleted", 200
 
 
+@object_bp.route("/query", methods=["DELETE"])
+def delete_objects_by_query():
+    query_params_dict = request.args.to_dict()
+
+    os_query = QueryBuilder().from_query_params_dict(query_params_dict).build()
+
+    delete_response = os_index.delete_objects_by_query(os_query)
+
+    return jsonify(delete_response)
+
+
 def send_objects_as_zip(objects: List[LibraryObject]):
     zip_buffer = io.BytesIO()
 
@@ -270,13 +282,13 @@ def add_inspection_record(object_id: str):
 
 @object_bp.route("/<object_id>/inspection-record-dates", methods=["GET"])
 def get_inspection_record_dates(object_id: str):
-    dates = engine.get_inspection_record_dates(object_id)
+    dates = s3_bucket.get_inspection_record_dates(object_id)
     return jsonify(dates)
 
 
 @object_bp.route("/manufacturer", methods=["GET"])
 def get_all_manufacturers():
-    manufacturers = engine.get_manufacturers()
+    manufacturers = get_mock_manufacturers_names() # Yes hacky, but works for demo purposes
     return jsonify(manufacturers)
 
 
