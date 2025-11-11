@@ -68,7 +68,7 @@ def set_nested(d, key_path, value):
 
 
 def wall_material_to_object_json(row):
-    id = create_wall_id(row["Material: Name"] + row["Type"] + row["Family"])
+    id = create_wall_id(row["Material: Name"] + row["Type"])
 
     branz_description = row["Material: BRANZ Description"]
     parsed_material_name = branz_description if isinstance(branz_description, str) else "Unknown Material"
@@ -77,7 +77,7 @@ def wall_material_to_object_json(row):
         "object_id": id,
         "identity_data": {
             "primary_info": {
-                "name": "Wall - Stud",
+                "name": row["Material: Name"],
                 "model": "NO_MODEL",
                 "standard": "NO_STANDARD",
                 "ifc_type": "NO-TYPE",
@@ -114,7 +114,6 @@ def wall_material_to_object_json(row):
             "currency": "NZD",
             "metric": "COST_PER_M3"
         },
-        # TODO add material dict here
         "material": {
             "name": parsed_material_name,
             "ifc_material_type": "Unknown",
@@ -181,8 +180,6 @@ if __name__ == "__main__":
     # wall_df = pd.read_excel(XLSX_PATH, sheet_name="Unique_Data")
     wall_df = pd.read_excel(XLSX_PATH)
 
-    # print(wall_df.drop_duplicates().shape[0])
-
     write_all_wall_materials_to_json(wall_df)
 
     # entry_dict = get_entry_counts(wall_df)
@@ -190,4 +187,4 @@ if __name__ == "__main__":
     # with open("wall_entry_counts.json", "w") as f:
     #     json.dump(entry_dict, f, indent=4)
 
-    # fill_opensearch.upload_json_to_os("prod", json_dir=OUTPUT_JSON_DIR, sleep_interval=0.2)
+    fill_opensearch.upload_json_to_os("prod", json_dir=OUTPUT_JSON_DIR, sleep_interval=0.2)
